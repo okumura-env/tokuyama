@@ -15,6 +15,13 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+
+            $table->date('order_date')->nullable();
+
+            $table->foreignId('vehicle_id')
+                ->constrained('vehicles')
+                ->cascadeOnUpdate();
+
             $table->timestamps();
         });
     }
