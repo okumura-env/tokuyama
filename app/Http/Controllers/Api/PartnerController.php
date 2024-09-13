@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\StorePartnerRequest;
-use App\Http\Requests\UpdatePartnerRequest;
-use App\Models\Partner;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class PartnerController extends Controller
 {
@@ -31,10 +30,10 @@ class PartnerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StorePartnerRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePartnerRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -42,10 +41,10 @@ class PartnerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Partner  $partner
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Partner $partner)
+    public function show($id)
     {
         //
     }
@@ -53,10 +52,10 @@ class PartnerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Partner  $partner
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Partner $partner)
+    public function edit($id)
     {
         //
     }
@@ -64,11 +63,11 @@ class PartnerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdatePartnerRequest  $request
-     * @param  \App\Models\Partner  $partner
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePartnerRequest $request, Partner $partner)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -76,10 +75,10 @@ class PartnerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Partner  $partner
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Partner $partner)
+    public function destroy($id)
     {
         //
     }
