@@ -13,4 +13,22 @@ class Order extends Model
         'order_date',
         'vehicle_id',
     ];
+
+    /**
+     * 車両テーブルとリレーション
+     */
+     public function vehicle()
+     {
+         return $this->belongsTo(Vehicle::class);
+     }
+
+    /**
+     * 業者テーブルとリレーション
+     */
+     public function partner()
+     {
+         return $this->belongsTo(Partner::class);
+     }
+
+
 }

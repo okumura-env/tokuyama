@@ -13,4 +13,21 @@ class Vehicle extends Model
         'name',
         'partner_id',
     ];
+
+    /**
+     * 受注テーブルとリレーション
+     */
+
+     public function orders()
+     {
+         return $this->hasMany(Order::class);
+     }
+
+    /**
+     * 業者テーブルとリレーション
+     */
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class);
+    }
 }
