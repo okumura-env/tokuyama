@@ -24,7 +24,7 @@ return new class extends Migration
                 ->constrained('orders')
                 ->cascadeOnUpdate();
 
-            $table->integer('quantity');
+            $table->integer('boiler_number');    
 
             $table->timestamps();
         });
