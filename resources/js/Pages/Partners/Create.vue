@@ -1,14 +1,15 @@
 <script setup>
 import { ref } from 'vue';
-// import { useRouter } from 'vue-router';  // Vue Routerの使用
+import { useRouter } from 'vue-router';  // Vue Routerの使用
 import PartnerForm from '@/Components/Partials/Partners/Form.vue';// Formコンポーネントのインポート
 
 // ルーターインスタンスの取得
-// const router = useRouter();
+const router = useRouter();
 
 // 業者の作成成功時のハンドラ
 const handlePartnerStored = () => {
-  router.push({ name: 'partners.index' });  // 作成後、一覧ページにリダイレクト
+    // 作成後、一覧ページにリダイレクト
+    router.push({ name: 'partners.index' });
 };
 </script>
 
