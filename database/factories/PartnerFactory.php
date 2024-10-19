@@ -11,9 +11,11 @@ class PartnerFactory extends Factory
 
     public function definition()
     {
+        $faker = \Faker\Factory::create('ja_JP');
+
         return [
-            'name' => $this->faker->company,
-            'color' => $this->faker->hexColor,
+            'name' => $faker->company,
+            'color' => $faker->hexColor,
         ];
     }
 }
