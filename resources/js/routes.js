@@ -1,4 +1,6 @@
-import ExampleComponent from './components/Example.vue';
+import ExampleComponent from './Components/Example.vue';
+import PartnerIndex from './Pages/Partners/Index.vue';
+import PartnerCreate from './Pages/Partners/Create.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
