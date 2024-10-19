@@ -7,6 +7,16 @@ const routes = [
         component: ExampleComponent,
         name:'home',
     },
+    {
+        path: '/partners',
+        name: 'partners.index',
+        component: PartnerIndex,
+    },
+    {
+        path: '/partners/create',
+        name: 'partners.create',
+        component: PartnerCreate,
+    },
 ];
 
 const router = createRouter({
