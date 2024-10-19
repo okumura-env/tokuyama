@@ -3,62 +3,43 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PartnerRequest;
+use App\Http\Resources\PartnerResource;
+use App\Models\Partner;
 use Illuminate\Http\Request;
 
 class PartnerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // 一覧を取得
     public function index()
     {
-        //
+        return PartnerResource::collection(Partner::all());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    // 新規作成
+    public function store(PartnerRequest $request)
     {
-        //
+        $partner = Partner::create($request->validated());
+        return new PartnerResource($partner);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    // 詳細取得
+    public function show(Partner $partner)
     {
-        //
+        return new PartnerResource($partner);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    // 更新処理
+    public function update(PartnerRequest $request, Partner $partner)
     {
-        //
+        $partner->update($request->validated());
+        return new PartnerResource($partner);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    // 削除処理（ソフトデリート）
+    public function destroy(Partner $partner)
     {
-        //
+        $partner->delete();
+        return response()->noContent();
     }
 }
