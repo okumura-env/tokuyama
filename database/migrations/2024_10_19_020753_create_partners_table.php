@@ -14,8 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('partners', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // 自動インクリメントのID
+            $table->string('name', 255); // パートナー名
+            $table->string('color', 100); // 色 (例: #FFFFFF)
+            $table->softDeletes(); // ソフトデリート用のカラム (deleted_at)
+            $table->timestamps(); // 作成日と更新日
+
         });
     }
 
