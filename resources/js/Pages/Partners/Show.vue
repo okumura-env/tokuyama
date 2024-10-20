@@ -63,8 +63,13 @@ const deletePartner = async (id) => {
     </div>
 
     <div class="mt-4">
-      <button @click="deletePartner(partner.id)" class="bg-red-500 text-white p-2 rounded">削除する</button>
+      <button @click="deletePartner(partner.id)" class="bg-red-500 text-white p-2 rounded">削除</button>
     </div>
+    <router-link v-bind:to="{ name: 'partners.edit', params: { id: partner.id }}">
+        <div class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded transition ease-in-out duration-150">
+            <button type="button" class="btn btn-secondary">編集</button>
+        </div>
+    </router-link>
   </div>
 </template>
 
