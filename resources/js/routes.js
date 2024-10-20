@@ -2,6 +2,7 @@ import ExampleComponent from './Components/Example.vue';
 import PartnerIndex from './Pages/Partners/Index.vue';
 import PartnerCreate from './Pages/Partners/Create.vue';
 import PartnerShow from './Pages/Partners/Show.vue';
+import PartnerEdit from './Pages/Partners/Edit.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
@@ -24,6 +25,11 @@ const routes = [
         path: '/partners/:id',
         name: 'partners.show',
         component: PartnerShow,
+    },
+    {
+        path: '/partners/:id/edit',
+        name: 'partners.edit',
+        component: PartnerEdit,
     },
 ];
 
