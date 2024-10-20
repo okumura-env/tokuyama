@@ -71,9 +71,9 @@ onMounted(() => {
                   <tbody>
                     <tr v-for="partner in partners" :key="partner.id" class="border-b">
                       <td class="px-4 py-3">
-                       
+                        <router-link v-bind:to="{ name: 'partners.show', params: { id: partner.id },}">
                           {{ partner.name }}
-                    
+                        </router-link>
                       </td>
                       <td class="px-4 py-3">
                       
