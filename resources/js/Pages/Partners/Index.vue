@@ -77,7 +77,7 @@ onMounted(() => {
                       </td>
                       <td class="px-4 py-3">
                       
-                          編集
+                          
                         
                       </td>
                     </tr>
