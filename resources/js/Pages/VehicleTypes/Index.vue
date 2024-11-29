@@ -2,7 +2,7 @@
     <div>
       <h1>Vehicle Types</h1>
       <ul>
-        <li v-for="vehicle in vehicles" :key="vehicle.id">{{ vehicle.type_name }}</li>
+        <li v-for="vehicle_type in vehicle_types" :key="vehicle_type.id">{{ vehicle_type.type_name }}</li>
       </ul>
     </div>
   </template>
@@ -13,14 +13,14 @@
   
   export default {
     setup() {
-      const vehicles = ref([]);
+      const vehicle_types = ref([]);
   
       onMounted(async () => {
         const response = await axios.get('/api/vehicle-types');
-        vehicles.value = response.data.data;
+        vehicle_types.value = response.data.data;
       });
   
-      return { vehicles };
+      return { vehicle_types };
     },
   };
   </script>
