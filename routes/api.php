@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\PartnerController;
+use App\Http\Controllers\Api\DateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //協力業者
 Route::apiResource('partners', PartnerController::class);
+
+//日付
+Route::apiResource('dates', DateController::class);
