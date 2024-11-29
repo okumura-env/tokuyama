@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\PartnerController;
 use App\Http\Controllers\Api\DateController;
+use App\Http\Controllers\Api\WorkerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,6 @@ Route::apiResource('partners', PartnerController::class);
 
 //日付
 Route::apiResource('dates', DateController::class);
+
+//従業員
+Route::apiResource('workers', WorkerController::class);
