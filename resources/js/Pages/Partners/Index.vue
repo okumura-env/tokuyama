@@ -64,7 +64,7 @@ onMounted(() => {
                       </th>
                  
                       <th class="px-4 py-3 title-font tracking-wider font-medium text-sm">
-                        操作
+                        色
                       </th>
                     </tr>
                   </thead>
@@ -76,9 +76,7 @@ onMounted(() => {
                         </router-link>
                       </td>
                       <td class="px-4 py-3">
-                      
-                          
-                        
+                        <div style="width:50px; height:20px; background: #03c7b1 ;"></div>
                       </td>
                     </tr>
                   </tbody>
@@ -91,4 +89,3 @@ onMounted(() => {
       </div>
     </AuthenticatedLayout>
   </template>
-  
