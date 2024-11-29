@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PartnerSeeder::class,
             DateSeeder::class,
+            WorkerSeeder::class,
         ]);
     }
 }
