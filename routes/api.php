@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PartnerController;
 use App\Http\Controllers\Api\DateController;
 use App\Http\Controllers\Api\WorkerController;
+use App\Http\Controllers\Api\VehicleTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +31,6 @@ Route::apiResource('dates', DateController::class);
 
 //従業員
 Route::apiResource('workers', WorkerController::class);
+
+//車両種別
+Route::apiResource('vehicle-types', VehicleTypeController::class);

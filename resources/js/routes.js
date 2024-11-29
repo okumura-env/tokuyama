@@ -3,6 +3,7 @@ import PartnerIndex from './Pages/Partners/Index.vue';
 import PartnerCreate from './Pages/Partners/Create.vue';
 import PartnerShow from './Pages/Partners/Show.vue';
 import PartnerEdit from './Pages/Partners/Edit.vue';
+import VehicleTypeIndex from './Pages/VehicleTypes/Index.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
@@ -31,6 +32,10 @@ const routes = [
         name: 'partners.edit',
         component: PartnerEdit,
     },
+    { 
+        path: '/vehicle-types',
+        name: 'vehicle_type.index', 
+        component: VehicleTypeIndex },
 ];
 
 const router = createRouter({
