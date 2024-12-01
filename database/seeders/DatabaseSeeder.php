@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             WorkerSeeder::class,
             VehicleTypeSeeder::class,
             VehicleSeeder::class,
+            DumpOrderCategorySeeder::class,
         ]);
     }
 }
