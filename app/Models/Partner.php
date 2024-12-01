@@ -14,7 +14,4 @@ class Partner extends Model
         'name',
         'color',
     ];
-
-    // deleted_atを使用するためにソフトデリートを有効化
-    protected $dates = ['deleted_at'];
 }
