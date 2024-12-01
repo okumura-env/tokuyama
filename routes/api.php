@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\DateController;
 use App\Http\Controllers\Api\WorkerController;
 use App\Http\Controllers\Api\VehicleTypeController;
 use App\Http\Controllers\Api\VehicleController;
+use App\Http\Controllers\Api\DumpOrderCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +39,6 @@ Route::apiResource('vehicle-types', VehicleTypeController::class);
 
 //車両
 Route::apiResource('vehicles', VehicleController::class);
+
+//ダンプオーダーの種類
+Route::apiResource('dump-order-categories', DumpOrderCategoryController::class);
