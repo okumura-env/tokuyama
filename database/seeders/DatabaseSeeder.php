@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             DateSeeder::class,
             WorkerSeeder::class,
             VehicleTypeSeeder::class,
+            VehicleSeeder::class,
         ]);
     }
 }
