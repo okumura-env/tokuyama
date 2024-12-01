@@ -5,6 +5,7 @@ import PartnerShow from './Pages/Partners/Show.vue';
 import PartnerEdit from './Pages/Partners/Edit.vue';
 import VehicleTypeIndex from './Pages/VehicleTypes/Index.vue';
 import WorkerIndex from './Pages/Workers/Index.vue';
+import VehicleIndex from './Pages/Vehicles/Index.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
@@ -42,6 +43,14 @@ const routes = [
         path: '/vehicle-types',
         name: 'vehicle_type.index', 
         component: VehicleTypeIndex },
+    {
+        path: '/vehicles',
+        name: 'vehicle.index', 
+        component: VehicleIndex },
+
+
+
+
 ];
 
 const router = createRouter({

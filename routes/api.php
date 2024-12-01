@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\PartnerController;
 use App\Http\Controllers\Api\DateController;
 use App\Http\Controllers\Api\WorkerController;
 use App\Http\Controllers\Api\VehicleTypeController;
+use App\Http\Controllers\Api\VehicleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,3 +35,6 @@ Route::apiResource('workers', WorkerController::class);
 
 //車両種別
 Route::apiResource('vehicle-types', VehicleTypeController::class);
+
+//車両
+Route::apiResource('vehicles', VehicleController::class);
