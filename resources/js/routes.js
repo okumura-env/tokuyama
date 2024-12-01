@@ -6,6 +6,7 @@ import PartnerEdit from './Pages/Partners/Edit.vue';
 import VehicleTypeIndex from './Pages/VehicleTypes/Index.vue';
 import WorkerIndex from './Pages/Workers/Index.vue';
 import VehicleIndex from './Pages/Vehicles/Index.vue';
+import DumpAssignment from './Pages/DumpOrders/Assignment.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
@@ -13,6 +14,11 @@ const routes = [
         path: "/test",
         component: ExampleComponent,
         name:'home',
+    },
+    {
+        path: "/dump-assignment",
+        component: DumpAssignment,
+        name:'dump-assignment',
     },
     {
         path: '/partners',
