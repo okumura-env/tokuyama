@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             VehicleTypeSeeder::class,
             VehicleSeeder::class,
             DumpOrderCategorySeeder::class,
+            DumpOrderCategoryTitleSeeder::class,
         ]);
     }
 }
