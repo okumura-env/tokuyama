@@ -19,7 +19,8 @@ class DailyVehicleAssignment extends Model
         'worker_id',
         'sub_worker',
         'start_time',
-        'task_order',
+        'task_priority',
+        'driver_task_order',
         'notes',
     ];
 }
