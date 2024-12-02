@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\VehicleTypeController;
 use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\DumpOrderCategoryController;
 use App\Http\Controllers\Api\DumpOrderCategoryTitleController;
+use App\Http\Controllers\Api\WorkTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,3 +47,6 @@ Route::apiResource('dump-order-categories', DumpOrderCategoryController::class);
 
 //ダンプオーダーのタイトル
 Route::apiResource('dump-order-category-titles', DumpOrderCategoryTitleController::class);
+
+//作業の種類
+Route::apiResource('work-types', WorkTypeController::class);
