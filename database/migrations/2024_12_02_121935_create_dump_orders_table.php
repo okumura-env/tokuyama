@@ -12,13 +12,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('date_id');
             $table->unsignedBigInteger('vehicle_id');
-            $table->unsignedBigInteger('daily_vehicle_assignment_id');
+            $table->unsignedBigInteger('daily_vehicle_assignment_id')->nullable();
             $table->unsignedBigInteger('dump_order_category_id');// 例)HES,MCM,...
             $table->unsignedBigInteger('dump_order_category_title_id');// 例)リデ,MM,MO,CL,...
             $table->string('boiler_number')->nullable(); // ボイラー番号
             $table->string('status'); // ステータス(未配車 or 配車済)
             $table->boolean('is_preloaded')->default(false); // 事前の積込みあり or なし
-            $table->string('vehicle_number'); // 車両番号(富士運輸)
+            $table->string('vehicle_number')->nullable(); // 車両番号(富士運輸)
             $table->text('notes')->nullable(); // 備考
             $table->timestamps();
             $table->softDeletes(); // 論理削除
