@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\DumpOrderCategoryController;
 use App\Http\Controllers\Api\DumpOrderCategoryTitleController;
 use App\Http\Controllers\Api\WorkTypeController;
+use App\Http\Controllers\Api\DailyVehicleAssignmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,3 +51,6 @@ Route::apiResource('dump-order-category-titles', DumpOrderCategoryTitleControlle
 
 //作業の種類
 Route::apiResource('work-types', WorkTypeController::class);
+
+//日別車両割り当て
+Route::apiResource('daily-vehicle-assignments', DailyVehicleAssignmentController::class);
