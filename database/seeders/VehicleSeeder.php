@@ -11,7 +11,7 @@ class VehicleSeeder extends Seeder
     {
         $vehicles = [
             [
-                'name' => '海陸21号',
+                'name' => '海陸（２１号）',
                 'code' => '21',
                 'number' => '4975',
                 'capacity' => 20,
@@ -20,7 +20,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸22号',
+                'name' => '海陸（２２号）',
                 'code' => '22',
                 'number' => '5672',
                 'capacity' => 20,
@@ -29,7 +29,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸23号',
+                'name' => '海陸（２３号）',
                 'code' => '23',
                 'number' => '5673',
                 'capacity' => 20,
@@ -38,7 +38,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸24号',
+                'name' => '海陸（２４号）',
                 'code' => '24',
                 'number' => '5674',
                 'capacity' => 20,
@@ -47,7 +47,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸25号',
+                'name' => '海陸（２５号）',
                 'code' => '25',
                 'number' => '5755',
                 'capacity' => 20,
@@ -56,7 +56,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸26号',
+                'name' => '海陸（２６号）',
                 'code' => '26',
                 'number' => '8478',
                 'capacity' => 20,
@@ -65,7 +65,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸27号',
+                'name' => '海陸（２７号）',
                 'code' => '27',
                 'number' => '8513',
                 'capacity' => 20,
@@ -74,7 +74,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸28号',
+                'name' => '海陸（２８号）',
                 'code' => '28',
                 'number' => '8514',
                 'capacity' => 20,
@@ -83,7 +83,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸29号',
+                'name' => '海陸（２９号）',
                 'code' => '29',
                 'number' => '205',
                 'capacity' => 20,
@@ -92,7 +92,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸30号',
+                'name' => '海陸（３０号）',
                 'code' => '30',
                 'number' => '1408',
                 'capacity' => 20,
@@ -101,7 +101,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸31号',
+                'name' => '海陸（３１号）',
                 'code' => '31',
                 'number' => '1409',
                 'capacity' => 20,
@@ -110,7 +110,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸32号',
+                'name' => '海陸（３２号）',
                 'code' => '32',
                 'number' => '1890',
                 'capacity' => 20,
@@ -119,7 +119,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸33号',
+                'name' => '海陸（３３号）',
                 'code' => '33',
                 'number' => '1891',
                 'capacity' => 20,
@@ -128,7 +128,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '奥村(1318)',
+                'name' => '奥村（１３１８）',
                 'code' => null,
                 'number' => '1318',
                 'capacity' => null,
@@ -137,7 +137,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '奥村(390)',
+                'name' => '奥村（３９０）',
                 'code' => null,
                 'number' => '390',
                 'capacity' => null,
@@ -146,7 +146,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '奥村(1353)',
+                'name' => '奥村（１３５３）',
                 'code' => null,
                 'number' => '1353',
                 'capacity' => null,
@@ -155,7 +155,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '港湾(11号)',
+                'name' => '港湾（１１号）',
                 'code' => null,
                 'number' => '11',
                 'capacity' => null,
@@ -164,7 +164,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '港湾(10号)',
+                'name' => '港湾（１０号）',
                 'code' => null,
                 'number' => '10',
                 'capacity' => null,
@@ -173,7 +173,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '興洋(8498)',
+                'name' => '興洋（８４９８）',
                 'code' => null,
                 'number' => '8498',
                 'capacity' => null,
@@ -182,7 +182,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '興洋(8504)',
+                'name' => '興洋（８５０４）',
                 'code' => null,
                 'number' => '8504',
                 'capacity' => null,
@@ -191,7 +191,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '上組(8967)',
+                'name' => '上組（８９６７）',
                 'code' => null,
                 'number' => '8967',
                 'capacity' => null,
@@ -200,7 +200,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '湯野(17)',
+                'name' => '湯野（１７）',
                 'code' => null,
                 'number' => '17',
                 'capacity' => null,
@@ -209,7 +209,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸1号',
+                'name' => '海陸（１号）',
                 'code' => '1',
                 'number' => '1564',
                 'capacity' => 15,
@@ -218,7 +218,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸2号',
+                'name' => '海陸（２号）',
                 'code' => '2',
                 'number' => '0000',
                 'capacity' => 15,
@@ -227,7 +227,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸3号',
+                'name' => '海陸（３号）',
                 'code' => '3',
                 'number' => '6609',
                 'capacity' => 15,
@@ -236,7 +236,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸5号',
+                'name' => '海陸（５号）',
                 'code' => '5',
                 'number' => '0000',
                 'capacity' => 15,
@@ -245,7 +245,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸6号',
+                'name' => '海陸（６号）',
                 'code' => '6',
                 'number' => '6063',
                 'capacity' => 15,
@@ -254,7 +254,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸7号',
+                'name' => '海陸（７号）',
                 'code' => '7',
                 'number' => '529',
                 'capacity' => 15,
@@ -263,7 +263,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸8号',
+                'name' => '海陸（８号）',
                 'code' => '8',
                 'number' => '5115',
                 'capacity' => 15,
@@ -272,7 +272,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '海陸12号',
+                'name' => '海陸（１２号）',
                 'code' => '12',
                 'number' => '5099',
                 'capacity' => 15,
@@ -281,7 +281,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => 'キチナン(2112)',
+                'name' => 'キチナン（２１１２）',
                 'code' => null,
                 'number' => '2112',
                 'capacity' => null,
@@ -290,7 +290,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '富士1',
+                'name' => '富士１',
                 'code' => null,
                 'number' => '0000',
                 'capacity' => null,
@@ -299,7 +299,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '富士2',
+                'name' => '富士２',
                 'code' => null,
                 'number' => '0000',
                 'capacity' => null,
@@ -308,7 +308,7 @@ class VehicleSeeder extends Seeder
                 'worker_id' => null,
             ],
             [
-                'name' => '富士3',
+                'name' => '富士３',
                 'code' => null,
                 'number' => '0000',
                 'capacity' => null,
