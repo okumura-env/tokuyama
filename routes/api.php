@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\DailyVehicleAssignmentController;
 use App\Http\Controllers\Api\DumpOrderController;
 use App\Http\Controllers\Api\ImportDumpOrderController;
 use App\Http\Controllers\Api\DumpScheduleController;
+use App\Http\Controllers\Api\OtherScheduleController;
 
 
 
@@ -65,3 +66,6 @@ Route::apiResource('dump-orders', DumpOrderController::class);
 
 //ダンプスケジュール
 Route::apiResource('dump-schedules', DumpScheduleController::class);
+
+//その他のスケジュール
+Route::apiResource('other-schedules', OtherScheduleController::class);
