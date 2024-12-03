@@ -16,6 +16,7 @@ class DumpOrderRequest extends FormRequest
         return [
             'date_id' => ['required', 'integer'],
             'vehicle_id' => ['required', 'integer'],
+            'schedule_id' => ['required', 'integer'],
             'daily_vehicle_assignment_id' => ['nullable', 'integer'],
             'dump_order_category_id' => ['required', 'integer'],
             'dump_order_category_title_id' => ['required', 'integer'],

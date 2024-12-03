@@ -15,6 +15,7 @@ class DumpOrder extends Model
     protected $fillable = [
         'date_id',
         'vehicle_id',
+        'schedule_id',
         'daily_vehicle_assignment_id',
         'dump_order_category_id',
         'dump_order_category_title_id',

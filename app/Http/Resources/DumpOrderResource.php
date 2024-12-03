@@ -12,6 +12,7 @@ class DumpOrderResource extends JsonResource
             'id' => $this->id,
             'date_id' => $this->date_id,
             'vehicle_id' => $this->vehicle_id,
+            'schedule_id' => $this->schedule_id,
             'daily_vehicle_assignment_id' => $this->daily_vehicle_assignment_id,
             'dump_order_category_id' => $this->dump_order_category_id,
             'dump_order_category_title_id' => $this->dump_order_category_title_id,
