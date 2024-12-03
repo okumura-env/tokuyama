@@ -20,7 +20,7 @@ class DumpOrderRequest extends FormRequest
             'dump_order_category_id' => ['required', 'integer'],
             'dump_order_category_title_id' => ['required', 'integer'],
             'boiler_number' => ['nullable', 'string'],
-            'status' => ['required', 'string'],
+            'status' => ['required', 'boolean'],
             'is_preloaded' => ['required', 'boolean'],
             'vehicle_number' => ['nullable', 'string'],
             'notes' => ['nullable', 'string'],
