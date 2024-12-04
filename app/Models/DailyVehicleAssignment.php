@@ -14,8 +14,8 @@ class DailyVehicleAssignment extends Model
 
     protected $fillable = [
         'date_id',
-        'work_type_id',
         'vehicle_id',
+        'work_type_id',
         'worker_id',
         'sub_worker',
         'start_time',

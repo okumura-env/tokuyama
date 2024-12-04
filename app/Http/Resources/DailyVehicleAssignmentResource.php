@@ -11,8 +11,8 @@ class DailyVehicleAssignmentResource extends JsonResource
         return [
             'id' => $this->id,
             'date_id' => $this->date_id,
-            'work_type_id' => $this->work_type_id,
             'vehicle_id' => $this->vehicle_id,
+            'work_type_id' => $this->work_type_id,
             'worker_id' => $this->worker_id,
             'sub_worker' => $this->sub_worker,
             'start_time' => $this->start_time,

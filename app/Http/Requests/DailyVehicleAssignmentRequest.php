@@ -15,8 +15,8 @@ class DailyVehicleAssignmentRequest extends FormRequest
     {
         return [
             'date_id' => ['required', 'integer'],
+            'vehicle_id' => ['nullable', 'integer'],
             'work_type_id' => ['required', 'integer'],
-            'vehicle_id' => ['required', 'integer'],
             'worker_id' => ['nullable', 'integer'],
             'sub_worker' => ['nullable', 'string'],
             'start_time' => ['nullable', 'date_format:H:i'],
