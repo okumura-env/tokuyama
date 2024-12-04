@@ -12,8 +12,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('date_id');
             $table->unsignedBigInteger('vehicle_id');
-            $table->unsignedBigInteger('dump_order_category_id');
-            $table->unsignedBigInteger('dump_order_category_title_id');
+            $table->unsignedBigInteger('dump_order_category_id');// 例)HES,MCM,...
+            $table->unsignedBigInteger('dump_order_category_title_id');// 例)リデ,MM,MO,CL,...
             $table->string('dump_order_category_title');
             $table->string('schedule_type');
             $table->integer('sort_order');
