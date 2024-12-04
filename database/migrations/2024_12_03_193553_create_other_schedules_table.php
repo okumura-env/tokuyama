@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('date_id');
             $table->unsignedBigInteger('vehicle_id');
-            $table->unsignedBigInteger('schedule_id');
+            $table->unsignedBigInteger('dump_schedule_id');
             $table->text('notes')->nullable(); // 備考は任意
             $table->timestamps();
             $table->softDeletes(); // 論理削除

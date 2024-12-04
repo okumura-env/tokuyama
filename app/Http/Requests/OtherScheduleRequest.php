@@ -16,7 +16,7 @@ class OtherScheduleRequest extends FormRequest
         return [
             'date_id' => ['required', 'integer'],
             'vehicle_id' => ['required', 'integer'],
-            'schedule_id' => ['required', 'integer'],
+            'dump_schedule_id' => ['required', 'integer'],
             'notes' => ['nullable', 'string'],
         ];
     }

@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('date_id');
             $table->unsignedBigInteger('vehicle_id')->nullable();
-            $table->unsignedBigInteger('schedule_id');
+            $table->unsignedBigInteger('dump_schedule_id');
             $table->unsignedBigInteger('daily_vehicle_assignment_id')->nullable();
             $table->string('boiler_number')->nullable(); // ボイラー番号
             $table->boolean('status')->default(false); // ステータス(未配車 or 配車済)

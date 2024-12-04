@@ -15,7 +15,7 @@ class OtherSchedule extends Model
     protected $fillable = [
         'date_id',
         'vehicle_id',
-        'schedule_id',
+        'dump_schedule_id',
         'notes',
     ];
 }
