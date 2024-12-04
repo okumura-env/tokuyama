@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('dump_orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('date_id');
-            $table->unsignedBigInteger('vehicle_id');
+            $table->unsignedBigInteger('vehicle_id')->nullable();
             $table->unsignedBigInteger('schedule_id');
             $table->unsignedBigInteger('daily_vehicle_assignment_id')->nullable();
             $table->string('boiler_number')->nullable(); // ボイラー番号
