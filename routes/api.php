@@ -65,7 +65,7 @@ Route::apiResource('daily-vehicle-assignments', DailyVehicleAssignmentController
 Route::apiResource('dump-orders', DumpOrderController::class);
 
 //ファイルのアップロード
-Route::post('/import-dump-orders', ImportDumpOrderController::class);
+Route::post('/import-dump-orders', [ImportDumpOrderController::class, 'import']);
 
 //ダンプスケジュール
 Route::apiResource('dump-schedules', DumpScheduleController::class);
