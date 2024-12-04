@@ -11,10 +11,10 @@ return new class extends Migration
         Schema::create('dump_schedules', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('date_id');
-            $table->unsignedBigInteger('vehicle_id');
+            $table->unsignedBigInteger('vehicle_id')->nullable();
             $table->unsignedBigInteger('dump_order_category_id');// 例)HES,MCM,...
-            $table->unsignedBigInteger('dump_order_category_title_id');// 例)リデ,MM,MO,CL,...
-            $table->string('dump_order_category_title');
+            $table->unsignedBigInteger('dump_order_category_title_id')->nullable();// 例)リデ,MM,MO,CL,...
+            $table->string('dump_order_category_title')->nullable();
             $table->string('schedule_type');
             $table->integer('sort_order');
             $table->timestamps();
