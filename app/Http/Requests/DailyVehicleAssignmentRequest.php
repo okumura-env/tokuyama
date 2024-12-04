@@ -20,7 +20,7 @@ class DailyVehicleAssignmentRequest extends FormRequest
             'worker_id' => ['nullable', 'integer'],
             'sub_worker' => ['nullable', 'string'],
             'start_time' => ['nullable', 'date_format:H:i'],
-            'task_priority' => ['nullable', 'integer'],
+            'task_priority' => ['nullable', 'string'],
             'driver_task_order' => ['nullable', 'integer'],
             'notes' => ['nullable', 'string'],
         ];
