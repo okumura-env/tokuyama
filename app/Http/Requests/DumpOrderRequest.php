@@ -18,8 +18,6 @@ class DumpOrderRequest extends FormRequest
             'vehicle_id' => ['required', 'integer'],
             'schedule_id' => ['required', 'integer'],
             'daily_vehicle_assignment_id' => ['nullable', 'integer'],
-            'dump_order_category_id' => ['required', 'integer'],
-            'dump_order_category_title_id' => ['required', 'integer'],
             'boiler_number' => ['nullable', 'string'],
             'status' => ['required', 'boolean'],
             'is_preloaded' => ['required', 'boolean'],

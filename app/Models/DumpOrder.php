@@ -17,8 +17,6 @@ class DumpOrder extends Model
         'vehicle_id',
         'schedule_id',
         'daily_vehicle_assignment_id',
-        'dump_order_category_id',
-        'dump_order_category_title_id',
         'boiler_number',
         'status',
         'is_preloaded',
