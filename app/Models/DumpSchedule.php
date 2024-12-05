@@ -59,9 +59,9 @@ class DumpSchedule extends Model
      * dump_other_schedulesテーブルにdump_schedule_idがある。
      * dump_schedulesテーブルにはdump_other_schedule_idはない。
      */
-    public function OtherSchedule()
+    public function dumpOtherSchedule()
     {
-        return $this->hasOne(OtherSchedule::class);
+        return $this->hasOne(DumpOtherSchedule::class);
     }
 
 }

@@ -57,12 +57,12 @@ class Vehicle extends Model
     }
 
     /**
-     * other_schedulesテーブルとリレーション
+     * dump_other_schedulesテーブルとリレーション
      * 予定に使用する車両を管理
      */
-    public function OtherSchedules()
+    public function dumpOtherSchedules()
     {
-        return $this->hasMany(OtherSchedule::class);
+        return $this->hasMany(DumpOtherSchedule::class);
     }
 
     /**

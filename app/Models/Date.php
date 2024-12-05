@@ -25,12 +25,12 @@ class Date extends Model
     }
 
     /**
-     * other_schedulesテーブルとリレーション
+     * dump_other_schedulesテーブルとリレーション
      * その他の予定の日付を管理
      */
-    public function OtherSchedules()
+    public function dumpOtherSchedules()
     {
-        return $this->hasMany(OtherSchedule::class);
+        return $this->hasMany(DumpOtherSchedule::class);
     }
 
     /**
