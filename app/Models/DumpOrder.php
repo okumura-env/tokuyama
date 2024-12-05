@@ -54,10 +54,13 @@ class DumpOrder extends Model
     /**
      * dump_schedulesテーブルとリレーション
      * 受注を含めた予定の大分類を管理
+     * 一対一のリレーション
+     * dump_ordersテーブルにdump_schedule_idがある。
+     * dump_schedulesテーブルにはdump_order_idはない。
      */
     public function dumpSchedule()
     {
-        return $this->hasOne(DumpSchedule::class);
+        return $this->belongsTo(DumpSchedule::class);
     }
 
 }

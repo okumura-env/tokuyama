@@ -40,10 +40,13 @@ class OtherSchedule extends Model
     /**
      * dump_schedulesテーブルとリレーション
      * その他予定を含めた予定の大分類を管理
+     * 一対一のリレーション
+     * dump_other_schedulesテーブルにdump_schedule_idがある。
+     * dump_schedulesテーブルにはdump_other_schedule_idはない。
      */
     public function dumpSchedule()
     {
-        return $this->hasOne(DumpSchedule::class);
+        return $this->belongsTo(DumpSchedule::class);
     }
 
 }

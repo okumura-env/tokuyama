@@ -43,6 +43,9 @@ class DumpSchedule extends Model
     /**
      * dump_ordersテーブルとリレーション
      * 受注を含めた予定の大分類を管理
+     * 一対一のリレーション
+     * dump_ordersテーブルにdump_schedule_idがある。
+     * dump_schedulesテーブルにはdump_order_idはない。
      */
     public function dumpOrder()
     {
@@ -52,6 +55,9 @@ class DumpSchedule extends Model
     /**
      * dump_other_schedulesテーブルとリレーション
      * その他予定を含めた予定の大分類を管理
+     * 一対一のリレーション
+     * dump_other_schedulesテーブルにdump_schedule_idがある。
+     * dump_schedulesテーブルにはdump_other_schedule_idはない。
      */
     public function OtherSchedule()
     {
