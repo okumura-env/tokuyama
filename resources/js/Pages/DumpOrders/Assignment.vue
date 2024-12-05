@@ -1,80 +1,97 @@
-<script>
+<script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import useDataApi from "../../Composables/useDataApi";
 
-export default {
-  setup() {
-    const vehicles = ref([]);
-    const dates = ref([]);
-    const fileInput = ref(null);
-    const selectedFile = ref(null);
+// データ定義
+const vehicles = ref([]);
+const dates = ref([]);
+const orders = ref([]);
+const fileInput = ref(null);
+const selectedFile = ref(null);
 
-    const fetchVehicles = async () => {
-      try {
-        const response = await axios.get("/api/vehicles");
-        vehicles.value = response.data.data.filter(vehicle => vehicle.id <= 34);
-      } catch (error) {
-        console.error("車両データの取得に失敗しました", error);
-      }
-    };
+// 車両データの取得
+const fetchVehicles = async () => {
+  try {
+    const { data } = await axios.get("/api/vehicles");
+    vehicles.value = data.data.filter(vehicle => vehicle.id <= 34);
+  } catch (error) {
+    console.error("車両データの取得に失敗しました", error);
+  }
+};
 
-    const fetchDates = async () => {
-      try {
-        const response = await axios.get("/api/dates");
-        dates.value = response.data.data.filter(date => date.id <= 6);
-      } catch (error) {
-        console.error("日付データの取得に失敗しました", error);
-      }
-    };
+// 日付データの取得
+const fetchDates = async () => {
+  try {
+    const { data } = await axios.get("/api/dates");
+    dates.value = data.data.filter(date => date.id <= 6);
+  } catch (error) {
+    console.error("日付データの取得に失敗しました", error);
+  }
+};
 
-    const triggerFileSelect = () => {
-      fileInput.value.click(); // ファイル入力要素をプログラム的にクリック
-    };
-    const handleFileSelect = (event) => {
-      selectedFile.value = event.target.files[0]; // 選択されたファイルを取得
-      console.log("選択されたファイル:", selectedFile.value);
-    };
+// ダンプオーダーの取得
+const fetchDumpOrders = async () => {
+  try {
+    const { data } = await axios.get("/api/dump-orders");
+    orders.value = data.data;
+  } catch (error) {
+    console.error("ダンプオーダーの取得に失敗しました", error);
+  }
+};
 
-    const importData = async () => {
-      if (!selectedFile.value) {
-        alert("ファイルを選択してください！");
-        return;
-      }
+// ファイル選択トリガー
+const triggerFileSelect = () => {
+  fileInput.value?.click(); // ?.演算子を使用して安全にアクセス
+};
 
-      const formData = new FormData();
-      formData.append("file", selectedFile.value);
+// ファイル選択ハンドラー
+const handleFileSelect = (event) => {
+  selectedFile.value = event.target.files[0];
+  console.log("選択されたファイル:", selectedFile.value);
+};
 
-      try {
-        const response = await axios.post("/api/import-dump-orders", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log("インポート成功:", response.data);
-        alert("データが正常にインポートされました！");
-      } catch (error) {
-        console.error("インポートに失敗しました", error);
-        alert("インポートに失敗しました");
-      }
-    };
+// データインポート
+const importData = async () => {
+  if (!selectedFile.value) {
+    alert("ファイルを選択してください！");
+    return;
+  }
 
-    onMounted(() => {
-      fetchVehicles();
-      fetchDates();
+  const formData = new FormData();
+  formData.append("file", selectedFile.value);
+
+  try {
+    // ファイルをアップロード
+    const response = await axios.post("/api/import-dump-orders", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     });
 
-    return {
-      vehicles,
-      dates,
-      fileInput,
-      triggerFileSelect,
-      handleFileSelect,
-      importData,
-    };
-  },
+    console.log("インポート成功:", response.data);
+
+    // インポート後のデータ再取得
+    try {
+      await fetchDumpOrders();
+      console.log("ダンプオーダーの再取得が成功しました:", orders.value);
+    } catch (fetchError) {
+      console.error("ダンプオーダーの再取得に失敗しました:", fetchError);
+      alert("インポートは成功しましたが、データの再取得に失敗しました。");
+    }
+
+    alert("データが正常にインポートされました！");
+  } catch (error) {
+    console.error("インポートに失敗しました", error);
+    alert("インポートに失敗しました");
+  }
 };
+
+// マウント時に初期データを取得
+onMounted(() => {
+  fetchVehicles();
+  fetchDates();
+  fetchDumpOrders();
+});
 </script>
+
 
 <template>
     <div>
