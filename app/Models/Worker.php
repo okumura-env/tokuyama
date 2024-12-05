@@ -14,4 +14,23 @@ class Worker extends Model
         'name',
         'note',
     ];
+
+    /**
+     * vehiclesテーブルとリレーション
+     * 車両専属の従業員を管理
+     */
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
+
+    /**
+     * daily_vehicle_assignmentsテーブルとリレーション
+     * 日毎の車両情報を管理する際の担当従業員を管理
+     */
+    public function dailyVehicleAssignments()
+    {
+        return $this->hasMany(DailyVehicleAssignment::class);
+    }
+
 }

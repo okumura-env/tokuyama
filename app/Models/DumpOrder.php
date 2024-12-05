@@ -23,4 +23,41 @@ class DumpOrder extends Model
         'vehicle_number',
         'notes',
     ];
+
+    /**
+     * daily_vehicle_assignmentsテーブルとリレーション
+     * 日毎で統一の車両情報を管理
+     */
+    public function dailyVehicleAssignment()
+    {
+        return $this->belongsTo(DailyVehicleAssignment::class);
+    }
+
+    /**
+     * dump_order_categoriesテーブルとリレーション
+     * 受注ごとに行うタスクの大分類を管理
+     */
+    public function dumpOrderCategory()
+    {
+        return $this->belongsTo(DumpOrderCategory::class);
+    }
+
+    /**
+     * dump_order_category_titlesテーブルとリレーション
+     * 受注ごとに行うタスクを管理
+     */
+    public function dumpOrderCategoryTitle()
+    {
+        return $this->belongsTo(DumpOrderCategoryTitle::class);
+    }
+
+    /**
+     * dump_schedulesテーブルとリレーション
+     * 受注を含めた予定の大分類を管理
+     */
+    public function dumpSchedule()
+    {
+        return $this->hasOne(DumpSchedule::class);
+    }
+
 }

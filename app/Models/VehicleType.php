@@ -11,4 +11,13 @@ class VehicleType extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['type_name'];
+
+    /**
+     * vehiclesテーブルとリレーション
+     * 車両がどの車両タイプのものかを管理
+     */
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
 }

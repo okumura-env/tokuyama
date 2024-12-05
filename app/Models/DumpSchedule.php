@@ -21,4 +21,41 @@ class DumpSchedule extends Model
         'schedule_type',
         'sort_order',
     ];
+
+    /**
+     * datesテーブルとリレーション
+     * 予定の日付を管理
+     */
+    public function date()
+    {
+        return $this->belongsTo(Date::class);
+    }
+
+    /**
+     * vehiclesテーブルとリレーション
+     * 予定に使用する車両を管理
+     */
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
+
+    /**
+     * dump_ordersテーブルとリレーション
+     * 受注を含めた予定の大分類を管理
+     */
+    public function dumpOrder()
+    {
+        return $this->hasOne(DumpOrder::class);
+    }
+
+    /**
+     * dump_other_schedulesテーブルとリレーション
+     * その他予定を含めた予定の大分類を管理
+     */
+    public function OtherSchedule()
+    {
+        return $this->hasOne(OtherSchedule::class);
+    }
+
 }

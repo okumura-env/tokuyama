@@ -13,4 +13,14 @@ class WorkType extends Model
     protected $fillable = [
         'name',
     ];
+
+    /**
+     * daily_vehicle_assignmentsテーブルとリレーション
+     * 日毎の車両情報を管理する際の「ジェットパック」「ダンプ」「WP・PKS業務」「その他」かを管理
+     */
+    public function dailyVehicleAssignments()
+    {
+        return $this->hasMany(DailyVehicleAssignment::class);
+    }
+
 }

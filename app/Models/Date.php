@@ -14,4 +14,41 @@ class Date extends Model
         'date',
         'jetpack_note',
     ];
+
+    /**
+     * dump_ordersテーブルとリレーション
+     * 紐づく受注案件の日付を管理
+     */
+    public function dumpOrders()
+    {
+        return $this->hasMany(DumpOrder::class);
+    }
+
+    /**
+     * other_schedulesテーブルとリレーション
+     * その他の予定の日付を管理
+     */
+    public function OtherSchedules()
+    {
+        return $this->hasMany(OtherSchedule::class);
+    }
+
+    /**
+     * dump_schedulesテーブルとリレーション
+     * 受注とその他の予定の日付を管理
+     */
+    public function dumpSchedules()
+    {
+        return $this->hasMany(DumpSchedule::class);
+    }
+
+    /**
+     * daily_vehicle_assignmentsテーブルとリレーション
+     * 日毎の車両情報を管理する際の日付を管理
+     */
+    public function dailyVehicleAssignments()
+    {
+        return $this->hasMany(DailyVehicleAssignment::class);
+    }
+
 }

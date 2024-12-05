@@ -19,4 +19,68 @@ class Vehicle extends Model
         'partner_id',
         'worker_id',
     ];
+
+    /**
+     * vehicle_typesテーブルとリレーション
+     * 車両がどの車両タイプのものかを管理
+     */
+    public function vehicleType()
+    {
+        return $this->belongsTo(VehicleType::class);
+    }
+
+    /**
+     * partnersテーブルとリレーション
+     * 車両が所属する業者を管理
+     */
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class);
+    }
+
+    /**
+     * workersテーブルとリレーション
+     * 車両に専属のドライバーを管理
+     */
+    public function worker()
+    {
+        return $this->belongsTo(Worker::class);
+    }
+
+    /**
+     * dump_ordersテーブルとリレーション
+     * 受注ごとに使用する車両を管理
+     */
+    public function dumpOrders()
+    {
+        return $this->hasMany(DumpOrder::class);
+    }
+
+    /**
+     * other_schedulesテーブルとリレーション
+     * 予定に使用する車両を管理
+     */
+    public function OtherSchedules()
+    {
+        return $this->hasMany(OtherSchedule::class);
+    }
+
+    /**
+     * dump_schedulesテーブルとリレーション
+     * 予定に使用する車両を管理
+     */
+    public function dumpSchedules()
+    {
+        return $this->hasMany(DumpSchedule::class);
+    }
+
+    /**
+     * daily_vehicle_assignmentsテーブルとリレーション
+     * 日毎の車両情報を管理する際の車両を管理
+     */
+    public function dailyVehicleAssignments()
+    {
+        return $this->hasMany(DailyVehicleAssignment::class);
+    }
+
 }

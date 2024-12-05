@@ -23,4 +23,50 @@ class DailyVehicleAssignment extends Model
         'driver_task_order',
         'notes',
     ];
+
+    /**
+     * datesテーブルとリレーション
+     * 日毎の車両情報を管理する際の日付を管理
+     */
+    public function date()
+    {
+        return $this->belongsTo(Date::class);
+    }
+
+    /**
+     * work_typesテーブルとリレーション
+     * 日毎の車両情報を管理する際の「ジェットパック」「ダンプ」「WP・PKS業務」「その他」かを管理
+     */
+    public function workType()
+    {
+        return $this->belongsTo(WorkType::class);
+    }
+
+    /**
+     * vehiclesテーブルとリレーション
+     * 日毎の車両情報を管理する際の車両を管理
+     */
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
+
+    /**
+     * workersテーブルとリレーション
+     * 日毎の車両情報を管理する際の担当ドライバーを管理
+     */
+    public function worker()
+    {
+        return $this->belongsTo(Worker::class);
+    }
+
+    /**
+     * dump_ordersテーブルとリレーション
+     * 日毎で統一の車両情報を管理
+     */
+    public function dumpOrders()
+    {
+        return $this->hasMany(DumpOrder::class);
+    }
+
 }

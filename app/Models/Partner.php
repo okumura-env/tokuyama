@@ -14,4 +14,13 @@ class Partner extends Model
         'name',
         'color',
     ];
+
+    /**
+     * vehiclesテーブルとリレーション
+     * 車両が所属する業者を管理
+     */
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
 }
