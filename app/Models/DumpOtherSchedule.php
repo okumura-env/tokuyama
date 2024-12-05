@@ -6,20 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class OtherSchedule extends Model
+class DumpOtherSchedule extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'other_schedules';
+    protected $table = 'dump_other_schedules';
 
     protected $fillable = [
         'date_id',
         'vehicle_id',
         'dump_schedule_id',
-        'notes',
+        'note',
     ];
-
-    /**
+    
+     /**
      * datesテーブルとリレーション
      * その他の予定の日付を管理
      */
@@ -48,5 +48,4 @@ class OtherSchedule extends Model
     {
         return $this->belongsTo(DumpSchedule::class);
     }
-
 }

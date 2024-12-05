@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OtherScheduleRequest extends FormRequest
+class DumpOtherScheduleRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -17,7 +17,7 @@ class OtherScheduleRequest extends FormRequest
             'date_id' => ['required', 'integer'],
             'vehicle_id' => ['required', 'integer'],
             'dump_schedule_id' => ['required', 'integer'],
-            'notes' => ['nullable', 'string'],
+            'note' => ['nullable', 'string'],
         ];
     }
 }

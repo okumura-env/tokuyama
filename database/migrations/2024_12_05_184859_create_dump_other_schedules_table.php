@@ -8,12 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('other_schedules', function (Blueprint $table) {
+        Schema::create('dump_other_schedules', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('date_id');
             $table->unsignedBigInteger('vehicle_id');
             $table->unsignedBigInteger('dump_schedule_id');
-            $table->text('notes')->nullable(); // 備考は任意
+            $table->text('note')->nullable(); // 備考は任意
             $table->timestamps();
             $table->softDeletes(); // 論理削除
         });
@@ -21,6 +21,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('other_schedules');
+        Schema::dropIfExists('dump_other_schedules');
     }
 };
