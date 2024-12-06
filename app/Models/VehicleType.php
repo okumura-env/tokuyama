@@ -10,7 +10,7 @@ class VehicleType extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['type_name'];
+    protected $fillable = ['name'];
 
     /**
      * vehiclesテーブルとリレーション

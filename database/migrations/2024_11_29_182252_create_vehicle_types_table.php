@@ -10,7 +10,7 @@ class CreateVehicleTypesTable extends Migration
     {
         Schema::create('vehicle_types', function (Blueprint $table) {
             $table->id();
-            $table->string('type_name');
+            $table->string('name');
             $table->timestamps();
             $table->softDeletes(); // deleted_atカラムを追加
         });
