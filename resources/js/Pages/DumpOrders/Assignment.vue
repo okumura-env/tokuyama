@@ -23,7 +23,7 @@ const fetchVehicles = async () => {
 const fetchDates = async () => {
   try {
     const { data } = await axios.get("/api/dates");
-    dates.value = data.data.filter(date => date.id <= 6);
+    dates.value = data.data.filter(date => date.id >= 7);
   } catch (error) {
     console.error("日付データの取得に失敗しました", error);
   }
@@ -65,7 +65,7 @@ const importData = async () => {
     const response = await axios.post("/api/import-dump-orders", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-
+    await fetchDumpOrders(); // 再取得
     console.log("インポート成功:", response.data);
 
     // インポート後のデータ再取得
@@ -82,6 +82,29 @@ const importData = async () => {
     console.error("インポートに失敗しました", error);
     alert("インポートに失敗しました");
   }
+};
+
+// 1マスごと（同一日付・同一車両）のオーダーを取得する関数
+const getOrderTitle = (dateId, vehicleId) => {
+  // フィルタリング
+  const localFilteredOrders = orders.value.filter(order => order.date_id === dateId && order.vehicle_id === vehicleId);
+
+  // マッチするデータがない場合
+  if (!localFilteredOrders || localFilteredOrders.length === 0) {
+    return "データなし";
+  }
+
+  // dumpScheduleの存在をチェックし、タイトルを取得
+  const titles = localFilteredOrders.map(order => {
+    const dumpSchedule = order.dumpSchedule;
+    if (!dumpSchedule || !dumpSchedule.dump_order_category_title) {
+      console.warn("dumpScheduleが見つかりません");
+      return "不明";
+    }
+    return dumpSchedule.dump_order_category_title;
+  });
+
+  return titles.join(", ");
 };
 
 // マウント時に初期データを取得
@@ -114,7 +137,10 @@ onMounted(() => {
           <tr v-for="vehicle in vehicles" :key="vehicle.id">
             <td>{{ vehicle.name }}</td>
             <td v-for="date in dates" :key="date.id">
-              <div></div>
+              <div>
+                <p v-if="!orders || orders.length === 0">読み込み中...</p>
+                <p v-else>{{ getOrderTitle(date.id, vehicle.id) }}</p>
+              </div>
             </td>
           </tr>
         </tbody>
