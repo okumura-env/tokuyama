@@ -11,6 +11,7 @@ class DumpOrderResource extends JsonResource
         return [
             'id' => $this->id,
             'dumpSchedule' => $this->whenLoaded("dumpSchedule"),
+            'dailyVehicleAssignment' => $this->whenLoaded("dailyVehicleAssignment"),
             'date_id' => $this->date_id,
             'vehicle_id' => $this->vehicle_id,
             'dump_schedule_id' => $this->dump_schedule_id,
