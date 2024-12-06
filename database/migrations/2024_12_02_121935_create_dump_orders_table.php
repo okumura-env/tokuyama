@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('status')->default(false); // ステータス(未配車 or 配車済)
             $table->boolean('is_preloaded')->default(false); // 事前の積込みあり or なし
             $table->string('vehicle_number')->nullable(); // 車両番号(富士運輸)
-            $table->text('notes')->nullable(); // 備考
+            $table->text('note')->nullable(); // 備考
             $table->timestamps();
             $table->softDeletes(); // 論理削除
         });

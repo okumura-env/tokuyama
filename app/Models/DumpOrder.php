@@ -21,7 +21,7 @@ class DumpOrder extends Model
         'status',
         'is_preloaded',
         'vehicle_number',
-        'notes',
+        'note',
     ];
 
     /**

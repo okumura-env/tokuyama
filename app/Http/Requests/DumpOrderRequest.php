@@ -22,7 +22,7 @@ class DumpOrderRequest extends FormRequest
             'status' => ['required', 'boolean'],
             'is_preloaded' => ['required', 'boolean'],
             'vehicle_number' => ['nullable', 'string'],
-            'notes' => ['nullable', 'string'],
+            'note' => ['nullable', 'string'],
         ];
     }
 }

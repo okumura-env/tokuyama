@@ -20,7 +20,7 @@ class DumpOrderResource extends JsonResource
             'status' => $this->status,
             'is_preloaded' => $this->is_preloaded,
             'vehicle_number' => $this->vehicle_number,
-            'notes' => $this->notes,
+            'note' => $this->note,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
