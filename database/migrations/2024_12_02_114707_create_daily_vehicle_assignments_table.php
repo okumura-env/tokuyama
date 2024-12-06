@@ -18,7 +18,7 @@ return new class extends Migration
             $table->time('start_time')->nullable();// 始業時間は任意
             $table->string('task_priority')->nullable();//業務の優先度は任意
             $table->integer('driver_task_order')->nullable();//同一ドライバーの作業順序は任意
-            $table->text('notes')->nullable(); // 備考は任意
+            $table->text('note')->nullable(); // 備考は任意
             $table->timestamps();
             $table->softDeletes(); // deleted_atカラムを作成
         });

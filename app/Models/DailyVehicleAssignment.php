@@ -21,7 +21,7 @@ class DailyVehicleAssignment extends Model
         'start_time',
         'task_priority',
         'driver_task_order',
-        'notes',
+        'note',
     ];
 
     /**

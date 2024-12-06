@@ -22,7 +22,7 @@ class DailyVehicleAssignmentRequest extends FormRequest
             'start_time' => ['nullable', 'date_format:H:i'],
             'task_priority' => ['nullable', 'string'],
             'driver_task_order' => ['nullable', 'integer'],
-            'notes' => ['nullable', 'string'],
+            'note' => ['nullable', 'string'],
         ];
     }
 }

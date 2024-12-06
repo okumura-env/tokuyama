@@ -18,7 +18,7 @@ class DailyVehicleAssignmentResource extends JsonResource
             'start_time' => $this->start_time,
             'task_priority' => $this->task_priority,
             'driver_task_order' => $this->driver_task_order,
-            'notes' => $this->notes,
+            'note' => $this->note,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
