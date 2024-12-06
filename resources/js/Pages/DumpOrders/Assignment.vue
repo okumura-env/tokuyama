@@ -91,20 +91,22 @@ const getOrderTitle = (dateId, vehicleId) => {
 
   // マッチするデータがない場合
   if (!localFilteredOrders || localFilteredOrders.length === 0) {
-    return "データなし";
+    return Array(5).fill("-"); // データがない場合でも5区画を埋める
   }
 
   // dumpScheduleの存在をチェックし、タイトルを取得
   const titles = localFilteredOrders.map(order => {
     const dumpSchedule = order.dumpSchedule;
-    if (!dumpSchedule || !dumpSchedule.dump_order_category_title) {
-      console.warn("dumpScheduleが見つかりません");
-      return "不明";
-    }
-    return dumpSchedule.dump_order_category_title;
+    return dumpSchedule?.dump_order_category_title || "不明";
   });
 
-  return titles.join(", ");
+  // 配列を5区画に調整
+  const result = Array(5).fill("");
+  titles.slice(0, 5).forEach((title, index) => {
+    result[index] = title;
+  });
+
+  return result;
 };
 
 // マウント時に初期データを取得
@@ -137,9 +139,10 @@ onMounted(() => {
           <tr v-for="vehicle in vehicles" :key="vehicle.id">
             <td>{{ vehicle.name }}</td>
             <td v-for="date in dates" :key="date.id">
-              <div>
-                <p v-if="!orders || orders.length === 0">読み込み中...</p>
-                <p v-else>{{ getOrderTitle(date.id, vehicle.id) }}</p>
+              <div class="grid-container">
+                <div v-for="(title, index) in getOrderTitle(date.id, vehicle.id)" :key="index" class="grid-item">
+                  {{ title }}
+                </div>
               </div>
             </td>
           </tr>
@@ -150,7 +153,23 @@ onMounted(() => {
   
 
   
-  <style scoped>
+<style scoped>
+/* グリッドレイアウトのスタイル */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5列に分割 */
+    gap: 5px; /* 区画間の間隔 */
+  }
+
+  .grid-item {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+    background-color: #f9f9f9; /* 背景色 */
+    font-size: 12px; /* サイズ調整 */
+  }
+
+/* テーブルの基本スタイル */
   table {
     width: 100%;
     border-collapse: collapse;
@@ -165,5 +184,5 @@ onMounted(() => {
   th {
     background-color: #f4f4f4;
   }
-  </style>
+</style>
   
