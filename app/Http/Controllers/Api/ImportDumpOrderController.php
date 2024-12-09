@@ -197,7 +197,7 @@ class ImportDumpOrderController extends Controller
         'date_id' => $dateId,
         'vehicle_id' => $vehicleId,
         'dump_schedule_id' => $dump_schedule->id,
-        'daily_vehicle_assignment_id' => $dailyVehicleAssignmentId,
+        'date_vehicle_id' => null,
         'boiler_number' => $boilerNumber,
         'status' => 1, // (配車済み)固定値
         'is_preloaded' => 0, // (積込なし)固定値
