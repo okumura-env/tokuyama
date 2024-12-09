@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('dump_other_schedules', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('date_id');
-            $table->unsignedBigInteger('vehicle_id');
-            $table->unsignedBigInteger('dump_schedule_id');
+            $table->foreignId('date_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('vehicle_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('dump_schedule_id')->constrained()->cascadeOnDelete();
             $table->text('note')->nullable(); // 備考は任意
             $table->timestamps();
             $table->softDeletes(); // 論理削除

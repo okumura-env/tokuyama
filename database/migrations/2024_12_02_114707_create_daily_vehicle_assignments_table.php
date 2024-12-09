@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('daily_vehicle_assignments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('date_id');
-            $table->unsignedBigInteger('vehicle_id')->nullable();// 未配車時は車両はないのでnull許可
-            $table->unsignedBigInteger('work_type_id');
-            $table->unsignedBigInteger('worker_id')->nullable(); // 作業員は任意;
+            $table->foreignId('date_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('vehicle_id')->constrained()->cascadeOnDelete()->nullable();// 未配車時は車両はないのでnull許可
+            $table->foreignId('work_type_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('worker_id')->constrained()->cascadeOnDelete()->nullable(); // 作業員は任意
             $table->string('sub_worker')->nullable(); // サブ作業員は任意
             $table->time('start_time')->nullable();// 始業時間は任意
             $table->string('task_priority')->nullable();//業務の優先度は任意
