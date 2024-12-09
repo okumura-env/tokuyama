@@ -59,10 +59,11 @@ const importData = async () => {
 
   const formData = new FormData();
   formData.append("file", selectedFile.value);
+  formData.append("dates", JSON.stringify(dates.value));
 
   try {
     // ファイルをアップロード
-    const response = await axios.post("/api/import-dump-orders", formData, {
+    const response = await axios.post("/api/dump-orders/import", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     await fetchDumpOrders(); // 再取得
@@ -84,25 +85,38 @@ const importData = async () => {
   }
 };
 
-// 1マスごと（同一日付・同一車両）のオーダーを取得する関数
+// 1番目の区画: 業務の優先度(task_priority) を取得する関数
+const getTaskPriority = (dateId, vehicleId) => {
+  const order = orders.value.find(order => order.date_id === dateId && order.vehicle_id === vehicleId);
+
+  if (!order || !order.dailyVehicleAssignment || !order.dailyVehicleAssignment.task_priority) {
+    return "-"; // デフォルトメッセージ
+  }
+
+  return order.dailyVehicleAssignment.task_priority;
+};
+
+// 2番目以降の区画: オーダーのタイトル(titles) を取得する関数
 const getOrderTitle = (dateId, vehicleId) => {
   // フィルタリング
   const localFilteredOrders = orders.value.filter(order => order.date_id === dateId && order.vehicle_id === vehicleId);
 
   // マッチするデータがない場合
   if (!localFilteredOrders || localFilteredOrders.length === 0) {
-    return Array(5).fill("-"); // データがない場合でも5区画を埋める
+    return Array(4).fill("-"); // データがない場合でも4区画を埋める
   }
 
   // dumpScheduleの存在をチェックし、タイトルを取得
-  const titles = localFilteredOrders.map(order => {
+  const titlesWithBoiler = localFilteredOrders.map(order => {
     const dumpSchedule = order.dumpSchedule;
-    return dumpSchedule?.dump_order_category_title || "不明";
+    const title = dumpSchedule?.dump_order_category_title || "";
+    const boilerNumber = order.boiler_number || ""; // boiler_numberがない場合のデフォルト
+    return `${boilerNumber}${title}`; // boiler_numberとタイトルを結合
   });
 
   // 配列を5区画に調整
-  const result = Array(5).fill("");
-  titles.slice(0, 5).forEach((title, index) => {
+  const result = Array(4).fill("");
+  titlesWithBoiler.slice(0, 4).forEach((title, index) => {
     result[index] = title;
   });
 
@@ -140,6 +154,11 @@ onMounted(() => {
             <td>{{ vehicle.name }}</td>
             <td v-for="date in dates" :key="date.id">
               <div class="grid-container">
+                <!-- 1番目の区画にtask_priorityを表示 -->
+                <div class="grid-item">
+                  {{ getTaskPriority(date.id, vehicle.id) }}
+                </div>
+                <!-- 2番目以降の区画にboiler_numberとtitleを表示 -->
                 <div v-for="(title, index) in getOrderTitle(date.id, vehicle.id)" :key="index" class="grid-item">
                   {{ title }}
                 </div>
