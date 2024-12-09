@@ -16,22 +16,12 @@ class DumpOrder extends Model
         'date_id',
         'vehicle_id',
         'dump_schedule_id',
-        'daily_vehicle_assignment_id',
         'boiler_number',
         'status',
         'is_preloaded',
         'vehicle_number',
         'note',
     ];
-
-    /**
-     * daily_vehicle_assignmentsテーブルとリレーション
-     * 日毎で統一の車両情報を管理
-     */
-    public function dailyVehicleAssignment()
-    {
-        return $this->belongsTo(DailyVehicleAssignment::class);
-    }
 
     /**
      * dump_order_categoriesテーブルとリレーション
