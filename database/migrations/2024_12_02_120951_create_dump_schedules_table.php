@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('date_id')->constrained()->cascadeOnDelete();
             $table->foreignId('vehicle_id')->constrained()->cascadeOnDelete()->nullable();
-            $table->foreignId('date_vehicle_id')->constrained()->cascadeOnDelete()->nullable();
+            $table->foreignId('date_vehicle_id')->constrained('date_vehicle')->cascadeOnDelete()->nullable();//constrainedに正しいテーブル名を設定しないとdate_vehicle"s"テーブルとして認識されてしまう
             $table->foreignId('dump_order_category_id')->constrained()->cascadeOnDelete();// 例)HES,MCM,...
             $table->foreignId('dump_order_category_title_id')->constrained()->cascadeOnDelete()->nullable();// 例)リデ,MM,MO,CL,...
             $table->string('dump_order_category_title')->nullable();
