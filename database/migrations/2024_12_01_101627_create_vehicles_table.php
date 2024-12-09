@@ -16,7 +16,7 @@ class CreateVehiclesTable extends Migration
             $table->integer('capacity')->nullable();
             $table->foreignId('vehicle_type_id')->constrained()->cascadeOnDelete();
             $table->foreignId('partner_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('worker_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('worker_id')->constrained()->cascadeOnDelete()->nullable();
             $table->timestamps();
             $table->softDeletes(); // deleted_at カラム
         });
