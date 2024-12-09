@@ -43,12 +43,14 @@ class Date extends Model
     }
 
     /**
-     * daily_vehicle_assignmentsテーブルとリレーション
+     * vehiclesテーブルとリレーション
      * 日毎の車両情報を管理する際の日付を管理
      */
-    public function dailyVehicleAssignments()
+    public function vehicles()
     {
-        return $this->hasMany(DailyVehicleAssignment::class);
+        return $this->belongsToMany(Vehicle::class)
+                    ->using(DateVehicle::class) // ピボットモデルを指定
+                    ->withPivot('id','work_type_id', 'worker_id', 'sub_worker', 'start_time', 'task_priority', 'driver_task_order', 'note')
+                    ->withTimestamps();
     }
-
 }
