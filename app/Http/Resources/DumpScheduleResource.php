@@ -17,7 +17,7 @@ class DumpScheduleResource extends JsonResource
             'dump_order_category_title_id' => $this->dump_order_category_title_id,
             'dump_order_category_title' => $this->dump_order_category_title,
             'schedule_type' => $this->schedule_type,
-            'sort_order' => $this->sort_order,
+            'sort' => $this->sort_order,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

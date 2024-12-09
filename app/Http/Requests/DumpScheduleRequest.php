@@ -20,7 +20,7 @@ class DumpScheduleRequest extends FormRequest
             'dump_order_category_title_id' => ['nullable', 'integer'],
             'dump_order_category_title' => ['nullable', 'string', 'max:255'],
             'schedule_type' => ['required', 'string', 'max:255'],
-            'sort_order' => ['required', 'integer'],
+            'sort' => ['required', 'integer'],
         ];
     }
 }

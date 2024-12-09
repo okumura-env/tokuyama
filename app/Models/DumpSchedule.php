@@ -19,7 +19,7 @@ class DumpSchedule extends Model
         'dump_order_category_title_id',
         'dump_order_category_title',
         'schedule_type',
-        'sort_order',
+        'sort',
     ];
 
     /**

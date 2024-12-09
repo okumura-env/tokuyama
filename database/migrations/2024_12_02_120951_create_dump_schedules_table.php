@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('dump_order_category_title_id')->nullable();// 例)リデ,MM,MO,CL,...
             $table->string('dump_order_category_title')->nullable();
             $table->string('schedule_type');
-            $table->integer('sort_order');
+            $table->integer('sort');
             $table->timestamps();
             $table->softDeletes(); // deleted_at
         });
