@@ -15,12 +15,12 @@ class WorkType extends Model
     ];
 
     /**
-     * daily_vehicle_assignmentsテーブルとリレーション
+     * date_vehicleテーブルとリレーション
      * 日毎の車両情報を管理する際の「ジェットパック」「ダンプ」「WP・PKS業務」「その他」かを管理
      */
-    public function dailyVehicleAssignments()
+    public function dateVehicle()
     {
-        return $this->hasMany(DailyVehicleAssignment::class);
+        return $this->hasMany(DateVehicle::class);
     }
 
 }

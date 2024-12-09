@@ -25,12 +25,12 @@ class Worker extends Model
     }
 
     /**
-     * daily_vehicle_assignmentsテーブルとリレーション
+     * date_vehicleテーブルとリレーション
      * 日毎の車両情報を管理する際の担当従業員を管理
      */
-    public function dailyVehicleAssignments()
-    {
-        return $this->hasMany(DailyVehicleAssignment::class);
-    }
+     public function dateVehicle()
+     {
+         return $this->hasMany(DateVehicle::class);
+     }
 
 }
