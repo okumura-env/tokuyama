@@ -102,8 +102,6 @@ class DumpOrderImport implements ToCollection, WithStartRow
                 'task_priority' => $taskPriority,
                 'driver_task_order' => null,
                 'notes' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
             $dailyVehicleAssignmentId = $assignment->id;
         }      
@@ -126,8 +124,6 @@ class DumpOrderImport implements ToCollection, WithStartRow
                     'dump_order_category_title' => $orderTitle,
                     'schedule_type' => "orders", // (受注)固定値
                     'sort_order' => $sortOrder, 
-                    'created_at' => now(),
-                    'updated_at' => now(),
                 ]);
         
                 $dumpScheduleId = $dump_schedule->id;    
@@ -141,8 +137,6 @@ class DumpOrderImport implements ToCollection, WithStartRow
                     'is_preloaded' => 0, // (積込なし)固定値
                     'vehicle_number' => null, // 固定値
                     'notes' => null, // 固定値
-                    'created_at' => now(),
-                    'updated_at' => now(),
                 ]);
             }
         }
