@@ -12,7 +12,6 @@ use App\Models\Vehicle;
 use App\Models\DumpOrder;
 use App\Models\DumpOrderCategoryTitle;
 use App\Models\DumpSchedule;
-use App\Models\DailyVehicleAssignment;
 
 class ImportDumpOrderController extends Controller
 {
@@ -153,29 +152,6 @@ class ImportDumpOrderController extends Controller
       // 保存処理
     public function store($dateId, $vehicleId, $boilerNumber, $categoryTitleId, $categoryTitle, $taskPriority)      
     {
-        $assignment = DailyVehicleAssignment::where('date_id', $dateId)
-        ->where('vehicle_id', $vehicleId)
-        ->first();
-
-        if ($assignment) {
-            $dailyVehicleAssignmentId = $assignment->id;
-        } else {     
-            $assignment = DailyVehicleAssignment::create([
-            'date_id' => $dateId,
-            'vehicle_id' => $vehicleId,
-            'work_type_id' => 1, // (ダンプ)固定値
-            'worker_id' => null,
-            'sub_worker' => null,
-            'start_time' => null,
-            'task_priority' => $taskPriority,
-            'driver_task_order' => null,
-            'notes' => null,
-            'created_at' => now(),
-            'updated_at' => now(),
-            ]);
-            $dailyVehicleAssignmentId = $assignment->id;
-        }
-
         //同一日付、同一車両の中の全体のスケジュールの順番
         $sortOrder = DumpSchedule::where('date_id', $dateId)
         ->where('vehicle_id', $vehicleId)
