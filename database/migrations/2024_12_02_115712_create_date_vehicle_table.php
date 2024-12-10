@@ -11,13 +11,13 @@ return new class extends Migration
         Schema::create('date_vehicle', function (Blueprint $table) {
             $table->id();
             $table->foreignId('date_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('vehicle_id')->constrained()->cascadeOnDelete()->nullable();
+            $table->foreignId('vehicle_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('work_type_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('worker_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('worker_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('sub_worker')->nullable();
             $table->time('start_time')->nullable();
-            $table->integer('task_priority')->default(0);
-            $table->integer('driver_task_order')->default(0);
+            $table->string('task_priority')->default(0)->nullable();
+            $table->integer('driver_task_order')->default(0)->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });
