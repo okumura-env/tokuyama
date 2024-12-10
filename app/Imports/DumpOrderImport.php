@@ -34,42 +34,30 @@ class DumpOrderImport implements ToCollection, WithStartRow
 
     public function collection(Collection $rows)
     {
-        // 曜日ごとのカラムインデックスを定義
-        // 0: 月曜, 1: 火曜, 2: 水曜, 3: 木曜, 4: 金曜, 5: 土曜
-        $dayColumnMappings = [
-            // $dateIndex => [taskPriorityColumn, orderTitleAndBoilerStartColumn, orderTitleAndBoilerEndColumn]
-            0 => [ 'taskPriority' => 4,  'orderTitleAndBoilerStartColumn' => 5,  'orderTitleAndBoilerEndColumn' => 10 ],
-            1 => [ 'taskPriority' => 11, 'orderTitleAndBoilerStartColumn' => 12, 'orderTitleAndBoilerEndColumn' => 17 ],
-            2 => [ 'taskPriority' => 18, 'orderTitleAndBoilerStartColumn' => 19, 'orderTitleAndBoilerEndColumn' => 24 ],
-            3 => [ 'taskPriority' => 25, 'orderTitleAndBoilerStartColumn' => 26, 'orderTitleAndBoilerEndColumn' => 31 ],
-            4 => [ 'taskPriority' => 32, 'orderTitleAndBoilerStartColumn' => 33, 'orderTitleAndBoilerEndColumn' => 38 ],
-            5 => [ 'taskPriority' => 39, 'orderTitleAndBoilerStartColumn' => 40, 'orderTitleAndBoilerEndColumn' => 45 ],
-        ];
-
         foreach ($this->dateIds as $dateIndex => $dateId) {
-            // 定義がない日付インデックスはスキップ
-            if (!isset($dayColumnMappings[$dateIndex])) {
-                continue;
-            }
+            // 各曜日ごとのセル開始位置(パターン)
+            // taskPriorityは基準 + 4 + (曜日インデックス * 7)
+            // boilerNumbers, orderTitlesは基準 + 5 + (曜日インデックス * 7) から6つ分
+            $priorityIndex = 4 + ($dateIndex * 7);
+            $boilerStartIndex = 5 + ($dateIndex * 7);
 
-            $dailyColumnConfig = $dayColumnMappings[$dateIndex];
             $boilerNumbers = null;
             $vehicle = null;
             $taskPriority = null;
             $orderTitles = null;
 
             foreach ($rows as $rowIndex => $row) {
-                // 偶数行でボイラナンバーを取得
                 if ($rowIndex % 2 === 0) {
-                    $boilerNumbers = $row->slice($dailyColumnConfig['orderTitleAndBoilerStartColumn'], ($dailyColumnConfig['orderTitleAndBoilerEndColumn'] - $dailyColumnConfig['orderTitleAndBoilerStartColumn'] + 1));
-                    Log::info($boilerNumbers);
+                    // 偶数行：boilerNumbersのみ取得
+                    $boilerNumbers = collect($row)->slice($boilerStartIndex, 6)->values()->all();
+
                 } else {
-                    // 奇数行でその他情報を取得
+                    // 奇数行：vehicleId, taskPriority, orderTitlesを取得
                     $vehicle = Vehicle::where("name", $row[1])->first();
-                    $taskPriority = $row[$dailyColumnConfig['taskPriority']];
-                    $orderTitles = $row->slice($dailyColumnConfig['orderTitleAndBoilerStartColumn'], ($dailyColumnConfig['orderTitleAndBoilerEndColumn'] - $dailyColumnConfig['orderTitleAndBoilerStartColumn'] + 1));
-    
+                    $taskPriority = $row[$priorityIndex];
+                    $orderTitles = collect($row)->slice($boilerStartIndex, 6)->values()->all();
                 }
+        
 
                 // 必要な変数が揃ったら保存処理実行
                 if ($boilerNumbers !== null && $vehicle !== null && $orderTitles !== null) {
@@ -84,6 +72,7 @@ class DumpOrderImport implements ToCollection, WithStartRow
             }
         }
     }
+    
 
     private function createDumpOrder($dateId, $vehicle, $boilerNumbers, $taskPriority, $orderTitles)
     {
@@ -111,7 +100,8 @@ class DumpOrderImport implements ToCollection, WithStartRow
             //同一日付、同一車両の中の全体のスケジュールの順番
             // $index: 5, 6, 7, 8, 9, 10(月曜日の場合)
             // $index: 12, 13, 14, 15, 16, 17(火曜日の場合)...となる
-            $sort = ($index + 3) % 7; 
+            $sort = $index + 1; 
+            Log::debug("sort:".$sort);
 
             $orderTitle = $orderTitles[$index];
             if($orderTitle !== null && $boilerNumber !== null){
