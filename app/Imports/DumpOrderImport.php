@@ -68,9 +68,7 @@ class DumpOrderImport implements ToCollection, WithStartRow
                     $vehicle = Vehicle::where("name", $row[1])->first();
                     $taskPriority = $row[$dailyColumnConfig['taskPriority']];
                     $orderTitles = $row->slice($dailyColumnConfig['orderTitleAndBoilerStartColumn'], ($dailyColumnConfig['orderTitleAndBoilerEndColumn'] - $dailyColumnConfig['orderTitleAndBoilerStartColumn'] + 1));
-                    Log::info($vehicle);
-                    Log::info($taskPriority);
-                    Log::info($orderTitles);
+    
                 }
 
                 // 必要な変数が揃ったら保存処理実行
@@ -111,9 +109,9 @@ class DumpOrderImport implements ToCollection, WithStartRow
 
         foreach ($boilerNumbers as $index => $boilerNumber) {
             //同一日付、同一車両の中の全体のスケジュールの順番
-            $sort = DumpSchedule::where('date_id', $dateId)
-            ->where('vehicle_id', $vehicle->id)
-            ->count() + 1;
+            // $index: 5, 6, 7, 8, 9, 10(月曜日の場合)
+            // $index: 12, 13, 14, 15, 16, 17(火曜日の場合)...となる
+            $sort = ($index + 3) % 7; 
 
             $orderTitle = $orderTitles[$index];
             if($orderTitle !== null && $boilerNumber !== null){
