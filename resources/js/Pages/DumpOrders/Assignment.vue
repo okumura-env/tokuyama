@@ -9,7 +9,9 @@ const orders = ref([]);
 const fileInput = ref(null);
 const selectedFile = ref(null);
 
-// 車両データの取得
+/**
+ * 車両データの取得 
+ */
 const fetchVehicles = async () => {
   try {
     const { data } = await axios.get("/api/vehicles");
@@ -19,7 +21,9 @@ const fetchVehicles = async () => {
   }
 };
 
-// 日付データの取得
+/**
+ * 日付データの取得
+ */
 const fetchDates = async () => {
   try {
     const { data } = await axios.get("/api/dates");
@@ -29,7 +33,10 @@ const fetchDates = async () => {
   }
 };
 
-// ダンプオーダーの取得
+/**
+ * ダンプオーダーの取得 
+ * 
+ */
 const fetchDumpOrders = async () => {
   try {
     const { data } = await axios.get("/api/dump-orders");
@@ -39,24 +46,35 @@ const fetchDumpOrders = async () => {
   }
 };
 
-// ファイル選択トリガー
+/**
+ * ファイル選択トリガー
+ */
 const triggerFileSelect = () => {
   fileInput.value?.click(); // ?.演算子を使用して安全にアクセス
 };
 
-// ファイル選択ハンドラー
+/**
+ * ファイル選択時の処理
+ * @param {Event} event
+ * 
+ */
 const handleFileSelect = (event) => {
   selectedFile.value = event.target.files[0];
   console.log("選択されたファイル:", selectedFile.value);
 };
 
-// データインポート
+/**
+ * データのインポート
+ */
 const importData = async () => {
   if (!selectedFile.value) {
     alert("ファイルを選択してください！");
     return;
   }
 
+  /**
+   * FormDataオブジェクトの生成
+   */
   const formData = new FormData();
   formData.append("file", selectedFile.value);
   formData.append("dates", JSON.stringify(dates.value));
@@ -66,7 +84,6 @@ const importData = async () => {
     const response = await axios.post("/api/dump-orders/import", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    await fetchDumpOrders(); // 再取得
     console.log("インポート成功:", response.data);
 
     // インポート後のデータ再取得
@@ -85,7 +102,13 @@ const importData = async () => {
   }
 };
 
-// 1番目の区画: 業務の優先度(task_priority) を取得する関数
+/**
+ * ダンプオーダーの業務の優先度(task_priority)を取得する関数
+ * 1番目の区画に表示
+ * @param {number} dateId
+ * @param {number} vehicleId
+ * @returns {string}
+ */
 const getTaskPriority = (dateId, vehicleId) => {
   const order = orders.value.find(order => order.date_id === dateId && order.vehicle_id === vehicleId);
 
@@ -96,9 +119,19 @@ const getTaskPriority = (dateId, vehicleId) => {
   return order.dumpSchedule.date_vehicle.task_priority;
 };
 
+/**
+ * 該当日付と車両に対応するダンプオーダーを取得し、
+ * オーダーのタイトル(titles)とボイラー番号(boiler_number)を取得し、
+ * 並べ替えまで行う関数
+ * 2番目以降の区画に表示
+ * @param {number} dateId
+ * @param {number} vehicleId
+ * @returns {string[]}
+ * 
+ */
 // 2番目以降の区画: オーダーのタイトル(titles) を取得する関数
 const ProcessOrderTitlesAndNumberByDateAndVehicle = (dateId, vehicleId) => {
-  // フィルタリング
+  // 該当日付と車両に対応するダンプオーダーを取得
   const localFilteredOrders = orders.value.filter(order => order.date_id === dateId && order.vehicle_id === vehicleId);
 
   // マッチするデータがない場合
@@ -113,13 +146,13 @@ const ProcessOrderTitlesAndNumberByDateAndVehicle = (dateId, vehicleId) => {
     return sortA - sortB;
   });
 
-    // 区画に対応するタイトルを生成
+    // 区画に対応するタイトル、ボイラー番号、ソート値を取得
     const result = Array(4).fill("-");
-  sortedOrders.forEach(order => {
-    const sort = order.dumpSchedule?.sort || 0;
-    const title = order.dumpSchedule?.dump_order_category_title || "";
-    const boilerNumber = order.boiler_number || "";
-    const fullTitle = `${boilerNumber} ${title}`.trim();
+    sortedOrders.forEach(order => {
+      const sort = order.dumpSchedule?.sort || 0;
+      const title = order.dumpSchedule?.dump_order_category_title || "";
+      const boilerNumber = order.boiler_number || "";
+      const fullTitle = `${boilerNumber} ${title}`.trim();
 
     // ソート値に応じた区画にタイトルを配置
     if (sort >= 1 && sort <= 4) {
