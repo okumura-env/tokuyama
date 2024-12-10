@@ -106,18 +106,25 @@ const getOrderTitle = (dateId, vehicleId) => {
     return Array(4).fill("-"); // データがない場合でも4区画を埋める
   }
 
-  // dumpScheduleの存在をチェックし、タイトルを取得
-  const titlesWithBoiler = localFilteredOrders.map(order => {
-    const dumpSchedule = order.dumpSchedule;
-    const title = dumpSchedule?.dump_order_category_title || "";
-    const boilerNumber = order.boiler_number || ""; // boiler_numberがない場合のデフォルト
-    return `${boilerNumber}${title}`; // boiler_numberとタイトルを結合
+  // sort順で並び替え
+  const sortedOrders = localFilteredOrders.sort((a, b) => {
+    const sortA = a.dumpSchedule?.sort || 0;
+    const sortB = b.dumpSchedule?.sort || 0;
+    return sortA - sortB;
   });
 
-  // 配列を5区画に調整
-  const result = Array(4).fill("");
-  titlesWithBoiler.slice(0, 4).forEach((title, index) => {
-    result[index] = title;
+    // 区画に対応するタイトルを生成
+    const result = Array(4).fill("-");
+  sortedOrders.forEach(order => {
+    const sort = order.dumpSchedule?.sort || 0;
+    const title = order.dumpSchedule?.dump_order_category_title || "";
+    const boilerNumber = order.boiler_number || "";
+    const fullTitle = `${boilerNumber} ${title}`.trim();
+
+    // ソート値に応じた区画にタイトルを配置
+    if (sort >= 1 && sort <= 4) {
+      result[sort - 1] = fullTitle;
+    }
   });
 
   return result;
