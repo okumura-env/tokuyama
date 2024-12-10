@@ -16,7 +16,7 @@ class DumpOrderController extends Controller
 {
     public function index()
     {
-        return DumpOrderResource::collection(DumpOrder::with('dumpSchedule')->get());
+        return DumpOrderResource::collection(DumpOrder::with('dumpSchedule.dateVehicle')->get());
     }
 
     public function store(DumpOrderRequest $request)
