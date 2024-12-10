@@ -89,11 +89,11 @@ const importData = async () => {
 const getTaskPriority = (dateId, vehicleId) => {
   const order = orders.value.find(order => order.date_id === dateId && order.vehicle_id === vehicleId);
 
-  if (!order || !order.dailyVehicleAssignment || !order.dailyVehicleAssignment.task_priority) {
+  if (!order || !order.dumpSchedule || !order.dumpSchedule.date_vehicle || !order.dumpSchedule.date_vehicle.task_priority) {
     return "-"; // デフォルトメッセージ
   }
 
-  return order.dailyVehicleAssignment.task_priority;
+  return order.dumpSchedule.date_vehicle.task_priority;
 };
 
 // 2番目以降の区画: オーダーのタイトル(titles) を取得する関数
