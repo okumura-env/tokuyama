@@ -97,7 +97,7 @@ const getTaskPriority = (dateId, vehicleId) => {
 };
 
 // 2番目以降の区画: オーダーのタイトル(titles) を取得する関数
-const getOrderTitle = (dateId, vehicleId) => {
+const ProcessOrderTitlesAndNumberByDateAndVehicle = (dateId, vehicleId) => {
   // フィルタリング
   const localFilteredOrders = orders.value.filter(order => order.date_id === dateId && order.vehicle_id === vehicleId);
 
@@ -166,7 +166,7 @@ onMounted(() => {
                   {{ getTaskPriority(date.id, vehicle.id) }}
                 </div>
                 <!-- 2番目以降の区画にboiler_numberとtitleを表示 -->
-                <div v-for="(title, index) in getOrderTitle(date.id, vehicle.id)" :key="index" class="grid-item">
+                <div v-for="(title, index) in ProcessOrderTitlesAndNumberByDateAndVehicle(date.id, vehicle.id)" :key="index" class="grid-item">
                   {{ title }}
                 </div>
               </div>
