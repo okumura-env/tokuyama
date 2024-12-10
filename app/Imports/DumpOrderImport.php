@@ -123,7 +123,7 @@ class DumpOrderImport implements ToCollection, WithStartRow
                     'date_id' => $dateId,
                     'vehicle_id' => $vehicle->id,
                     'dump_schedule_id' => $dumpScheduleId,
-                    'date_vehicle_id' => null,//ひとまず,
+                    'date_vehicle_id' => $dateVehicleId,
                     'boiler_number' => $boilerNumber,
                     'status' => 1, // (配車済み)固定値
                     'is_preloaded' => 0, // (積込なし)固定値
