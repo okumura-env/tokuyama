@@ -6,12 +6,12 @@ use App\Models\Vehicle;
 use App\Models\DumpOrder;
 use App\Models\DumpSchedule;
 use App\Models\DumpOrderCategoryTitle;
-use App\Models\DailyVehicleAssignment;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Illuminate\Support\Facades\Log;
+
 
 class DumpOrderImport implements ToCollection, WithStartRow
 {
@@ -54,7 +54,7 @@ class DumpOrderImport implements ToCollection, WithStartRow
 
             $dailyColumnConfig = $dayColumnMappings[$dateIndex];
             $boilerNumbers = null;
-            $vehicleId = null;
+            $vehicle = null;
             $taskPriority = null;
             $orderTitles = null;
 
@@ -62,20 +62,24 @@ class DumpOrderImport implements ToCollection, WithStartRow
                 // 偶数行でボイラナンバーを取得
                 if ($rowIndex % 2 === 0) {
                     $boilerNumbers = $row->slice($dailyColumnConfig['orderTitleAndBoilerStartColumn'], ($dailyColumnConfig['orderTitleAndBoilerEndColumn'] - $dailyColumnConfig['orderTitleAndBoilerStartColumn'] + 1));
+                    Log::info($boilerNumbers);
                 } else {
                     // 奇数行でその他情報を取得
-                    $vehicleId = Vehicle::where("name", $row[1])->first()->id;
+                    $vehicle = Vehicle::where("name", $row[1])->first();
                     $taskPriority = $row[$dailyColumnConfig['taskPriority']];
                     $orderTitles = $row->slice($dailyColumnConfig['orderTitleAndBoilerStartColumn'], ($dailyColumnConfig['orderTitleAndBoilerEndColumn'] - $dailyColumnConfig['orderTitleAndBoilerStartColumn'] + 1));
+                    Log::info($vehicle);
+                    Log::info($taskPriority);
+                    Log::info($orderTitles);
                 }
 
                 // 必要な変数が揃ったら保存処理実行
-                if ($boilerNumbers !== null && $vehicleId !== null && $orderTitles !== null) {
-                    $this->createDumpOrder($dateId, $vehicleId, $boilerNumbers, $taskPriority, $orderTitles);
+                if ($boilerNumbers !== null && $vehicle !== null && $orderTitles !== null) {
+                    $this->createDumpOrder($dateId, $vehicle, $boilerNumbers, $taskPriority, $orderTitles);
 
                     // 次回に備えてリセット
                     $boilerNumbers = null;
-                    $vehicleId = null;
+                    $vehicle = null;
                     $taskPriority = null;
                     $orderTitles = null;
                 }
@@ -83,33 +87,32 @@ class DumpOrderImport implements ToCollection, WithStartRow
         }
     }
 
-    private function createDumpOrder($dateId, $vehicleId, $boilerNumbers, $taskPriority, $orderTitles)
+    private function createDumpOrder($dateId, $vehicle, $boilerNumbers, $taskPriority, $orderTitles)
     {
-        $assignment = DailyVehicleAssignment::where('date_id', $dateId)
-        ->where('vehicle_id', $vehicleId)
-        ->first();
+        $dateVehicle = $vehicle->dates()->wherePivot('date_id',$dateId)->first();
 
-        if ($assignment) {
-            $dailyVehicleAssignmentId = $assignment->id;
+        if ($dateVehicle) {
+            $dateVehicleId = $dateVehicle->id;
         } else {     
-            $assignment = DailyVehicleAssignment::create([
-                'date_id' => $dateId,
-                'vehicle_id' => $vehicleId,
+            $vehicle->dates()->syncWithoutDetaching([$dateId => [
                 'work_type_id' => 1, // (ダンプ)固定値
                 'worker_id' => null,
                 'sub_worker' => null,
                 'start_time' => null,
                 'task_priority' => $taskPriority,
                 'driver_task_order' => null,
-                'notes' => null,
+                'note' => null,
+                ]
             ]);
-            $dailyVehicleAssignmentId = $assignment->id;
+
+         
+            $dateVehicleId = $vehicle->dates()->wherePivot('date_id', $dateId)->first()->pivot->id;
         }      
 
         foreach ($boilerNumbers as $index => $boilerNumber) {
             //同一日付、同一車両の中の全体のスケジュールの順番
-            $sortOrder = DumpSchedule::where('date_id', $dateId)
-            ->where('vehicle_id', $vehicleId)
+            $sort = DumpSchedule::where('date_id', $dateId)
+            ->where('vehicle_id', $vehicle->id)
             ->count() + 1;
 
             $orderTitle = $orderTitles[$index];
@@ -118,20 +121,21 @@ class DumpOrderImport implements ToCollection, WithStartRow
 
                 $dump_schedule = DumpSchedule::create([
                     'date_id' => $dateId,
-                    'vehicle_id' => $vehicleId,
+                    'vehicle_id' => $vehicle->id,
+                    'date_vehicle_id' => $dateVehicleId,
                     'dump_order_category_id' => 1, //(HES)固定値
                     'dump_order_category_title_id' => $orderTitleId,
                     'dump_order_category_title' => $orderTitle,
                     'schedule_type' => "orders", // (受注)固定値
-                    'sort_order' => $sortOrder, 
+                    'sort' => $sort, 
                 ]);
         
                 $dumpScheduleId = $dump_schedule->id;    
                 DumpOrder::create([
                     'date_id' => $dateId,
-                    'vehicle_id' => $vehicleId,
+                    'vehicle_id' => $vehicle->id,
                     'dump_schedule_id' => $dumpScheduleId,
-                    'daily_vehicle_assignment_id' => $dailyVehicleAssignmentId,
+                    'date_vehicle_id' => null,//ひとまず,
                     'boiler_number' => $boilerNumber,
                     'status' => 1, // (配車済み)固定値
                     'is_preloaded' => 0, // (積込なし)固定値
