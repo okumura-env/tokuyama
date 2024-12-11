@@ -126,7 +126,7 @@ class DumpOrderImport implements ToCollection, WithStartRow
             //orderTotle取得時にまとめて取得したくなるがtitleがnullの可能性があるので上記の条件文を通った後に取得
             $orderTitleId = DumpOrderCategoryTitle::where('title', $orderTitle)->first()->id;
 
-            $dump_schedule = DumpSchedule::create([
+            $dumpSchedule = DumpSchedule::create([
                 'date_id' => $dateId,
                 'vehicle_id' => $vehicle->id,
                 'date_vehicle_id' => $dateVehicle->id,
@@ -136,12 +136,10 @@ class DumpOrderImport implements ToCollection, WithStartRow
                 'schedule_type' => "orders", // (受注)固定値
                 'sort' => $sort, 
             ]);
-    
-            $dumpScheduleId = $dump_schedule->id;    
-            DumpOrder::create([
+      
+            $dumpSchedule->dumpOrder()->create([
                 'date_id' => $dateId,
                 'vehicle_id' => $vehicle->id,
-                'dump_schedule_id' => $dumpScheduleId,
                 'date_vehicle_id' => $dateVehicle->id,
                 'boiler_number' => $boilerNumber,
                 'status' => 1, // (配車済み)固定値
