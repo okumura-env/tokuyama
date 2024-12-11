@@ -8,7 +8,6 @@ use App\Models\DumpSchedule;
 use App\Models\DumpOrderCategoryTitle;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Illuminate\Support\Facades\Log;
 
@@ -46,7 +45,11 @@ class DumpOrderImport implements ToCollection, WithStartRow
         foreach ($this->dateIds as $dateIndex => $dateId) {
             // 各曜日ごとのセル開始位置(パターン)
             // taskPriorityは基準 + 4 + (曜日インデックス * 7)
+            // 例）月曜日の場合、taskPriorityは基準 + 4 + (0 * 7) = 4（行目）
+            // 例）火曜日の場合、taskPriorityは基準 + 4 + (1 * 7) = 11（行目）
             // boilerNumbers, orderTitlesは基準 + 5 + (曜日インデックス * 7) から6つ分
+            // 例）月曜日の場合、boilerNumbers, orderTitlesは基準 + 5 + (0 * 7) = 5 (行目)から6つ分
+            // 例）火曜日の場合、boilerNumbers, orderTitlesは基準 + 5 + (1 * 7) = 12 (行目)から6つ分
             $priorityIndex = 4 + ($dateIndex * 7);
             $boilerStartIndex = 5 + ($dateIndex * 7);
 
@@ -56,14 +59,19 @@ class DumpOrderImport implements ToCollection, WithStartRow
             $taskPriority = null;
             $orderTitles = null;
 
-            // 行ごとに処理
+            // 1行ずつ処理
+            // 偶数行と奇数行で処理を分ける
+            // 偶数行：boilerNumbersのみ取得
+            // 奇数行：vehicleId, taskPriority, orderTitlesを取得
             // 1つの受注につき偶数行と奇数行はセット。必ず偶数行から取得処理が始まる。例)1つの受注情報がExcelの30行目と31行目に渡って記載されている。
-            // 偶数行：ボイラー番号(boilerNumber)・奇数行：車両(vehicle), 業務の優先度(taskPriority), 受注タイトル(orderTitle)
+            // 必要な変数が揃ったら保存処理実行
+            // 次のループに備えてリセット
             foreach ($rows as $rowIndex => $row) {
                 if ($rowIndex % 2 === 0) {
                     // 偶数行：boilerNumbersのみ取得
                     // (例)$boilerNumbers：[ 1, 6, 1, NULL, NULL, NULL]
                     $boilerNumbers = collect($row)->slice($boilerStartIndex, 6)->values()->all();
+                    Log::info("Boiler Numbers: ", $boilerNumbers);
                 } else {
                     // 奇数行：vehicleId, taskPriority, orderTitlesを取得
                     // (例)$taskPriority：四
