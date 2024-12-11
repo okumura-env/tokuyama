@@ -57,6 +57,8 @@ class DumpOrderImport implements ToCollection, WithStartRow
             $orderTitles = null;
 
             // 行ごとに処理
+            // 1つの受注につき偶数行と奇数行はセット。必ず偶数行から取得処理が始まる。例)1つの受注情報がExcelの30行目と31行目に渡って記載されている。
+            // 偶数行：ボイラー番号(boilerNumber)・奇数行：車両(vehicle), 業務の優先度(taskPriority), 受注タイトル(orderTitle)
             foreach ($rows as $rowIndex => $row) {
                 if ($rowIndex % 2 === 0) {
                     // 偶数行：boilerNumbersのみ取得
@@ -69,11 +71,8 @@ class DumpOrderImport implements ToCollection, WithStartRow
                     $vehicle = Vehicle::where("name", $row[1])->first();
                     $taskPriority = $row[$priorityIndex];
                     $orderTitles = collect($row)->slice($boilerStartIndex, 6)->values()->all();
-                }
 
-                // 必要な変数が揃ったら保存処理実行
-                // $taskPriorityは必須ではないので条件に含めない
-                if ($boilerNumbers !== null && $vehicle !== null && $orderTitles !== null) {
+                    // 必要な変数が揃ったら保存処理実行
                     $this->createDumpOrder($dateId, $vehicle, $boilerNumbers, $taskPriority, $orderTitles);
 
                     // 次回に備えてリセット
