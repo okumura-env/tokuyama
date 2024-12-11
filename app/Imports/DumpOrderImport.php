@@ -139,7 +139,16 @@ class DumpOrderImport implements ToCollection, WithStartRow
             // (例)$orderTitles：[ リデ, MM, MM, NULL, NULL, NULL]
             $orderTitle = $orderTitles[$index];
             // オーダーの表示名(title)とボイラー番号は必須項目
-            if($orderTitle !== null && $boilerNumber !== null){
+            
+
+             // 注意：$orderTitle, $boilerNumber が NULL の場合はスキップ
+            // オーダーの表示名(title)は必須項目のためエラーになる
+            //注意：boilerNumberは実はnullableなので以下の条件に含める必要はないが、記載しないとエラーになるので追加
+            //デバック時に確認
+            if ($orderTitle === null || $boilerNumber === null) {
+                continue;
+            }
+
                 $orderTitleId = DumpOrderCategoryTitle::where('title', $orderTitle)->first()->id;
 
                 $dump_schedule = DumpSchedule::create([
@@ -165,7 +174,7 @@ class DumpOrderImport implements ToCollection, WithStartRow
                     'vehicle_number' => null, // 固定値
                     'notes' => null, // 固定値
                 ]);
-            }
+            
         }
     }
 
