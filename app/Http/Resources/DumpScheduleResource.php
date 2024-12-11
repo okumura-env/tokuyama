@@ -12,13 +12,14 @@ class DumpScheduleResource extends JsonResource
         return [
             'id' => $this->id,
             'dateVehicle' => $this->whenLoaded("dateVehicle"),
+            'dumpOrder' => $this->whenLoaded("dumpOrder"),
             'date_id' => $this->date_id,
             'vehicle_id' => $this->vehicle_id,
             'dump_order_category_id' => $this->dump_order_category_id,
             'dump_order_category_title_id' => $this->dump_order_category_title_id,
             'dump_order_category_title' => $this->dump_order_category_title,
             'schedule_type' => $this->schedule_type,
-            'sort' => $this->sort_order,
+            'sort' => $this->sort,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
