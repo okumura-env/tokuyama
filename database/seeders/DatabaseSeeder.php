@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Date;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,6 +25,7 @@ class DatabaseSeeder extends Seeder
             DumpOrderCategorySeeder::class,
             DumpOrderCategoryTitleSeeder::class,
             WorkTypeSeeder::class,
+            DateVehicleSeeder::class,
         ]);
     }
 }
