@@ -138,10 +138,8 @@ class DumpOrderImport implements ToCollection, WithStartRow
 
             // (例)$orderTitles：[ リデ, MM, MM, NULL, NULL, NULL]
             $orderTitle = $orderTitles[$index];
-            // オーダーの表示名(title)とボイラー番号は必須項目
-            
 
-             // 注意：$orderTitle, $boilerNumber が NULL の場合はスキップ
+            // 注意：$orderTitle, $boilerNumber が NULL の場合はスキップ
             // オーダーの表示名(title)は必須項目のためエラーになる
             //注意：boilerNumberは実はnullableなので以下の条件に含める必要はないが、記載しないとエラーになるので追加
             //デバック時に確認
@@ -149,31 +147,32 @@ class DumpOrderImport implements ToCollection, WithStartRow
                 continue;
             }
 
-                $orderTitleId = DumpOrderCategoryTitle::where('title', $orderTitle)->first()->id;
+            //orderTotle取得時にまとめて取得したくなるがtitleがnullの可能性があるので上記の条件文を通った後に取得
+            $orderTitleId = DumpOrderCategoryTitle::where('title', $orderTitle)->first()->id;
 
-                $dump_schedule = DumpSchedule::create([
-                    'date_id' => $dateId,
-                    'vehicle_id' => $vehicle->id,
-                    'date_vehicle_id' => $dateVehicleId,
-                    'dump_order_category_id' => 1, //(HES)固定値
-                    'dump_order_category_title_id' => $orderTitleId,
-                    'dump_order_category_title' => $orderTitle,
-                    'schedule_type' => "orders", // (受注)固定値
-                    'sort' => $sort, 
-                ]);
-        
-                $dumpScheduleId = $dump_schedule->id;    
-                DumpOrder::create([
-                    'date_id' => $dateId,
-                    'vehicle_id' => $vehicle->id,
-                    'dump_schedule_id' => $dumpScheduleId,
-                    'date_vehicle_id' => $dateVehicleId,
-                    'boiler_number' => $boilerNumber,
-                    'status' => 1, // (配車済み)固定値
-                    'is_preloaded' => 0, // (積込なし)固定値
-                    'vehicle_number' => null, // 固定値
-                    'notes' => null, // 固定値
-                ]);
+            $dump_schedule = DumpSchedule::create([
+                'date_id' => $dateId,
+                'vehicle_id' => $vehicle->id,
+                'date_vehicle_id' => $dateVehicleId,
+                'dump_order_category_id' => 1, //(HES)固定値
+                'dump_order_category_title_id' => $orderTitleId,
+                'dump_order_category_title' => $orderTitle,
+                'schedule_type' => "orders", // (受注)固定値
+                'sort' => $sort, 
+            ]);
+    
+            $dumpScheduleId = $dump_schedule->id;    
+            DumpOrder::create([
+                'date_id' => $dateId,
+                'vehicle_id' => $vehicle->id,
+                'dump_schedule_id' => $dumpScheduleId,
+                'date_vehicle_id' => $dateVehicleId,
+                'boiler_number' => $boilerNumber,
+                'status' => 1, // (配車済み)固定値
+                'is_preloaded' => 0, // (積込なし)固定値
+                'vehicle_number' => null, // 固定値
+                'notes' => null, // 固定値
+            ]);
             
         }
     }
