@@ -6,6 +6,7 @@ import axios from "axios";
 const vehicles = ref([]);
 const dates = ref([]);
 const orders = ref([]);
+const schedules = ref([]);
 const fileInput = ref(null);
 const selectedFile = ref(null);
 
@@ -34,15 +35,15 @@ const fetchDates = async () => {
 };
 
 /**
- * ダンプオーダーの取得 
+ * ダンプスケジュールの取得 
  * 
  */
-const fetchDumpOrders = async () => {
+const fetchDumpSchedules = async () => {
   try {
-    const { data } = await axios.get("/api/dump-orders");
-    orders.value = data.data;
+    const { data } = await axios.get("/api/dump-schedules");
+    schedules.value = data.data;
   } catch (error) {
-    console.error("ダンプオーダーの取得に失敗しました", error);
+    console.error("ダンプスケジュールの取得に失敗しました", error);
   }
 };
 
@@ -88,7 +89,7 @@ const importData = async () => {
 
     // インポート後のデータ再取得
     try {
-      await fetchDumpOrders();
+      await fetchDumpSchedules();
       console.log("ダンプオーダーの再取得が成功しました:", orders.value);
     } catch (fetchError) {
       console.error("ダンプオーダーの再取得に失敗しました:", fetchError);
@@ -110,13 +111,13 @@ const importData = async () => {
  * @returns {string}
  */
 const getTaskPriority = (dateId, vehicleId) => {
-  const order = orders.value.find(order => order.date_id === dateId && order.vehicle_id === vehicleId);
+  const schedule = schedules.value.find(schedules => schedules.date_id === dateId && schedules.vehicle_id === vehicleId);
 
-  if (!order || !order.dumpSchedule || !order.dumpSchedule.date_vehicle || !order.dumpSchedule.date_vehicle.task_priority) {
+  if (!schedule || !schedule.dateVehicle || !schedule.dateVehicle.task_priority) {
     return "-"; // デフォルトメッセージ
   }
 
-  return order.dumpSchedule.date_vehicle.task_priority;
+  return schedule.dateVehicle.task_priority;
 };
 
 /**
@@ -131,27 +132,27 @@ const getTaskPriority = (dateId, vehicleId) => {
  */
 // 2番目以降の区画: オーダーのタイトル(titles) を取得する関数
 const ProcessOrderTitlesAndNumberByDateAndVehicle = (dateId, vehicleId) => {
-  // 該当日付と車両に対応するダンプオーダーを取得
-  const localFilteredOrders = orders.value.filter(order => order.date_id === dateId && order.vehicle_id === vehicleId);
-
+  // 該当日付と車両に対応するダンプスケジュールを取得
+  const localFilteredSchedules = schedules.value.filter(schedule => schedule.date_id === dateId && schedule.vehicle_id === vehicleId);
+  
   // マッチするデータがない場合
-  if (!localFilteredOrders || localFilteredOrders.length === 0) {
+  if (!localFilteredSchedules || localFilteredSchedules.length === 0) {
     return Array(4).fill("-"); // データがない場合でも4区画を埋める
   }
 
-  // sort順で並び替え
-  const sortedOrders = localFilteredOrders.sort((a, b) => {
-    const sortA = a.dumpSchedule?.sort || 0;
-    const sortB = b.dumpSchedule?.sort || 0;
+    // sort順で並び替え
+    const sortedSchedules = localFilteredSchedules.sort((a, b) => {
+    const sortA = a.sort || "";
+    const sortB = b.sort || "";
     return sortA - sortB;
   });
 
     // 区画に対応するタイトル、ボイラー番号、ソート値を取得
     const result = Array(4).fill("-");
-    sortedOrders.forEach(order => {
-      const sort = order.dumpSchedule?.sort || 0;
-      const title = order.dumpSchedule?.dump_order_category_title || "";
-      const boilerNumber = order.boiler_number || "";
+    sortedSchedules.forEach(schedule => {
+      const sort = schedule.sort|| "";
+      const title = schedule.dump_order_category_title|| "";
+      const boilerNumber = schedule.dumpOrder?.boiler_number || "";
       const fullTitle = `${boilerNumber} ${title}`.trim();
 
     // ソート値に応じた区画にタイトルを配置
@@ -167,7 +168,7 @@ const ProcessOrderTitlesAndNumberByDateAndVehicle = (dateId, vehicleId) => {
 onMounted(() => {
   fetchVehicles();
   fetchDates();
-  fetchDumpOrders();
+  fetchDumpSchedules();
 });
 </script>
 
