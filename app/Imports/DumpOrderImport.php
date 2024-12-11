@@ -53,12 +53,6 @@ class DumpOrderImport implements ToCollection, WithStartRow
             $priorityIndex = 4 + ($dateIndex * 7);
             $boilerStartIndex = 5 + ($dateIndex * 7);
 
-            // 一時的に保持する変数
-            $boilerNumbers = null;
-            $vehicle = null;
-            $taskPriority = null;
-            $orderTitles = null;
-
             // 1行ずつ処理
             // 偶数行と奇数行で処理を分ける
             // 偶数行：boilerNumbersのみ取得
@@ -81,13 +75,7 @@ class DumpOrderImport implements ToCollection, WithStartRow
                     $orderTitles = collect($row)->slice($boilerStartIndex, 6)->values()->all();
 
                     // 必要な変数が揃ったら保存処理実行
-                    $this->createDumpOrder($dateId, $vehicle, $boilerNumbers, $taskPriority, $orderTitles);
-
-                    // 次回に備えてリセット
-                    $boilerNumbers = null;
-                    $vehicle = null;
-                    $taskPriority = null;
-                    $orderTitles = null;
+                    $this->createDumpOrder($dateId, $vehicle, $boilerNumbers ?? [], $taskPriority, $orderTitles);
                 }
             }
         }
