@@ -1,26 +1,19 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import useDataApi from "../../Composables/useDataApi";
 
 // データ定義
-const vehicles = ref([]);
 const dates = ref([]);
 const orders = ref([]);
 const schedules = ref([]);
 const fileInput = ref(null);
 const selectedFile = ref(null);
 
-/**
- * 車両データの取得 
- */
-const fetchVehicles = async () => {
-  try {
-    const { data } = await axios.get("/api/vehicles");
-    vehicles.value = data.data.filter(vehicle => vehicle.id <= 34);
-  } catch (error) {
-    console.error("車両データの取得に失敗しました", error);
-  }
-};
+const { data:vehicles , fetchData:fetchVehicles } = useDataApi(
+    "/api/vehicles",
+    (data) => data.filter(vehicle => vehicle.id <= 34)
+  );
 
 /**
  * 日付データの取得
