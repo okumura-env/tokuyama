@@ -12,7 +12,7 @@ class DumpScheduleController extends Controller
 {
     public function index()
     {
-        return DumpScheduleResource::collection(DumpSchedule::with('dateVehicle')->get());
+        return DumpScheduleResource::collection(DumpSchedule::with('dumpOrder','dateVehicle')->get());
     }
 
     public function store(DumpScheduleRequest $request)
