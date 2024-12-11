@@ -14,9 +14,9 @@ class CreateVehiclesTable extends Migration
             $table->string('code')->nullable();
             $table->string('number');
             $table->integer('capacity')->nullable();
-            $table->unsignedBigInteger('vehicle_type_id');
-            $table->unsignedBigInteger('partner_id')->nullable();
-            $table->unsignedBigInteger('worker_id')->nullable();
+            $table->foreignId('vehicle_type_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('partner_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('worker_id')->constrained()->cascadeOnDelete()->nullable();
             $table->timestamps();
             $table->softDeletes(); // deleted_at カラム
         });

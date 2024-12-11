@@ -9,7 +9,9 @@ const orders = ref([]);
 const fileInput = ref(null);
 const selectedFile = ref(null);
 
-// 車両データの取得
+/**
+ * 車両データの取得 
+ */
 const fetchVehicles = async () => {
   try {
     const { data } = await axios.get("/api/vehicles");
@@ -19,7 +21,9 @@ const fetchVehicles = async () => {
   }
 };
 
-// 日付データの取得
+/**
+ * 日付データの取得
+ */
 const fetchDates = async () => {
   try {
     const { data } = await axios.get("/api/dates");
@@ -29,7 +33,10 @@ const fetchDates = async () => {
   }
 };
 
-// ダンプオーダーの取得
+/**
+ * ダンプオーダーの取得 
+ * 
+ */
 const fetchDumpOrders = async () => {
   try {
     const { data } = await axios.get("/api/dump-orders");
@@ -39,24 +46,35 @@ const fetchDumpOrders = async () => {
   }
 };
 
-// ファイル選択トリガー
+/**
+ * ファイル選択トリガー
+ */
 const triggerFileSelect = () => {
   fileInput.value?.click(); // ?.演算子を使用して安全にアクセス
 };
 
-// ファイル選択ハンドラー
+/**
+ * ファイル選択時の処理
+ * @param {Event} event
+ * 
+ */
 const handleFileSelect = (event) => {
   selectedFile.value = event.target.files[0];
   console.log("選択されたファイル:", selectedFile.value);
 };
 
-// データインポート
+/**
+ * データのインポート
+ */
 const importData = async () => {
   if (!selectedFile.value) {
     alert("ファイルを選択してください！");
     return;
   }
 
+  /**
+   * FormDataオブジェクトの生成
+   */
   const formData = new FormData();
   formData.append("file", selectedFile.value);
   formData.append("dates", JSON.stringify(dates.value));
@@ -66,7 +84,6 @@ const importData = async () => {
     const response = await axios.post("/api/dump-orders/import", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    await fetchDumpOrders(); // 再取得
     console.log("インポート成功:", response.data);
 
     // インポート後のデータ再取得
@@ -85,20 +102,36 @@ const importData = async () => {
   }
 };
 
-// 1番目の区画: 業務の優先度(task_priority) を取得する関数
+/**
+ * ダンプオーダーの業務の優先度(task_priority)を取得する関数
+ * 1番目の区画に表示
+ * @param {number} dateId
+ * @param {number} vehicleId
+ * @returns {string}
+ */
 const getTaskPriority = (dateId, vehicleId) => {
   const order = orders.value.find(order => order.date_id === dateId && order.vehicle_id === vehicleId);
 
-  if (!order || !order.dailyVehicleAssignment || !order.dailyVehicleAssignment.task_priority) {
+  if (!order || !order.dumpSchedule || !order.dumpSchedule.date_vehicle || !order.dumpSchedule.date_vehicle.task_priority) {
     return "-"; // デフォルトメッセージ
   }
 
-  return order.dailyVehicleAssignment.task_priority;
+  return order.dumpSchedule.date_vehicle.task_priority;
 };
 
+/**
+ * 該当日付と車両に対応するダンプオーダーを取得し、
+ * オーダーのタイトル(titles)とボイラー番号(boiler_number)を取得し、
+ * 並べ替えまで行う関数
+ * 2番目以降の区画に表示
+ * @param {number} dateId
+ * @param {number} vehicleId
+ * @returns {string[]}
+ * 
+ */
 // 2番目以降の区画: オーダーのタイトル(titles) を取得する関数
-const getOrderTitle = (dateId, vehicleId) => {
-  // フィルタリング
+const ProcessOrderTitlesAndNumberByDateAndVehicle = (dateId, vehicleId) => {
+  // 該当日付と車両に対応するダンプオーダーを取得
   const localFilteredOrders = orders.value.filter(order => order.date_id === dateId && order.vehicle_id === vehicleId);
 
   // マッチするデータがない場合
@@ -106,18 +139,25 @@ const getOrderTitle = (dateId, vehicleId) => {
     return Array(4).fill("-"); // データがない場合でも4区画を埋める
   }
 
-  // dumpScheduleの存在をチェックし、タイトルを取得
-  const titlesWithBoiler = localFilteredOrders.map(order => {
-    const dumpSchedule = order.dumpSchedule;
-    const title = dumpSchedule?.dump_order_category_title || "";
-    const boilerNumber = order.boiler_number || ""; // boiler_numberがない場合のデフォルト
-    return `${boilerNumber}${title}`; // boiler_numberとタイトルを結合
+  // sort順で並び替え
+  const sortedOrders = localFilteredOrders.sort((a, b) => {
+    const sortA = a.dumpSchedule?.sort || 0;
+    const sortB = b.dumpSchedule?.sort || 0;
+    return sortA - sortB;
   });
 
-  // 配列を5区画に調整
-  const result = Array(4).fill("");
-  titlesWithBoiler.slice(0, 4).forEach((title, index) => {
-    result[index] = title;
+    // 区画に対応するタイトル、ボイラー番号、ソート値を取得
+    const result = Array(4).fill("-");
+    sortedOrders.forEach(order => {
+      const sort = order.dumpSchedule?.sort || 0;
+      const title = order.dumpSchedule?.dump_order_category_title || "";
+      const boilerNumber = order.boiler_number || "";
+      const fullTitle = `${boilerNumber} ${title}`.trim();
+
+    // ソート値に応じた区画にタイトルを配置
+    if (sort >= 1 && sort <= 4) {
+      result[sort - 1] = fullTitle;
+    }
   });
 
   return result;
@@ -159,7 +199,7 @@ onMounted(() => {
                   {{ getTaskPriority(date.id, vehicle.id) }}
                 </div>
                 <!-- 2番目以降の区画にboiler_numberとtitleを表示 -->
-                <div v-for="(title, index) in getOrderTitle(date.id, vehicle.id)" :key="index" class="grid-item">
+                <div v-for="(title, index) in ProcessOrderTitlesAndNumberByDateAndVehicle(date.id, vehicle.id)" :key="index" class="grid-item">
                   {{ title }}
                 </div>
               </div>

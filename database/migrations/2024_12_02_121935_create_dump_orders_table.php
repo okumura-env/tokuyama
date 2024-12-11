@@ -10,10 +10,9 @@ return new class extends Migration
     {
         Schema::create('dump_orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('date_id');
-            $table->unsignedBigInteger('vehicle_id')->nullable();
-            $table->unsignedBigInteger('dump_schedule_id');
-            $table->unsignedBigInteger('daily_vehicle_assignment_id')->nullable();
+            $table->foreignId('date_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('vehicle_id')->constrained()->cascadeOnDelete()->nullable();
+            $table->foreignId('dump_schedule_id')->constrained()->cascadeOnDelete();
             $table->string('boiler_number')->nullable(); // ボイラー番号
             $table->boolean('status')->default(false); // ステータス(未配車 or 配車済)
             $table->boolean('is_preloaded')->default(false); // 事前の積込みあり or なし

@@ -15,11 +15,12 @@ class DumpSchedule extends Model
     protected $fillable = [
         'date_id',
         'vehicle_id',
+        'date_vehicle_id',
         'dump_order_category_id',
         'dump_order_category_title_id',
         'dump_order_category_title',
         'schedule_type',
-        'sort_order',
+        'sort',
     ];
 
     /**
@@ -63,5 +64,15 @@ class DumpSchedule extends Model
     {
         return $this->hasOne(DumpOtherSchedule::class);
     }
+
+    /**
+     * date_vehicleテーブルとリレーション
+     * 日毎で統一の車両情報を管理
+     */
+    public function dateVehicle()
+    {
+        return $this->belongsTo(DateVehicle::class);
+    }
+
 
 }

@@ -10,13 +10,14 @@ return new class extends Migration
     {
         Schema::create('dump_schedules', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('date_id');
-            $table->unsignedBigInteger('vehicle_id')->nullable();
-            $table->unsignedBigInteger('dump_order_category_id');// 例)HES,MCM,...
-            $table->unsignedBigInteger('dump_order_category_title_id')->nullable();// 例)リデ,MM,MO,CL,...
+            $table->foreignId('date_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('vehicle_id')->constrained()->cascadeOnDelete()->nullable();
+            $table->foreignId('date_vehicle_id')->constrained('date_vehicle')->cascadeOnDelete()->nullable();//constrainedに正しいテーブル名を設定しないとdate_vehicle"s"テーブルとして認識されてしまう
+            $table->foreignId('dump_order_category_id')->constrained()->cascadeOnDelete();// 例)HES,MCM,...
+            $table->foreignId('dump_order_category_title_id')->constrained()->cascadeOnDelete()->nullable();// 例)リデ,MM,MO,CL,...
             $table->string('dump_order_category_title')->nullable();
             $table->string('schedule_type');
-            $table->integer('sort_order');
+            $table->integer('sort');
             $table->timestamps();
             $table->softDeletes(); // deleted_at
         });

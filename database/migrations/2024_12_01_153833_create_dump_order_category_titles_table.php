@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('dump_order_category_titles', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->unsignedBigInteger('dump_order_category_id');
+            $table->foreignId('dump_order_category_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes(); // deleted_at カラムを追加
         });

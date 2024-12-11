@@ -22,6 +22,7 @@ class DumpOrderCategoryTitleSeeder extends Seeder
             ['title' => 'ベン', 'dump_order_category_id' => 1],
             ['title' => 'MO', 'dump_order_category_id' => 1],
             ['title' => 'US', 'dump_order_category_id' => 1],
+            ['title' => 'TT', 'dump_order_category_id' => 1],
             ['title' => '石炭', 'dump_order_category_id' => 2],
             ['title' => 'CL', 'dump_order_category_id' => 2],
             ['title' => '汚泥', 'dump_order_category_id' => 3],
