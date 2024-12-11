@@ -6,6 +6,7 @@ use App\Models\Vehicle;
 use App\Models\DumpOrder;
 use App\Models\DumpSchedule;
 use App\Models\DumpOrderCategoryTitle;
+use App\Models\DateVehicle;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
@@ -96,32 +97,19 @@ class DumpOrderImport implements ToCollection, WithStartRow
     private function createDumpOrder($dateId, $vehicle, $boilerNumbers, $taskPriority, $orderTitles)
     {
         // 該当日付、該当車両のスケジュールが存在するか確認する
-        $dateVehicle = $vehicle->dates()->wherePivot('date_id',$dateId)->first();
-
-        // 該当日付、該当車両のスケジュールが存在する場合、そのidを取得
-        // 存在しない場合、新規作成
-        if ($dateVehicle) {
-            $dateVehicleId = $dateVehicle->id;
-        } else {     
-            $vehicle->dates()->syncWithoutDetaching([$dateId => [
-                'work_type_id' => 1, // (ダンプ)固定値
-                'worker_id' => null,
-                'sub_worker' => null,
-                'start_time' => null,
-                'task_priority' => $taskPriority,
-                'driver_task_order' => null,
-                'note' => null,
-                ]
-            ]);
-         
-            $dateVehicleId = $vehicle->dates()->wherePivot('date_id', $dateId)->first()->pivot->id;
-        }      
+        $dateVehicle = DateVehicle::where('date_id',$dateId)
+        ->where('vehicle_id',$vehicle->id)
+        ->first();
+        $dateVehicle->update([
+            'task_priority' => $taskPriority
+        ]); 
 
         // (例)$boilerNumbers：[ 1, 6, 1, NULL, NULL, NULL]
         Log::info($boilerNumbers);
         foreach ($boilerNumbers as $index => $boilerNumber) {
             //同一日付、同一車両の全てのスケジュールの順番
             // $index: 0, 1, 2, 3, 4, 5
+            // なぜ+1しているかは、スケジュールの順番は1から始まるため
             $sort = $index + 1; 
 
             // (例)$orderTitles：[ リデ, MM, MM, NULL, NULL, NULL]
@@ -141,7 +129,7 @@ class DumpOrderImport implements ToCollection, WithStartRow
             $dump_schedule = DumpSchedule::create([
                 'date_id' => $dateId,
                 'vehicle_id' => $vehicle->id,
-                'date_vehicle_id' => $dateVehicleId,
+                'date_vehicle_id' => $dateVehicle->id,
                 'dump_order_category_id' => 1, //(HES)固定値
                 'dump_order_category_title_id' => $orderTitleId,
                 'dump_order_category_title' => $orderTitle,
@@ -154,7 +142,7 @@ class DumpOrderImport implements ToCollection, WithStartRow
                 'date_id' => $dateId,
                 'vehicle_id' => $vehicle->id,
                 'dump_schedule_id' => $dumpScheduleId,
-                'date_vehicle_id' => $dateVehicleId,
+                'date_vehicle_id' => $dateVehicle->id,
                 'boiler_number' => $boilerNumber,
                 'status' => 1, // (配車済み)固定値
                 'is_preloaded' => 0, // (積込なし)固定値
