@@ -4,41 +4,29 @@ import axios from "axios";
 import useDataApi from "../../Composables/useDataApi";
 
 // データ定義
-const dates = ref([]);
-const orders = ref([]);
-const schedules = ref([]);
 const fileInput = ref(null);
 const selectedFile = ref(null);
 
+/**
+ * 車両の取得
+ */
 const { data:vehicles , fetchData:fetchVehicles } = useDataApi(
     "/api/vehicles",
     (data) => data.filter(vehicle => vehicle.id <= 34)
   );
 
 /**
- * 日付データの取得
+ * 日付の取得
  */
-const fetchDates = async () => {
-  try {
-    const { data } = await axios.get("/api/dates");
-    dates.value = data.data.filter(date => date.id >= 7);
-  } catch (error) {
-    console.error("日付データの取得に失敗しました", error);
-  }
-};
-
+const { data:dates , fetchData:fetchDates } = useDataApi(
+  "/api/dates",
+  (data) => data.filter(date => date.id >= 7)
+);
+  
 /**
- * ダンプスケジュールの取得 
- * 
+ * ダンプスケジュールの取得
  */
-const fetchDumpSchedules = async () => {
-  try {
-    const { data } = await axios.get("/api/dump-schedules");
-    schedules.value = data.data;
-  } catch (error) {
-    console.error("ダンプスケジュールの取得に失敗しました", error);
-  }
-};
+const { data:schedules , fetchData:fetchDumpSchedules } = useDataApi("/api/dump-schedules");
 
 /**
  * ファイル選択トリガー
