@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue'
+import vuetify from 'vite-plugin-vuetify';
 
 export default defineConfig({
 	server: {
@@ -17,5 +18,6 @@ plugins: [
 		refresh: true,
 		}),
 		vue(),
+		vuetify({ autoImport: true }), // Vuetifyプラグインを追加
 	],
 });
