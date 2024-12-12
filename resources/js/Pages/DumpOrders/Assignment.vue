@@ -1,7 +1,14 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
+import { useDisplay } from "vuetify";
 import axios from "axios";
 import useDataApi from "../../Composables/useDataApi";
+
+const drawer = ref(false);
+const clipped = ref(false);
+const { smAndDown } = useDisplay();
+const isDesktop = computed(() => !smAndDown.value);
+const menuItems = [{ title: "ホーム" }, { title: "設定" }];
 
 // データ定義
 const fileInput = ref(null);
