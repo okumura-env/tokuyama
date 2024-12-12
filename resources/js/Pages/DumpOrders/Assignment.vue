@@ -71,7 +71,7 @@ const importData = async () => {
     // インポート後のデータ再取得
     try {
       await fetchDumpSchedules();
-      console.log("ダンプオーダーの再取得が成功しました:", orders.value);
+      console.log("ダンプオーダーの再取得が成功しました:");
     } catch (fetchError) {
       console.error("ダンプオーダーの再取得に失敗しました:", fetchError);
       alert("インポートは成功しましたが、データの再取得に失敗しました。");
