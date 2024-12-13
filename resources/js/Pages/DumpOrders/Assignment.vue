@@ -14,27 +14,18 @@ const menuItems = [{ title: "ホーム" }, { title: "設定" }];
 const fileInput = ref(null);
 const selectedFile = ref(null);
 
-/**
- * 車両の取得
- */
-const { data: vehicles, fetchData: fetchVehicles } = useDataApi(
-    "/api/vehicles",
-    (data) => data.filter((vehicle) => vehicle.id <= 34)
+// データ取得
+const { data: vehicles, fetchData: fetchVehicles } = useDataApi("/api/vehicles");
+const { data: dates, fetchData: fetchDates } = useDataApi("/api/dates");
+const { data: schedules, fetchData: fetchDumpSchedules } = useDataApi("/api/dump-schedules");
+
+// フィルタリング処理
+const filteredVehicles = computed(() =>
+    vehicles.value.filter((vehicle) => vehicle.id <= 34)
 );
 
-/**
- * 日付の取得
- */
-const { data: dates, fetchData: fetchDates } = useDataApi(
-    "/api/dates",
-    (data) => data.filter((date) => date.id >= 7)
-);
-
-/**
- * ダンプスケジュールの取得
- */
-const { data: schedules, fetchData: fetchDumpSchedules } = useDataApi(
-    "/api/dump-schedules"
+const filteredDates = computed(() =>
+    dates.value.filter((date) => date.id >= 7)
 );
 
 /**
@@ -68,7 +59,7 @@ const importData = async () => {
      */
     const formData = new FormData();
     formData.append("file", selectedFile.value);
-    formData.append("dates", JSON.stringify(dates.value));
+    formData.append("dates", JSON.stringify(filteredDates.value));
 
     try {
         // ファイルをアップロード
@@ -223,15 +214,15 @@ const ProcessOrderTitlesAndNumberByDateAndVehicle = (dateId, vehicleId) => {
                         <thead>
                             <tr>
                                 <th>車両名/日付</th>
-                                <th v-for="date in dates" :key="date.id">
+                                <th v-for="date in filteredDates" :key="date.id">
                                     {{ date.date }}
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="vehicle in vehicles" :key="vehicle.id">
+                            <tr v-for="vehicle in filteredVehicles" :key="vehicle.id">
                                 <td class="nowrap">{{ vehicle.name }}</td>
-                                <td v-for="date in dates" :key="date.id">
+                                <td v-for="date in filteredDates" :key="date.id">
                                     <div class="grid-container">
                                         <!-- 1番目の区画にtask_priorityを表示 -->
                                         <div class="grid-item">
