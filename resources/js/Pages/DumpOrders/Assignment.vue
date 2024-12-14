@@ -1,9 +1,8 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
 import axios from "axios";
 import useDataApi from "@/Composables/useDataApi";
-import { filter } from "lodash";
 
 const drawer = ref(false);
 const clipped = ref(false);
