@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import { useDisplay } from "vuetify";
 import axios from "axios";
 import useDataApi from "@/Composables/useDataApi";
+import { filter } from "lodash";
 
 const drawer = ref(false);
 const clipped = ref(false);
@@ -109,36 +110,50 @@ const getTaskPriority = (dateId, vehicleId, defaultPriority = "-") => {
  * @returns {string[]}
  *
  */
-// 2番目以降の区画: オーダーのタイトル(titles) を取得する関数
+// メイン関数：2番目以降の区画のオーダーのタイトル(titles)とボイラー番号を処理
 const ProcessOrderTitlesAndNumberByDateAndVehicle = (dateId, vehicleId) => {
     // 該当日付と車両に対応するダンプスケジュールを取得
-    const localFilteredSchedules = schedules.value.filter(
-        (schedule) =>
-            schedule.date_id === dateId && schedule.vehicle_id === vehicleId
-    );
+    const localFilteredSchedules = filteredSchedules(dateId, vehicleId);
 
-    // マッチするデータがない場合
-    if (!localFilteredSchedules || localFilteredSchedules.length === 0) {
+    // データがない場合の処理
+    if (!localFilteredSchedules.length === 0) {
         return Array(5).fill("-"); // データがない場合でも4区画を埋める
     }
 
-    // sort順で並び替え
-    const sortedSchedules = localFilteredSchedules.sort((a, b) => {
+    // ソート済みスケジュールの取得
+    const sortedSchedules = sortSchedulesByOrder(localFilteredSchedules);
+
+    // ソートされたスケジュールから区画データを作成
+    return createSectionFromSchedules(sortedSchedules,5);
+};
+
+// サブ関数: フィルタリング処理
+const filteredSchedules = (dateId, vehicleId) => {
+    return schedules.value.filter(
+        (schedule) =>
+            schedule.date_id === dateId && schedule.vehicle_id === vehicleId
+    );
+};
+
+// サブ関数: スケジュールをソート
+const sortSchedulesByOrder = (schedules) => {
+    return schedules.sort((a, b) => {
         const sortA = a.sort || "";
         const sortB = b.sort || "";
         return sortA - sortB;
     });
+};
 
-    // 区画に対応するタイトル、ボイラー番号、ソート値を取得
-    const result = Array(5).fill("-");
-    sortedSchedules.forEach((schedule) => {
+// サブ関数: スケジュールから区画データを作成
+const createSectionFromSchedules = (schedules,sectionCount) => {
+    const result = Array(sectionCount).fill("-");
+    schedules.forEach((schedule) => {
         const sort = schedule.sort || "";
         const title = schedule.dump_order_category_title || "";
         const boilerNumber = schedule.dumpOrder?.boiler_number || "";
         const fullTitle = `${boilerNumber} ${title}`.trim();
 
-        // ソート値に応じた区画にタイトルを配置
-        if (sort >= 1 && sort <= 5) {
+        if (sort >= 1 && sort <= sectionCount) {
             result[sort - 1] = fullTitle;
         }
     });
