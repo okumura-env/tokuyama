@@ -111,7 +111,7 @@ const getTaskPriority = (dateId, vehicleId, defaultPriority = "-") => {
  *
  */
 // メイン関数：2番目以降の区画のオーダーのタイトル(titles)とボイラー番号を処理
-const ProcessOrderTitlesAndNumberByDateAndVehicle = (dateId, vehicleId) => {
+const getScheduleSections = (dateId, vehicleId) => {
     // 該当日付と車両に対応するダンプスケジュールを取得
     const localFilteredSchedules = filteredSchedules(dateId, vehicleId);
 
@@ -243,7 +243,7 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                                         <div
                                             v-for="(
                                                 title, index
-                                            ) in ProcessOrderTitlesAndNumberByDateAndVehicle(
+                                            ) in getScheduleSections(
                                                 date.id,
                                                 vehicle.id
                                             )"
