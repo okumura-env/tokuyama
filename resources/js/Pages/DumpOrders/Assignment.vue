@@ -91,21 +91,12 @@ const importData = async () => {
  * @param {number} vehicleId
  * @returns {string}
  */
-const getTaskPriority = (dateId, vehicleId) => {
+const getTaskPriority = (dateId, vehicleId, defaultPriority = "-") => {
     const schedule = schedules.value.find(
         (schedules) =>
             schedules.date_id === dateId && schedules.vehicle_id === vehicleId
     );
-
-    if (
-        !schedule ||
-        !schedule.dateVehicle ||
-        !schedule.dateVehicle.task_priority
-    ) {
-        return "-"; // デフォルトメッセージ
-    }
-
-    return schedule.dateVehicle.task_priority;
+    return schedule?.dateVehicle?.task_priority || defaultPriority; 
 };
 
 /**
