@@ -3,12 +3,14 @@ import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
 import axios from "axios";
 import useDataApi from "@/Composables/useDataApi";
+import DumpOrderModal from "@/Pages/DumpOrders/DumpOrderModal.vue";
 
 const drawer = ref(false);
 const clipped = ref(false);
 const { smAndDown } = useDisplay();
 const isDesktop = computed(() => !smAndDown.value);
 const menuItems = [{ title: "ホーム" }, { title: "設定" }];
+const isModalOpen = ref(true);
 
 // データ定義
 const fileInput = ref(null);
@@ -27,6 +29,14 @@ const filteredVehicles = computed(() =>
 const filteredDates = computed(() =>
     dates.value.filter((date) => date.id >= 7)
 );
+
+// モーダルを開く・閉じる関数
+const openModal = () => {
+    isModalOpen.value = true;
+};
+const closeModal = () => {
+    isModalOpen.value = false;
+};
 
 /**
  * ファイル選択トリガー
@@ -257,6 +267,9 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                         </tbody>
                     </template>
                 </v-simple-table>
+
+                <!-- モーダル -->
+                <DumpOrderModal v-if="isModalOpen" @close="closeModal" />
             </v-container>
         </v-main>
     </v-app>
