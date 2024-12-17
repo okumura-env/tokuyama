@@ -3,11 +3,6 @@ import { ref } from "vue";
 
 const emit = defineEmits(["close"]);
 
-const formComponentRef = ref();
-const closeOrderModal = () => {
-    formComponentRef.value.emptyForm();
-    emit("close");
-};
 
 </script>
 <template>
@@ -17,7 +12,7 @@ const closeOrderModal = () => {
                 class="modal__overlay"
                 tabindex="-1"
                 data-micromodal-close
-                @click.self="closeOrderModal"
+                @click.self="emit('close')"
             >
                 <div
                     class="modal__container w-2/3"
@@ -29,11 +24,48 @@ const closeOrderModal = () => {
                         <h2 class="modal__title" id="modal-1-title">
                             モーダルタイトル
                         </h2>
-                        <button @click="closeOrderModal">✖</button>
+                        <button @click="emit('close')">✖</button>
                     </header>
                     <main class="modal__content" id="modal-1-content">
                         <div class="container px-5 py-8 mx-auto">
                             <div class="lg:w-2/3 w-full mx-auto overflow-auto">
+                                <form @submit.prevent="registerOrder">
+                                    <div class="form-group">
+                                        <label for="orderName">オーダー名</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                        />
+                                        <span class="error-text">
+                                            
+                                        </span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="priority">優先度</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                        />
+                                        <span class="error-text">
+                                            
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-center mt-4">
+                                        <button
+                                            type="submit"
+                                            class="submit-button"
+                                        >
+                                            登録
+                                        </button>
+                                        <button
+                                            type="button"
+                                            @click="closeOrderModal"
+                                            class="cancel-button"
+                                        >
+                                            キャンセル
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </main>
@@ -41,7 +73,7 @@ const closeOrderModal = () => {
                         <div class="flex justify-center space-x-4 p-2 w-full">
                             <a
                                 class="text-white bg-emerald-500 border-0 py-2 px-8 focus:outline-none hover:bg-emerald-600 rounded text-lg"
-                                v-on:click="closeOrderModal"
+                                v-on:click="emit('close')"
                             >
                                 Close
                             </a>
