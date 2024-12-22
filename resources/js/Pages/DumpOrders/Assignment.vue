@@ -10,7 +10,8 @@ const clipped = ref(false);
 const { smAndDown } = useDisplay();
 const isDesktop = computed(() => !smAndDown.value);
 const menuItems = [{ title: "ホーム" }, { title: "設定" }];
-const isModalOpen = ref(true);
+const isModalOpen = ref(false);
+const dateVehicleData = ref({});
 
 // データ定義
 const fileInput = ref(null);
@@ -30,12 +31,18 @@ const filteredDates = computed(() =>
     dates.value.filter((date) => date.id >= 7)
 );
 
-// モーダルを開く・閉じる関数
-const openModal = () => {
+// モーダルを開く関数
+const openModal = (date, vehicle) => {
+    console.log('ok');
+    dateVehicleData.value = { date, vehicle };
+    console.log(dateVehicleData.value);
     isModalOpen.value = true;
 };
-const closeModal = () => {
+
+// モーダルを閉じる関数
+const handleOrderClose = () => {
     isModalOpen.value = false;
+    dateVehicleData.value = { date: null, vehicle: null };
 };
 
 /**
@@ -237,7 +244,10 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                         <tbody>
                             <tr v-for="vehicle in filteredVehicles" :key="vehicle.id">
                                 <td class="nowrap">{{ vehicle.name }}</td>
-                                <td v-for="date in filteredDates" :key="date.id">
+                                <td v-for="date in filteredDates"
+                                   :key="date.id"
+                                   @click="openModal(date, vehicle)"
+                                   >
                                     <div class="grid-container">
                                         <!-- 1番目の区画にtask_priorityを表示 -->
                                         <div class="grid-item">
@@ -269,7 +279,11 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                 </v-simple-table>
 
                 <!-- モーダル -->
-                <DumpOrderModal v-if="isModalOpen" @close="closeModal" />
+                <DumpOrderModal 
+                  :isModalOpen = "isModalOpen" 
+                  :dateVehicleData = "dateVehicleData"
+                  @close="handleOrderClose" 
+                   />
             </v-container>
         </v-main>
     </v-app>
