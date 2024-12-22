@@ -35,6 +35,20 @@ watch(
   { immediate: true } // 初期値設定のために即時実行
 );
 
+const filteredTitles = ref([]);
+watch(
+  () => formData.value.dump_order_category_id,
+  (newCategoryId) => {
+    if (newCategoryId) {
+      filteredTitles.value = dumpOrderCategoryTitles.value.filter(
+        (title) => title.dump_order_category_id === newCategoryId
+      );
+    } else {
+      filteredTitles.value = dumpOrderCategoryTitles.value;
+    }
+  }
+);
+
 const registerOrder = async() => {
     const response = await axios.post("/api/dump-orders", formData.value);
     console.log("登録ボタンが押されました");
@@ -125,7 +139,7 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
                                                 v-model="formData.dump_order_category_title_id"
                                             >
                                             <option
-                                                v-for="dumpOrderCategoryTitle in dumpOrderCategoryTitles"
+                                                v-for="dumpOrderCategoryTitle in filteredTitles"
                                                 :key="dumpOrderCategoryTitle.id"
                                                 :value="dumpOrderCategoryTitle.id"
                                             >
