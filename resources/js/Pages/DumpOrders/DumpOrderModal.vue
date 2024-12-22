@@ -54,7 +54,6 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
             <div
                 class="modal__overlay"
                 tabindex="-1"
-                data-micromodal-close
                 @click.self="emit('close')"
             >
                 <div
@@ -67,28 +66,28 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
                         <h2 class="modal__title" id="modal-1-title">
                             受注登録
                         </h2>
-                        <button @click="emit('close')">✖</button>
+                        <button @click="emit('close')" class="close-button">✖</button>
                     </header>
                     <main class="modal__content" id="modal-1-content">
                         <div class="container px-5 py-8 mx-auto">
                             <div class="lg:w-2/3 w-full mx-auto overflow-auto">
-                                <form @submit.prevent="registerOrder">
+                                <form @submit.prevent="registerOrder" class="form-container">
                                     <div class="form-group">
-                                        <label for="date">日付</label>
+                                        <label for="date" class="form-label">日付</label>
                                         <input
                                             id = "date"
                                             name = "date"
                                             v-model="formData.date"
                                             type="date"
-                                            class="form-control"
+                                            class="form-input"
                                         />
                                     </div>
                                     <div class="form-group">
-                                        <label for="vehicles">車両</label>
+                                        <label for="vehicles" class="form-label">車両</label>
                                         <select
                                                 id = "vehicles"
                                                 name = "vehicles"
-                                                class="form-control"
+                                                class="form-input"
                                                 v-model="formData.vehicle_id"
                                             >
                                             <option
@@ -101,11 +100,11 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="dump-order-categories">カテゴリー</label>
+                                        <label for="dump-order-categories" class="form-label">カテゴリー</label>
                                         <select
                                                 id = "dump-order-categories"
                                                 name = "dump-order-categories"
-                                                class="form-control"
+                                                class="form-input"
                                                 v-model="formData.dump_order_category_id"
                                             >
                                             <option
@@ -118,11 +117,11 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="dump-order-category-titles">タイトル</label>
+                                        <label for="dump-order-category-titles" class="form-label">タイトル</label>
                                         <select
                                                 id = "dump-order-category-titles"
                                                 name = "dump-order-category-titles"
-                                                class="form-control"
+                                                class="form-input"
                                                 v-model="formData.dump_order_category_title_id"
                                             >
                                             <option
@@ -135,11 +134,11 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="boiler-number">ボイラー番号</label>
+                                        <label for="boiler-number" class="form-label">ボイラー番号</label>
                                         <select 
                                             id = "boiler-number"
                                             name = "boiler-number"
-                                            class="form-control"
+                                            class="form-input"
                                             v-model="formData.boiler_number">
                                             <option value="1">1</option>
                                             <option value="5">5</option>
@@ -147,8 +146,8 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label>ステータス</label>
-                                        <div>
+                                        <label class="form-label">ステータス</label>
+                                        <div class="form-radio-group">
                                             <label for="status_unassigned">
                                                 <input 
                                                     type="radio" 
@@ -172,29 +171,29 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="is_preloaded">積み込み</label>
+                                        <label for="is_preloaded" class="form-label">積み込み</label>
                                         <input
                                             id="is_preloaded"
                                             name="is_preloaded"
                                             v-model="formData.is_preloaded"
                                             type="checkbox"
-                                            class="form-control"
+                                            class="form-checkbox"
                                             :true-value = true
                                             :false-value = false
                                         />
                                     </div>
                                     <div class="form-group">
-                                        <label for="note">備考</label>
+                                        <label for="note" class="form-label">備考</label>
                                         <textarea
                                             id="note"
                                             name="note"
                                             v-model="formData.note"
-                                            class="form-control"
+                                            class="form-textarea"
                                             rows="4"
                                         ></textarea>
                                     </div>
                                   
-                                    <div class="flex justify-center mt-4">
+                                    <div class="form-actions">
                                         <button
                                             type="submit"
                                             class="submit-button"
@@ -232,6 +231,7 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
 </template>
 
 <style scoped>
+/* モーダルのスタイル */
 .modal {
     position: fixed;
     top: 0;
@@ -241,14 +241,85 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* 上部と間隔を作るためにflex-startに変更 */
+    padding: 20px; /* ヘッダーとの間隔を確保 */
 }
+
 .modal__container {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    min-width: 300px;
-    max-width: 500px;
-    text-align: center;
+  width: 150%;
+  max-height: 90vh;
+  margin-top: 48px; /* ヘッダーとの間隔を調整 */
+  padding: 50px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.form-input,
+.form-textarea,
+.form-checkbox {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.submit-button {
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: #ccc;
+  color: black;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.cancel-button:hover {
+  background-color: #999;
 }
 </style>
