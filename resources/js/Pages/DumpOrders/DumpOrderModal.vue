@@ -10,7 +10,7 @@ const props = defineProps({
 
 const emit = defineEmits(["close"]);
 
-const formData = ref({
+const initialFormData = {
     date: "", // 日付文字列
     date_id: "",
     vehicle_id: "",
@@ -21,7 +21,9 @@ const formData = ref({
     status: true,
     is_preloaded: false,
     note: "",
-});
+};
+
+const formData = ref({ ...initialFormData });
 
 watch(
   () => props.dateVehicleData,
@@ -52,8 +54,17 @@ watch(
 const registerOrder = async() => {
     const response = await axios.post("/api/dump-orders", formData.value);
     console.log("登録ボタンが押されました");
-    emit("close");
+    closeModal();
 };
+
+const closeModal = () => {
+    emit("close");
+    formData.value = {
+        ...initialFormData,
+        date: formData.value.date,
+        vehicle_id: formData.value.vehicle_id,
+    };
+};  
 
 // データ取得
 const { data: vehicles, fetchData: fetchVehicles } = useDataApi("/api/vehicles");
@@ -68,7 +79,7 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
             <div
                 class="modal__overlay"
                 tabindex="-1"
-                @click.self="emit('close')"
+                @click.self="closeModal"
             >
                 <div
                     class="modal__container w-2/3"
@@ -80,7 +91,7 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
                         <h2 class="modal__title" id="modal-1-title">
                             受注登録
                         </h2>
-                        <button @click="emit('close')" class="close-button">✖</button>
+                        <button @click="closeModal" class="close-button">✖</button>
                     </header>
                     <main class="modal__content" id="modal-1-content">
                         <div class="container px-5 py-8 mx-auto">
@@ -218,7 +229,7 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
                                     <div class="flex justify-center mt-4">
                                         <button
                                             type="button"
-                                            @click="emit('close')"
+                                            @click="closeModal"
                                             class="cancel-button"
                                         >
                                             Close
@@ -232,7 +243,7 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
                         <div class="flex justify-center space-x-4 p-2 w-full">
                             <a
                                 class="text-white bg-emerald-500 border-0 py-2 px-8 focus:outline-none hover:bg-emerald-600 rounded text-lg"
-                                v-on:click="emit('close')"
+                                v-on:click="closeModal"
                             >
                                 Close
                             </a>
