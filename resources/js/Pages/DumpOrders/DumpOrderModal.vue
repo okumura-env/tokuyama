@@ -38,6 +38,7 @@ watch(
 const registerOrder = async() => {
     const response = await axios.post("/api/dump-orders", formData.value);
     console.log("登録ボタンが押されました");
+    emit("close");
 };
 
 // データ取得
