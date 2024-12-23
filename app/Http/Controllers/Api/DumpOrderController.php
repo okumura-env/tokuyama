@@ -14,6 +14,7 @@ use App\Imports\DumpOrderImport;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Log;
+use Spatie\LaravelIgnition\Recorders\DumpRecorder\Dump;
 
 class DumpOrderController extends Controller
 {
@@ -73,7 +74,23 @@ class DumpOrderController extends Controller
 
     public function update(DumpOrderRequest $request, DumpOrder $dumpOrder)
     {
-        $dumpOrder->update($request->validated());
+        // dd($request->validated(), $dumpOrder->id);
+        $data = $request->validated();
+        //dump_schedulesテーブルとdump_ordersテーブルは対応しているデータのidが同じ
+        $dumpSchedule = DumpSchedule::find($dumpOrder->id); 
+        $dumpSchedule->update([
+            'dump_order_category_id' => $data['dump_order_category_id'],
+            'dump_order_category_title_id' => $data['dump_order_category_title_id'],
+            'dump_order_category_title' => DumpOrderCategoryTitle::find($data['dump_order_category_title_id'])->title,
+        ]);
+
+        $dumpOrder->update([
+            'boiler_number' => $data['boiler_number'],
+            'status' => $data['status'],
+            'is_preloaded' => $data['is_preloaded'],
+            'note' => $data['note'],
+        ]);
+         
         return new DumpOrderResource($dumpOrder);
     }
 
