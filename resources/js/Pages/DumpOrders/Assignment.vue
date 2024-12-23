@@ -34,6 +34,7 @@ const filteredDates = computed(() =>
 
 // モーダルを開く関数
 const openModal = (date, vehicle) => {
+    isEditMode.value = false;
     dateVehicleData.value = { date, vehicle };
     console.log(dateVehicleData.value);
     isModalOpen.value = true;
@@ -41,12 +42,15 @@ const openModal = (date, vehicle) => {
 
 // 編集モーダルを開く関数
 const clickedSchedule = ref({});
-const openEditModal = async(id) => {
+const openEditModal = async(scheduleId) => {
     console.log('編集');
-    console.log(id);
-    const response = await axios.get(`api/dump-orders/${id}`);
-    isEditMode.value = true;
-    clickedSchedule.value = response.data.data;
+    console.log(scheduleId);
+    if(scheduleId){
+      const response = await axios.get(`api/dump-schedules/${scheduleId}`);
+      isEditMode.value = true;
+      clickedSchedule.value = response.data.data;
+      console.log(clickedSchedule.value)
+    }
 };
 
 // モーダルを閉じる関数
