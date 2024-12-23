@@ -23,7 +23,7 @@ class DumpScheduleController extends Controller
 
     public function show(DumpSchedule $dumpSchedule)
     {
-        return new DumpScheduleResource($dumpSchedule);
+        return new DumpScheduleResource($dumpSchedule->load('dumpOrder','dateVehicle','date'));
     }
 
     public function update(DumpScheduleRequest $request, DumpSchedule $dumpSchedule)
