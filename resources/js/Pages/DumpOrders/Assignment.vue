@@ -12,6 +12,7 @@ const isDesktop = computed(() => !smAndDown.value);
 const menuItems = [{ title: "ホーム" }, { title: "設定" }];
 const isModalOpen = ref(false);
 const dateVehicleData = ref({});
+const isEditMode = ref(false);
 
 // データ定義
 const fileInput = ref(null);
@@ -33,10 +34,19 @@ const filteredDates = computed(() =>
 
 // モーダルを開く関数
 const openModal = (date, vehicle) => {
-    console.log('ok');
     dateVehicleData.value = { date, vehicle };
     console.log(dateVehicleData.value);
     isModalOpen.value = true;
+};
+
+// 編集モーダルを開く関数
+const clickedSchedule = ref({});
+const openEditModal = async(id) => {
+    console.log('編集');
+    console.log(id);
+    const response = await axios.get(`api/dump-orders/${id}`);
+    isEditMode.value = true;
+    clickedSchedule.value = response.data.data;
 };
 
 // モーダルを閉じる関数
@@ -165,12 +175,13 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
     const result = Array(sectionCount).fill("-");
     schedules.forEach((schedule) => {
         const sort = schedule.sort || "";
+        const dumpScheduleId = schedule.id || "";
         const title = schedule.dump_order_category_title || "";
         const boilerNumber = schedule.dumpOrder?.boiler_number || "";
         const fullTitle = `${boilerNumber} ${title}`.trim();
 
         if (sort >= 1 && sort <= sectionCount) {
-            result[sort - 1] = fullTitle;
+            result[sort - 1] = [fullTitle, dumpScheduleId];
         }
     });
 
@@ -261,15 +272,16 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                                         <!-- 2番目以降の区画にboiler_numberとtitleを表示 -->
                                         <div
                                             v-for="(
-                                                title, index
+                                                scheduleTitleAndId, index
                                             ) in getScheduleSections(
                                                 date.id,
                                                 vehicle.id
                                             )"
                                             :key="index"
+                                            @click="openEditModal(scheduleTitleAndId[1])"
                                             class="grid-item"
                                         >
-                                            {{ title }}
+                                            {{ scheduleTitleAndId[0] }}
                                         </div>
                                     </div>
                                 </td>
@@ -280,6 +292,8 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
 
                 <!-- モーダル -->
                 <DumpOrderModal 
+                  :isEditMode = "isEditMode"
+                  :clickedSchedule = "clickedSchedule"
                   :isModalOpen = "isModalOpen" 
                   :dateVehicleData = "dateVehicleData"
                   @close="handleOrderClose" 
