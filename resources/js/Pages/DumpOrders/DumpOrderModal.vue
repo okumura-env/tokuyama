@@ -4,8 +4,10 @@ import axios from "axios";
 import useDataApi from "@/Composables/useDataApi";
 
 const props = defineProps({
+    isEditMode : Boolean,
     isModalOpen: Boolean,
     dateVehicleData: Object,
+    clickedSchedule: { type: Object, required: false, default: null },
 });
 
 const emit = defineEmits(["close"]);
