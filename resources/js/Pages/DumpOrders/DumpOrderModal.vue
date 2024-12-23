@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import axios from "axios";
 import useDataApi from "@/Composables/useDataApi";
 
@@ -18,12 +18,16 @@ const initialFormData = {
     vehicle_id: "",
     dump_schedule_id: "1",// 仮の初期値
     dump_order_category_id: "",
-    dump_order_category_title_id: "",
+    dump_order_category_title_id:"",
     boiler_number: "",
-    status: true,
-    is_preloaded: false,
+    status: "",
+    is_preloaded:"",
     note: "",
 };
+
+const clickedSchedule = computed(() => {
+    return props.clickedSchedule ? props.clickedSchedule : null;
+});
 
 const formData = ref({ ...initialFormData });
 
@@ -34,6 +38,21 @@ watch(
       formData.value.date = newData.date?.date || "";
       formData.value.date_id = newData.date?.id || "";
       formData.value.vehicle_id = newData.vehicle?.id || "";
+    }
+  },
+  { immediate: true } // 初期値設定のために即時実行
+);
+
+watch(
+  () => clickedSchedule.value,
+  (newData) => {
+    if (newData) {
+      formData.value.dump_order_category_id = newData.dump_order_category_id || "";
+      formData.value.dump_order_category_title_id = newData.dump_order_category_title_id || "";
+      formData.value.boiler_number = newData.dumpOrder?.boiler_number || "";
+      formData.value.status = !!newData.dumpOrder?.status || "";
+      formData.value.is_preloaded = !!newData.dumpOrder?.is_preloaded || "";
+      formData.value.note = newData.dumpOrder?.note || "";
     }
   },
   { immediate: true } // 初期値設定のために即時実行
@@ -53,9 +72,15 @@ watch(
   }
 );
 
-const registerOrder = async() => {
+const registerSchedule = async() => {
     const response = await axios.post("/api/dump-orders", formData.value);
     console.log("登録ボタンが押されました");
+    closeModal();
+};
+
+const updateSchedule = async() => {
+    const response = await axios.put(`/api/dump-orders/${clickedSchedule.value.id}`, formData.value);
+    console.log("更新ボタンが押されました");
     closeModal();
 };
 
@@ -91,14 +116,19 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
                 >
                     <header class="modal__header">
                         <h2 class="modal__title" id="modal-1-title">
-                            受注登録
+                            {{
+                                isEditMode
+                                    ? "受注編集"
+                                    : "受注登録"
+                            }}
                         </h2>
                         <button @click="closeModal" class="close-button">✖</button>
                     </header>
                     <main class="modal__content" id="modal-1-content">
                         <div class="container px-5 py-8 mx-auto">
                             <div class="lg:w-2/3 w-full mx-auto overflow-auto">
-                                <form @submit.prevent="registerOrder" class="form-container">
+                                <form @submit.prevent="isEditMode  ?  updateSchedule() : registerSchedule()" 
+                                      class="form-container">
                                     <div class="form-group">
                                         <label for="date" class="form-label">日付</label>
                                         <input
@@ -225,7 +255,7 @@ const { data: dumpOrderCategoryTitles, fetchData: fetchDumpOrderCategoryTitles }
                                             type="submit"
                                             class="submit-button"
                                         >
-                                            登録
+                                        {{ isEditMode ? "更新" : "登録" }}
                                         </button>
                                     </div>
                                     <div class="flex justify-center mt-4">
