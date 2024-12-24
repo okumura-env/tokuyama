@@ -21,8 +21,6 @@ class RuleResource extends JsonResource
             'vehicle_id' => $this->vehicle_id,
             'priority' => $this->priority,
             'mcm_task_type' => $this->mcmTaskType,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ];
     }
 }
