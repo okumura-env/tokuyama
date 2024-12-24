@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             WorkTypeSeeder::class,
             DateVehicleSeeder::class,
             McmTaskTypeSeeder::class,
+            RuleSeeder::class,
         ]);
     }
 }
