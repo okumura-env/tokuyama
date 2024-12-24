@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\WorkTypeController;
 use App\Http\Controllers\Api\DumpOrderController;
 use App\Http\Controllers\Api\DumpScheduleController;
 use App\Http\Controllers\Api\DumpOtherScheduleController;
+use App\Http\Controllers\Api\McmTaskTypeController;
 
 
 
@@ -66,3 +67,6 @@ Route::apiResource('dump-schedules', DumpScheduleController::class);
 
 //その他のスケジュール
 Route::apiResource('dump-other-schedules', DumpOtherScheduleController::class);
+
+//MCM運行計画タスクの種類
+Route::apiResource('mcm-task-types', McmTaskTypeController::class);
