@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             DumpOrderCategoryTitleSeeder::class,
             WorkTypeSeeder::class,
             DateVehicleSeeder::class,
+            McmTaskTypeSeeder::class,
         ]);
     }
 }
