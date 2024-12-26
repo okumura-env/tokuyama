@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from "vue";
 import DumpScheduleForm from "@/Components/DumpScheduleForm.vue";
 import Modal from "@/Components/Commons/Modal.vue";
 
@@ -8,6 +9,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close"]);
+
+const isEditMode = ref(false);
 
 const closeCreateModal = () => {
     emit("close");
@@ -21,6 +24,7 @@ const closeCreateModal = () => {
     @close="closeCreateModal"
   >
     <DumpScheduleForm
+        :isEditMode = "isEditMode"
         @close="closeCreateModal"
     />
   </Modal>
