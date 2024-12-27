@@ -1,5 +1,13 @@
 <script setup>
-import { ref, watch, computed } from "vue";
+import {
+  VDialog,
+  VCard,
+  VCardTitle,
+  VCardText,
+  VCardActions,
+  VBtn,
+} from "vuetify/components";
+
 
 const props = defineProps({
     isModalOpen : Boolean,
@@ -39,4 +47,6 @@ const closeModal = () => {
   </v-dialog>
 </template>
 
-
+<style scoped>
+@import "@css/modal.css";
+</style>

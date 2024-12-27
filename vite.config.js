@@ -13,6 +13,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@': path.resolve(__dirname, 'resources/js'), // エイリアス設定を追加
+			'@css': path.resolve(__dirname, 'resources/css'),
 		},
 	},
 	plugins: [
