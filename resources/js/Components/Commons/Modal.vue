@@ -3,6 +3,7 @@ import { ref, watch, computed } from "vue";
 
 const props = defineProps({
     isModalOpen : Boolean,
+    title : String,
 });
 
 const emit = defineEmits(["close"]);
@@ -22,7 +23,7 @@ const closeModal = () => {
   >
     <v-card class="modern-card">
       <v-card-title class="modern-card-title text-h6">
-        
+        {{ props.title }}
       </v-card-title>
       <v-card-text>
         <slot></slot>

@@ -109,16 +109,6 @@ const closeModal = () => {
 
 </script>
 <template>
-    <header class="modal__header">
-        <h2 class="modal__title" id="modal-1-title">
-            {{
-                isEditMode
-                    ? "受注編集"
-                    : "受注登録"
-            }}
-        </h2>
-        <button @click="closeModal" class="close-button">✖</button>
-    </header>
     <main class="modal__content" id="modal-1-content">
         <div class="container px-5 py-8 mx-auto">
             <div class="lg:w-2/3 w-full mx-auto overflow-auto">
