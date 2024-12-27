@@ -4,7 +4,6 @@ import { useDisplay } from "vuetify";
 import axios from "axios";
 import useDataApi from "@/Composables/useDataApi";
 import useModal from "@/Composables/useModal";
-import DumpOrderModal from "@/Pages/DumpOrders/DumpOrderModal.vue";
 import CreateDumpScheduleModal from "@/Pages/DumpOrders/CreateDumpScheduleModal.vue";
 import EditDumpScheduleModal from "@/Pages/DumpOrders/EditDumpScheduleModal.vue";
 
