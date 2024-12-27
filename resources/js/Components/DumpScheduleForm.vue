@@ -174,6 +174,7 @@ const closeModal = () => {
                             name = "boiler-number"
                             class="form-input"
                             v-model="formData.boiler_number">
+                            <option value="">未選択</option>
                             <option value="1">1</option>
                             <option value="5">5</option>
                             <option value="6">6</option>
