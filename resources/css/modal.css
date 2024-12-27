@@ -1,0 +1,59 @@
+/* Modal全体の背景 */
+.v-dialog__content {
+    backdrop-filter: blur(8px);
+    background: rgba(0, 44, 94, 0.7); /* ブランド基調色を適用 */
+  }
+  
+  /* カードのスタイル */
+  .modern-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+  }
+  
+  /* タイトルのスタイル */
+  .modern-card-title {
+    font-family: 'Roboto', sans-serif;
+    background:#002c5e; /* ブランド基調色 */
+    color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 16px 24px;
+  }
+  
+  /* テキストのスタイル */
+  .v-card-text {
+    padding: 16px 24px;
+    color: #333333;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  /* ボタンのスタイル */
+  .cancel-btn {
+    color: #ffffff;
+    background-color: #002c5e; /* ブランド基調色 */
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-transform: none;
+    font-weight: bold;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #001d43; /* より濃いトーンを適用 */
+    transition: background-color 0.3s ease;
+  }
+  
+  /* レスポンシブ対応 */
+  @media (max-width: 600px) {
+    .modern-card-title {
+      font-size: 16px;
+    }
+    .v-card-text {
+      font-size: 14px;
+    }
+    .cancel-btn {
+      font-size: 14px;
+    }
+  }
+  
