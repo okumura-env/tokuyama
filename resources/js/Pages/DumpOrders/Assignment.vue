@@ -34,6 +34,7 @@ const filteredDates = computed(() =>
     dates.value.filter((date) => date.id >= 7)
 );
 
+// モーダルの開閉ロジック
 const {     
           isModalOpen: isCreateModalOpen,
           openModal: openCreateModal,
@@ -46,11 +47,35 @@ const {
           closeModal: closeEditModal,
        } = useModal();
        
-
+// 新規登録の場合
+// clickedDate.value = {date:2024-12-04, date_id: 8 , vehicle_id: 1};
+// 編集の場合
+// clickedDate.value = {
+//                          id: 1,
+//                          date_id: 8,
+//                          vehicle_id: 1,
+//                          date:Object, 
+//                          dateVehicle: Object, 
+//                          dumpOrder:{
+//                                      id: 2,
+//                                      date_id: "8"
+//                                      vehicle_id: "1"
+//                                      dump_schedule_id: 2,
+//                                      boiler_number: "1",
+//                                      is_preloaded: 0,
+//                                      status: "1",
+//                                      note: "テスト",
+//                                      vehicle_number: null,
+//                                      },
+//                          dump_order_category_title: "リデ"
+//                          dump_order_category_id: 1,
+//                          dump_order_category_title_id: 2,
+//                          sort: 1,
+//                          schedule_type: "orders",
+//                        };
 const clickedData = ref({});
 const clickCell = async(scheduleId,date,vehicleId) => {
-    console.log(scheduleId);
-    console.log('クリック');
+    //scheduleIdがある場合は編集、ない場合は新規登録
     if(scheduleId){
       console.log("編集")
       openEditModal();
