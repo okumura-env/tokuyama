@@ -11,6 +11,7 @@ const props = defineProps({
 const emit = defineEmits(["close","refetch"]);
 
 const isEditMode = ref(true);
+const title = ref("ダンプスケジュール編集");
 
 const closeEditModal = () => {
     emit("close");
@@ -25,6 +26,7 @@ const fetchDumpSchedules = () => {
 <template>
   <Modal
     :isModalOpen = "isEditModalOpen" 
+    :title = "title"
     @close="closeEditModal"
   >
     <DumpScheduleForm
