@@ -5,14 +5,19 @@ import Modal from "@/Components/Commons/Modal.vue";
 
 const props = defineProps({
     isEditModalOpen : Boolean,
+    clickedData : Object,
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close","refetch"]);
 
 const isEditMode = ref(true);
 
 const closeEditModal = () => {
     emit("close");
+};
+
+const fetchDumpSchedules = () => {
+    emit("refetch");
 };
 
 </script>
@@ -24,7 +29,9 @@ const closeEditModal = () => {
   >
     <DumpScheduleForm
         :isEditMode = "isEditMode"
+        :clickedData = "clickedData"
         @close="closeEditModal"
+        @refetch="fetchDumpSchedules"
     />
   </Modal>
 </template>
