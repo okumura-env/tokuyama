@@ -130,7 +130,7 @@ const closeModal = () => {
                     </div>
                     <div class="form-group">
                         <label for="vehicles" class="form-label">車両</label>
-                        <div id="date" class="form-display">{{ getVehicle(formData.vehicle_id) }}</div>
+                        <div id="vehicles" class="form-display">{{ getVehicle(formData.vehicle_id) }}</div>
                   
                     </div>
                     <div class="form-group">
