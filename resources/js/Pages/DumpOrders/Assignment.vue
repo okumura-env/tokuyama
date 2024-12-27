@@ -3,7 +3,10 @@ import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
 import axios from "axios";
 import useDataApi from "@/Composables/useDataApi";
+import useModal from "@/Composables/useModal";
 import DumpOrderModal from "@/Pages/DumpOrders/DumpOrderModal.vue";
+import CreateDumpScheduleModal from "@/Pages/DumpOrders/CreateDumpScheduleModal.vue";
+import EditDumpScheduleModal from "@/Pages/DumpOrders/EditDumpScheduleModal.vue";
 
 const drawer = ref(false);
 const clipped = ref(false);
@@ -12,7 +15,6 @@ const isDesktop = computed(() => !smAndDown.value);
 const menuItems = [{ title: "ホーム" }, { title: "設定" }];
 const isModalOpen = ref(false);
 const dateVehicleData = ref({});
-const isEditMode = ref(false);
 
 // データ定義
 const fileInput = ref(null);
@@ -32,31 +34,36 @@ const filteredDates = computed(() =>
     dates.value.filter((date) => date.id >= 7)
 );
 
-// モーダルを開く関数
-const openModal = (date, vehicle) => {
-    isEditMode.value = false;
-    dateVehicleData.value = { date, vehicle };
-    console.log(dateVehicleData.value);
-    isModalOpen.value = true;
-};
+const {     
+          isModalOpen: isCreateModalOpen,
+          openModal: openCreateModal,
+          closeModal: closeCreateModal,
+       } = useModal();
 
-// 編集モーダルを開く関数
-const clickedSchedule = ref({});
-const openEditModal = async(scheduleId) => {
-    console.log('編集');
+const {     
+          isModalOpen: isEditModalOpen,
+          openModal: openEditModal,
+          closeModal: closeEditModal,
+       } = useModal();
+       
+
+const clickedData = ref({});
+const clickCell = async(scheduleId,date,vehicleId) => {
     console.log(scheduleId);
+    console.log('クリック');
     if(scheduleId){
+      console.log("編集")
+      openEditModal();
       const response = await axios.get(`api/dump-schedules/${scheduleId}`);
-      isEditMode.value = true;
-      clickedSchedule.value = response.data.data;
-      console.log(clickedSchedule.value)
+      clickedData.value = response.data.data;
+      console.log(clickedData.value);
+    }else{
+        console.log("新規登録")
+        openCreateModal();
+        clickedData.value = {date:date.date, date_id: date.id, vehicle_id: vehicleId};
+        console.log(clickedData.value);
     }
-};
-
-// モーダルを閉じる関数
-const handleOrderClose = () => {
-    isModalOpen.value = false;
-    dateVehicleData.value = { date: null, vehicle: null };
+    
 };
 
 /**
@@ -261,7 +268,7 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                                 <td class="nowrap">{{ vehicle.name }}</td>
                                 <td v-for="date in filteredDates"
                                    :key="date.id"
-                                   @click="openModal(date, vehicle)"
+                                   
                                    >
                                     <div class="grid-container">
                                         <!-- 1番目の区画にtask_priorityを表示 -->
@@ -282,7 +289,7 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                                                 vehicle.id
                                             )"
                                             :key="index"
-                                            @click="openEditModal(scheduleTitleAndId[1])"
+                                            @click="clickCell(scheduleTitleAndId[1],date,vehicle.id)"
                                             class="grid-item"
                                         >
                                             {{ scheduleTitleAndId[0] }}
@@ -295,12 +302,17 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                 </v-simple-table>
 
                 <!-- モーダル -->
-                <DumpOrderModal 
-                  :isEditMode = "isEditMode"
-                  :clickedSchedule = "clickedSchedule"
-                  :isModalOpen = "isModalOpen" 
-                  :dateVehicleData = "dateVehicleData"
-                  @close="handleOrderClose" 
+                <CreateDumpScheduleModal  
+                  :isCreateModalOpen = "isCreateModalOpen" 
+                  :clickedData = "clickedData"
+                  @close="closeCreateModal" 
+                  @refetch="fetchDumpSchedules"
+                   />
+                <EditDumpScheduleModal
+                    :isEditModalOpen = "isEditModalOpen"
+                    :clickedData = "clickedData"
+                    @close="closeEditModal"     
+                    @refetch="fetchDumpSchedules"
                    />
             </v-container>
         </v-main>
