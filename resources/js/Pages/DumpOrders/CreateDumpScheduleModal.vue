@@ -17,8 +17,9 @@ const closeCreateModal = () => {
     emit("close");
 };
 
-const fetchDumpSchedules = () => {
+const handleSuccess = () => {
     emit("refetch");
+    closeCreateModal(); 
 };
 
 </script>
@@ -32,8 +33,7 @@ const fetchDumpSchedules = () => {
     <DumpScheduleForm
         :isEditMode = "isEditMode"
         :clickedData = "clickedData"
-        @close="closeCreateModal"
-        @refetch="fetchDumpSchedules"
+        @success="handleSuccess"
     />
   </Modal>
 </template>

@@ -8,7 +8,7 @@ const props = defineProps({
     clickedData : Object,
 });
 
-const emit = defineEmits(["close", "refetch"]);
+const emit = defineEmits(["success"]);
 
 // データ取得
 const { data: vehicles, fetchData: fetchVehicles } = useDataApi("/api/vehicles");
@@ -93,19 +93,14 @@ watch(
 const registerSchedule = async() => {
     const response = await axios.post("/api/dump-orders", formData.value);
     console.log("登録ボタンが押されました");
-    closeModal();
+    emit("success");
 };
 
 const updateSchedule = async() => {
     const response = await axios.put(`/api/dump-orders/${clickedData.value.id}`, formData.value);
     console.log("更新ボタンが押されました");
-    closeModal();
+    emit("success");
 };
-
-const closeModal = () => {
-    emit("refetch");
-    emit("close");
-};  
 
 </script>
 <template>
