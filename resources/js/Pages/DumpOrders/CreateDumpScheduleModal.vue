@@ -5,13 +5,12 @@ import Modal from "@/Components/Commons/Modal.vue";
 
 const props = defineProps({
     isCreateModalOpen : Boolean,
-    clickedData : Object,
+    scheduleData : Object,
 });
 
 const emit = defineEmits(["close","refetch"]);
 
 const isEditMode = ref(false);
-const title = ref("ダンプスケジュール登録");
 
 const closeCreateModal = () => {
     emit("close");
@@ -27,12 +26,12 @@ const handleSuccess = () => {
 <template>
   <Modal
     :isModalOpen = "isCreateModalOpen" 
-    :title = "title"
+    title = "ダンプスケジュール登録"
     @close="closeCreateModal"
   >
     <DumpScheduleForm
         :isEditMode = "isEditMode"
-        :clickedData = "clickedData"
+        :scheduleData = "scheduleData"
         @success="handleSuccess"
     />
   </Modal>

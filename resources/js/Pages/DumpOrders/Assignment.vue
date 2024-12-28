@@ -47,9 +47,9 @@ const {
        } = useModal();
        
 // 新規登録の場合
-// clickedDate.value = {date:2024-12-04, date_id: 8 , vehicle_id: 1};
+// createModalData.value = {date:2024-12-04, date_id: 8 , vehicle_id: 1};
 // 編集の場合
-// clickedDate.value = {
+// editModalData.value = {
 //                          id: 1,
 //                          date_id: 8,
 //                          vehicle_id: 1,
@@ -72,20 +72,21 @@ const {
 //                          sort: 1,
 //                          schedule_type: "orders",
 //                        };
-const clickedData = ref({});
+const editModalData = ref({});
+const createModalData = ref({});
 const clickCell = async(scheduleId,date,vehicleId) => {
     //scheduleIdがある場合は編集、ない場合は新規登録
     if(scheduleId){
       console.log("編集")
       openEditModal();
       const response = await axios.get(`api/dump-schedules/${scheduleId}`);
-      clickedData.value = response.data.data;
-      console.log(clickedData.value);
+      editModalData.value = response.data.data;
+      console.log(editModalData.value);
     }else{
         console.log("新規登録")
         openCreateModal();
-        clickedData.value = {date:date.date, date_id: date.id, vehicle_id: vehicleId};
-        console.log(clickedData.value);
+        createModalData.value = {date:date.date, date_id: date.id, vehicle_id: vehicleId};
+        console.log(createModalData.value);
     }
     
 };
@@ -328,13 +329,13 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                 <!-- モーダル -->
                 <CreateDumpScheduleModal  
                   :isCreateModalOpen = "isCreateModalOpen" 
-                  :clickedData = "clickedData"
+                  :scheduleData = "createModalData"
                   @close="closeCreateModal" 
                   @refetch="fetchDumpSchedules"
                    />
                 <EditDumpScheduleModal
                     :isEditModalOpen = "isEditModalOpen"
-                    :clickedData = "clickedData"
+                    :scheduleData = "editModalData"
                     @close="closeEditModal"     
                     @refetch="fetchDumpSchedules"
                    />

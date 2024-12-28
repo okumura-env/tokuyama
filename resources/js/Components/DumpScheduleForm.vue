@@ -5,7 +5,7 @@ import useDataApi from "@/Composables/useDataApi";
 
 const props = defineProps({
     isEditMode : Boolean,
-    clickedData : Object,
+    scheduleData : Object,
 });
 
 const emit = defineEmits(["success"]);
@@ -28,14 +28,14 @@ const initialFormData = {
     note: "",
 };
 
-const clickedData = computed(() => {
-    return props.clickedData ? props.clickedData : null;
+const scheduleData = computed(() => {
+    return props.scheduleData ? props.scheduleData : null;
 });
 
 const formData = ref({ ...initialFormData });
 
 watch(
-  () => clickedData.value,
+  () => scheduleData.value,
   (newData) => {
     if (newData) {
         console.log(!!newData.dumpOrder?.is_preloaded);
@@ -71,6 +71,7 @@ const getVehicle = (vehicleId) => {
     return vehicle ? vehicle.name : "";
 };
 
+//カテゴリーを選ぶとタイトルが絞り込まれる
 //dumpOrderCategoryTitlesにAPIからデータが入った瞬間・dump_order_category_idが変わった瞬間
 //の両方でfilteredTitlesを更新する
 const filteredTitles = ref([]);
@@ -90,14 +91,16 @@ watch(
   { immediate: true }
 );
 
+//保存処理
 const registerSchedule = async() => {
     const response = await axios.post("/api/dump-orders", formData.value);
     console.log("登録ボタンが押されました");
     emit("success");
 };
 
+//更新処理
 const updateSchedule = async() => {
-    const response = await axios.put(`/api/dump-orders/${clickedData.value.id}`, formData.value);
+    const response = await axios.put(`/api/dump-orders/${scheduleDataData.value.id}`, formData.value);
     console.log("更新ボタンが押されました");
     emit("success");
 };
@@ -111,7 +114,7 @@ const updateSchedule = async() => {
                         class="form-container">
                     <div class="form-group">
                         <label for="date" class="form-label">日付</label>
-                        <div id="date" class="form-display">{{ isEditMode ? clickedData.date?.date : clickedData.date }}</div>
+                        <div id="date" class="form-display">{{ isEditMode ? scheduleData.date?.date : scheduleData.date }}</div>
                     </div>
                     <div class="form-group">
                         <label for="vehicles" class="form-label">車両</label>
