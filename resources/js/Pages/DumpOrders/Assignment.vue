@@ -6,6 +6,7 @@ import useDataApi from "@/Composables/useDataApi";
 import useModal from "@/Composables/useModal";
 import CreateDumpScheduleModal from "@/Pages/DumpOrders/CreateDumpScheduleModal.vue";
 import EditDumpScheduleModal from "@/Pages/DumpOrders/EditDumpScheduleModal.vue";
+import AutoAssignmentScheduleModal from "@/Pages/DumpOrders/AutoAssignmentScheduleModal.vue";
 
 const drawer = ref(false);
 const clipped = ref(false);
@@ -34,17 +35,26 @@ const filteredDates = computed(() =>
 );
 
 // モーダルの開閉ロジック
+// 手動新規登録モーダル
 const {     
           isModalOpen: isCreateModalOpen,
           openModal: openCreateModal,
           closeModal: closeCreateModal,
        } = useModal();
 
+// 手動編集モーダル
 const {     
           isModalOpen: isEditModalOpen,
           openModal: openEditModal,
           closeModal: closeEditModal,
        } = useModal();
+
+// 自動配車用モーダル
+const {     
+    isModalOpen: autoAssignmentModalOpen,
+    openModal: openAutoAssignmentModal,
+    closeModal: closeAutoAssignmentModal,
+} = useModal();
        
 // 新規登録の場合
 // createModalData.value = {date:2024-12-04, date_id: 8 , vehicle_id: 1};
@@ -263,6 +273,9 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
 
                 <v-row>
                   <v-col cols="3" md="2">
+                    <v-btn @click="openAutoAssignmentModal()" block color="primary">配車登録</v-btn>
+                  </v-col>
+                  <v-col cols="3" md="2">
                     <v-btn @click="triggerFileSelect" block>ファイルを選択</v-btn>
                   </v-col>
                   <v-file-input
@@ -339,6 +352,8 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                     @close="closeEditModal"     
                     @refetch="fetchDumpSchedules"
                    />
+                <AutoAssignmentModal
+                />
             </v-container>
         </v-main>
     </v-app>
