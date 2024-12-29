@@ -66,7 +66,6 @@ class DumpOrderImport implements ToCollection, WithStartRow
                     // 偶数行：boilerNumbersのみ取得
                     // (例)$boilerNumbers：[ 1, 6, 1, NULL, NULL, NULL]
                     $boilerNumbers = collect($row)->slice($boilerStartIndex, 6)->values()->all();
-                    Log::info("Boiler Numbers: ", $boilerNumbers);
                 } else {
                     // 奇数行：vehicleId, taskPriority, orderTitlesを取得
                     // (例)$taskPriority：四
@@ -96,58 +95,59 @@ class DumpOrderImport implements ToCollection, WithStartRow
      */
     private function createDumpOrder($dateId, $vehicle, $boilerNumbers, $taskPriority, $orderTitles)
     {
-        // 該当日付、該当車両のスケジュールが存在するか確認する
-        $dateVehicle = DateVehicle::where('date_id',$dateId)
-        ->where('vehicle_id',$vehicle->id)
-        ->first();
-        $dateVehicle->update([
-            'task_priority' => $taskPriority
-        ]); 
+        //万が一、Excelの車両名が変更されてしまったとき、$vehicleがnullになる可能性があるため、nullチェックを行う。
+        //この条件分岐があると、車両名が変更された場合、その行の処理はスキップされて空欄になる。その行以外は通常通りにデータが入る。
+        if($vehicle){
+            // 該当日付、該当車両のスケジュールが存在するか確認する
+            $dateVehicle = DateVehicle::where('date_id',$dateId)
+            ->where('vehicle_id',$vehicle->id)
+            ->first();
+            $dateVehicle->update([
+                'task_priority' => $taskPriority
+            ]); 
 
-        // (例)$boilerNumbers：[ 1, 6, 1, NULL, NULL, NULL]
-        Log::info($boilerNumbers);
-        foreach ($boilerNumbers as $index => $boilerNumber) {
-            //同一日付、同一車両の全てのスケジュールの順番
-            // $index: 0, 1, 2, 3, 4, 5
-            // なぜ+1しているかは、スケジュールの順番は1から始まるため
-            $sort = $index + 1; 
+            // (例)$boilerNumbers：[ 1, 6, 1, NULL, NULL, NULL]
+            foreach ($boilerNumbers as $index => $boilerNumber) {
+                //同一日付、同一車両の全てのスケジュールの順番
+                // $index: 0, 1, 2, 3, 4, 5
+                // なぜ+1しているかは、スケジュールの順番は1から始まるため
+                $sort = $index + 1; 
 
-            // (例)$orderTitles：[ リデ, MM, MM, NULL, NULL, NULL]
-            $orderTitle = $orderTitles[$index];
+                // (例)$orderTitles：[ リデ, MM, MM, NULL, NULL, NULL]
+                $orderTitle = $orderTitles[$index];
 
-            // 注意：$orderTitle, $boilerNumber が NULL の場合はスキップ
-            // オーダーの表示名(title)は必須項目のためエラーになる
-            //注意：boilerNumberは実はnullableなので以下の条件に含める必要はないが、記載しないとエラーになるので追加
-            //デバック時に確認
-            if ($orderTitle === null || $boilerNumber === null) {
-                continue;
+                // 注意：$orderTitle, $boilerNumber が NULL の場合はスキップ
+                // オーダーの表示名(title)は必須項目のためエラーになる
+                //注意：boilerNumberは実はnullableなので以下の条件に含める必要はないが、記載しないとエラーになるので追加
+                //デバック時に確認
+                if ($orderTitle === null || $boilerNumber === null) {
+                    continue;
+                }
+
+                //orderTotle取得時にまとめて取得したくなるがtitleがnullの可能性があるので上記の条件文を通った後に取得
+                $orderTitleId = DumpOrderCategoryTitle::where('title', $orderTitle)->first()->id;
+
+                $dumpSchedule = DumpSchedule::create([
+                    'date_id' => $dateId,
+                    'vehicle_id' => $vehicle->id,
+                    'date_vehicle_id' => $dateVehicle->id,
+                    'dump_order_category_id' => 1, //(HES)固定値
+                    'dump_order_category_title_id' => $orderTitleId,
+                    'dump_order_category_title' => $orderTitle,
+                    'schedule_type' => "orders", // (受注)固定値
+                    'sort' => $sort, 
+                ]);
+        
+                $dumpSchedule->dumpOrder()->create([
+                    'date_id' => $dateId,
+                    'vehicle_id' => $vehicle->id,
+                    'boiler_number' => $boilerNumber,
+                    'status' => 1, // (配車済み)固定値
+                    'is_preloaded' => 0, // (積込なし)固定値
+                    'vehicle_number' => null, // 固定値
+                    'note' => null, // 固定値
+                ]);    
             }
-
-            //orderTotle取得時にまとめて取得したくなるがtitleがnullの可能性があるので上記の条件文を通った後に取得
-            $orderTitleId = DumpOrderCategoryTitle::where('title', $orderTitle)->first()->id;
-
-            $dumpSchedule = DumpSchedule::create([
-                'date_id' => $dateId,
-                'vehicle_id' => $vehicle->id,
-                'date_vehicle_id' => $dateVehicle->id,
-                'dump_order_category_id' => 1, //(HES)固定値
-                'dump_order_category_title_id' => $orderTitleId,
-                'dump_order_category_title' => $orderTitle,
-                'schedule_type' => "orders", // (受注)固定値
-                'sort' => $sort, 
-            ]);
-      
-            $dumpSchedule->dumpOrder()->create([
-                'date_id' => $dateId,
-                'vehicle_id' => $vehicle->id,
-                'boiler_number' => $boilerNumber,
-                'status' => 1, // (配車済み)固定値
-                'is_preloaded' => 0, // (積込なし)固定値
-                'vehicle_number' => null, // 固定値
-                'note' => null, // 固定値
-            ]);
-            
         }
     }
-
 }
