@@ -51,7 +51,7 @@ const {
 
 // 自動配車用モーダル
 const {     
-    isModalOpen: autoAssignmentModalOpen,
+    isModalOpen: isAutoAssignmentModalOpen,
     openModal: openAutoAssignmentModal,
     closeModal: closeAutoAssignmentModal,
 } = useModal();
@@ -352,7 +352,9 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                     @close="closeEditModal"     
                     @refetch="fetchDumpSchedules"
                    />
-                <AutoAssignmentModal
+                <AutoAssignmentScheduleModal
+                    :isAutoAssignmentModalOpen = "isAutoAssignmentModalOpen"
+                    @close="closeAutoAssignmentModal" 
                 />
             </v-container>
         </v-main>
