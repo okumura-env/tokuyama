@@ -62,6 +62,8 @@ Route::apiResource('work-types', WorkTypeController::class);
 Route::apiResource('dump-orders', DumpOrderController::class);
 //ダンプオーダーのインポート
 Route::post('/dump-orders/import', [DumpOrderController::class, 'import']);
+//富士のオーダー登録
+Route::post('/dump-orders/fuji/store', [DumpOrderController::class, 'fujiScheduleStore']);
 
 //ダンプスケジュール
 Route::apiResource('dump-schedules', DumpScheduleController::class);
