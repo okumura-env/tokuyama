@@ -5,6 +5,7 @@ import Modal from "@/Components/Commons/Modal.vue";
 
 const props = defineProps({
     isAutoAssignmentModalOpen : Boolean,
+    dateData : Array,
 });
 
 const emit = defineEmits(["close"]);
@@ -21,6 +22,8 @@ const closeAutoAssignmentModal = () => {
     title = "配車登録" 
     @close="closeAutoAssignmentModal"
   >
-    <AutoAssignmentScheduleForm />
+    <AutoAssignmentScheduleForm
+      :dateData="dateData"
+     />
   </Modal>
 </template>

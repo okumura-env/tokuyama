@@ -1,7 +1,12 @@
 <script setup>
 import { ref } from "vue";
 
+const props = defineProps({
+    dateData : Array,
+});
+
 const fujiData = ref({
+    dateData: props.dateData,
     vehicleCount: "",
 });
 

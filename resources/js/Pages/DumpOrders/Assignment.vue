@@ -354,6 +354,7 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                    />
                 <AutoAssignmentScheduleModal
                     :isAutoAssignmentModalOpen = "isAutoAssignmentModalOpen"
+                    :dateData = "filteredDates"
                     @close="closeAutoAssignmentModal" 
                 />
             </v-container>
