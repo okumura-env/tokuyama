@@ -1,14 +1,25 @@
 <script setup>
+import { ref } from "vue";
 
+const fujiData = ref({
+    vehicleCount: "",
+});
+
+ //富士のオーダーの保存処理
+const registerFujiSchedule = async() => {
+    const response = await axios.post("/api/dump-orders/fuji/store",fujiData.value);
+    // emit("success");
+};
 
 </script>
 <template>
-    <form class="form-container">
+    <form  @submit.prevent="registerFujiSchedule()" 
+           class="form-container">
         <!-- 富士の車両台数 -->
         <v-select
             label="富士の車両台数"
             :items="['未選択', '1', '2', '3']"
-            
+            v-model="fujiData.vehicleCount"
             outlined
             class="form-input"
             ></v-select>

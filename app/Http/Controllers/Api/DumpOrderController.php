@@ -119,4 +119,9 @@ class DumpOrderController extends Controller
             return response()->json(['error' => 'データの処理中にエラーが発生しました: ' . $e->getMessage()], 500);
         }
     }
+
+    public function fujiScheduleStore(Request $request)
+    { 
+        dd($request->all());
+    }
 }
