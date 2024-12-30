@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import AutoAssignmentScheduleForm from "@/Components/AutoAssignmentScheduleForm.vue";
 import Modal from "@/Components/Commons/Modal.vue";
 
 const props = defineProps({
@@ -20,5 +21,6 @@ const closeAutoAssignmentModal = () => {
     title = "配車登録" 
     @close="closeAutoAssignmentModal"
   >
+    <AutoAssignmentScheduleForm />
   </Modal>
 </template>
