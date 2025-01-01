@@ -10,9 +10,21 @@ const fujiData = ref({
     vehicleCount: "",
 });
 
+const ruleData = ref({
+    dateData: props.dateData,
+    selectedRule: "",
+});
+
  //富士のオーダーの保存処理
 const registerFujiSchedule = async() => {
     const response = await axios.post("/api/dump-orders/fuji/store",fujiData.value);
+    // emit("success");
+};
+
+ //ルールに基づくオーダーの保存処理
+ const registerMcmRuledSchedule = async() => {
+    console.log(ruleData.value.selectedRule);
+    const response = await axios.post("/api/dump-orders/mcm-rule/store",ruleData.value);
     // emit("success");
 };
 
@@ -33,6 +45,25 @@ const registerFujiSchedule = async() => {
         <div class="form-actions">
             <v-btn type="submit" class="submit-button">
                 富士の登録
+            </v-btn>
+        </div>
+    </form>
+
+    <form  @submit.prevent="registerMcmRuledSchedule()" 
+           class="form-container">
+        <!-- 選択したMCMルール -->
+        <v-select
+            label="ルール"
+            :items="['未選択','ルール1','ルール2','ルール3','ルール4','ルール5','ルール6','ルール7','ルール8','ルール9']"
+            v-model="ruleData.selectedRule"
+            outlined
+            class="form-input"
+            ></v-select>
+
+        <!-- アクションボタン -->
+        <div class="form-actions">
+            <v-btn type="submit" class="submit-button">
+                ルールの登録
             </v-btn>
         </div>
     </form>
