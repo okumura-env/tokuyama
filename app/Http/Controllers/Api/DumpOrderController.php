@@ -11,6 +11,7 @@ use App\Models\DateVehicle;
 use App\Models\DumpOrderCategoryTitle;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DumpOrderImport;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Log;
@@ -122,6 +123,43 @@ class DumpOrderController extends Controller
 
     public function fujiScheduleStore(Request $request)
     { 
-        dd($request->all());
+        $dateIds = collect($request->dateData)->pluck("id");
+        $vehicleCount = $request->vehicleCount;
+        $fujiVehicleIds = Vehicle::where('name','like', '%富士%')->pluck('id')->toArray();
+        
+        if($vehicleCount !== "未選択"){
+            for ($i = 1; $i <= $vehicleCount; $i++) {
+                foreach($dateIds as $dateId){
+                    // 一つの車両が同じ日につき2回石炭を運ぶ
+                    for ($j = 1; $j <= 2; $j++) {
+                        $dateVehicle = DateVehicle::where('date_id',$dateId)
+                            ->where('vehicle_id',$fujiVehicleIds[$i-1])
+                            ->first();
+                        $sort = DumpSchedule::where('date_id',$dateId)
+                            ->where('vehicle_id',$fujiVehicleIds[$i-1])
+                            ->count() + 1;
+                        $dumpSchedule = DumpSchedule::create([
+                            'date_id' => $dateId,
+                            'vehicle_id' => $fujiVehicleIds[$i-1],
+                            'date_vehicle_id' => $dateVehicle->id,
+                            'dump_order_category_id' => 2,
+                            'dump_order_category_title_id' => 7,
+                            'dump_order_category_title' => DumpOrderCategoryTitle::find(7)->title,
+                            'schedule_type' => "orders", // (受注)固定値
+                            'sort' => $sort, 
+                        ]);
+                        $dumpOrder = $dumpSchedule->dumpOrder()->create([
+                            'date_id' => $dateId,
+                            'vehicle_id' => $fujiVehicleIds[$i-1],
+                            'boiler_number' => null,
+                            'status' => true, 
+                            'is_preloaded' => false, 
+                            'vehicle_number' => null, 
+                            'note' => null, 
+                        ]);
+                    }
+                }
+            }
+        }
     }
 }
