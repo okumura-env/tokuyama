@@ -18,7 +18,7 @@ class RuleSeeder extends Seeder
     {
         $rules = [
             ['name' => 'ルール1',
-             'day_of_week' => '月',
+             'day_of_week' => '月曜日',
              'assignment'=>[['vehicle_id' => '2',
                             'priority' => '1',
                             'mcm_task_type_id' => '1',],
@@ -51,7 +51,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '2',]]
             ],
             ['name' => 'ルール1',
-            'day_of_week' => '火',
+            'day_of_week' => '火曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '2',
                             'mcm_task_type_id' => '2',],
@@ -84,7 +84,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '2',]]
             ],
             ['name' => 'ルール1',
-            'day_of_week' => '水',
+            'day_of_week' => '水曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '1',
                             'mcm_task_type_id' => '2',],
@@ -117,7 +117,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール1',
-            'day_of_week' => '木',
+            'day_of_week' => '木曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '7',
                             'mcm_task_type_id' => '1',],
@@ -150,7 +150,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール1',
-            'day_of_week' => '金',
+            'day_of_week' => '金曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '6',
                             'mcm_task_type_id' => '1',],
@@ -183,7 +183,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール1',
-            'day_of_week' => '土',
+            'day_of_week' => '土曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '5',
                             'mcm_task_type_id' => '1',],
@@ -216,7 +216,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール2',
-            'day_of_week' => '月',
+            'day_of_week' => '月曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '5',
                             'mcm_task_type_id' => '1',],
@@ -249,7 +249,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール2',
-            'day_of_week' => '火',
+            'day_of_week' => '火曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '4',
                             'mcm_task_type_id' => '1',],
@@ -282,7 +282,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール2',
-            'day_of_week' => '水',
+            'day_of_week' => '水曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '3',
                             'mcm_task_type_id' => '1',],
@@ -315,7 +315,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール2',
-            'day_of_week' => '木',
+            'day_of_week' => '木曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '2',
                             'mcm_task_type_id' => '1',],
@@ -348,7 +348,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール2',
-            'day_of_week' => '金',
+            'day_of_week' => '金曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '1',
                             'mcm_task_type_id' => '1',],
@@ -381,7 +381,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '2',]]
             ],
             ['name' => 'ルール2',
-            'day_of_week' => '土',
+            'day_of_week' => '土曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '2',
                             'mcm_task_type_id' => '2',],
@@ -414,7 +414,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '2',]]
             ],
             ['name' => 'ルール3',
-            'day_of_week' => '月',
+            'day_of_week' => '月曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '2',
                             'mcm_task_type_id' => '2',],
@@ -447,7 +447,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '2',]]
             ],
             ['name' => 'ルール3',
-            'day_of_week' => '火',
+            'day_of_week' => '火曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '1',
                             'mcm_task_type_id' => '2',],
@@ -480,7 +480,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール3',
-            'day_of_week' => '水',
+            'day_of_week' => '水曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '7',
                             'mcm_task_type_id' => '1',],
@@ -513,7 +513,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール3',
-            'day_of_week' => '木',
+            'day_of_week' => '木曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '6',
                             'mcm_task_type_id' => '1',],
@@ -546,7 +546,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール3',
-            'day_of_week' => '金',
+            'day_of_week' => '金曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '5',
                             'mcm_task_type_id' => '1',],
@@ -579,7 +579,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール3',
-            'day_of_week' => '土',
+            'day_of_week' => '土曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '4',
                             'mcm_task_type_id' => '1',],
@@ -612,7 +612,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール4',
-            'day_of_week' => '月',
+            'day_of_week' => '月曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '4',
                             'mcm_task_type_id' => '1',],
@@ -645,7 +645,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール4',
-            'day_of_week' => '火',
+            'day_of_week' => '火曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '3',
                             'mcm_task_type_id' => '1',],
@@ -678,7 +678,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール4',
-            'day_of_week' => '水',
+            'day_of_week' => '水曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '2',
                             'mcm_task_type_id' => '1',],
@@ -711,7 +711,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール4',
-            'day_of_week' => '木',
+            'day_of_week' => '木曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '1',
                             'mcm_task_type_id' => '1',],
@@ -744,7 +744,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '2',]]
             ],
             ['name' => 'ルール4',
-            'day_of_week' => '金',
+            'day_of_week' => '金曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '2',
                             'mcm_task_type_id' => '2',],
@@ -777,7 +777,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '2',]]
             ],
             ['name' => 'ルール4',
-            'day_of_week' => '土',
+            'day_of_week' => '土曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '1',
                             'mcm_task_type_id' => '2',],
@@ -810,7 +810,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール5',
-            'day_of_week' => '月',
+            'day_of_week' => '月曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '1',
                             'mcm_task_type_id' => '2',],
@@ -843,7 +843,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール5',
-            'day_of_week' => '火',
+            'day_of_week' => '火曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '7',
                             'mcm_task_type_id' => '1',],
@@ -876,7 +876,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール5',
-            'day_of_week' => '水',
+            'day_of_week' => '水曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '6',
                             'mcm_task_type_id' => '1',],
@@ -909,7 +909,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール5',
-            'day_of_week' => '木',
+            'day_of_week' => '木曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '5',
                             'mcm_task_type_id' => '1',],
@@ -942,7 +942,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール5',
-            'day_of_week' => '金',
+            'day_of_week' => '金曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '4',
                             'mcm_task_type_id' => '1',],
@@ -975,7 +975,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール5',
-            'day_of_week' => '土',
+            'day_of_week' => '土曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '3',
                             'mcm_task_type_id' => '1',],
@@ -1008,7 +1008,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール6',
-            'day_of_week' => '月',
+            'day_of_week' => '月曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '3',
                             'mcm_task_type_id' => '1',],
@@ -1041,7 +1041,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール6',
-            'day_of_week' => '火',
+            'day_of_week' => '火曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '2',
                             'mcm_task_type_id' => '1',],
@@ -1074,7 +1074,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール6',
-            'day_of_week' => '水',
+            'day_of_week' => '水曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '1',
                             'mcm_task_type_id' => '1',],
@@ -1107,7 +1107,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '2',]]
             ],
             ['name' => 'ルール6',
-            'day_of_week' => '木',
+            'day_of_week' => '木曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '2',
                             'mcm_task_type_id' => '2',],
@@ -1140,7 +1140,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '2',]]
             ],
             ['name' => 'ルール6',
-            'day_of_week' => '金',
+            'day_of_week' => '金曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '1',
                             'mcm_task_type_id' => '2',],
@@ -1173,7 +1173,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール6',
-            'day_of_week' => '土',
+            'day_of_week' => '土曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '7',
                             'mcm_task_type_id' => '1',],
@@ -1206,7 +1206,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール7',
-            'day_of_week' => '月',
+            'day_of_week' => '月曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '7',
                             'mcm_task_type_id' => '1',],
@@ -1239,7 +1239,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール7',
-            'day_of_week' => '火',
+            'day_of_week' => '火曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '6',
                             'mcm_task_type_id' => '1',],
@@ -1272,7 +1272,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール7',
-            'day_of_week' => '水',
+            'day_of_week' => '水曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '5',
                             'mcm_task_type_id' => '1',],
@@ -1305,7 +1305,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール7',
-            'day_of_week' => '木',
+            'day_of_week' => '木曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '4',
                             'mcm_task_type_id' => '1',],
@@ -1338,7 +1338,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール7',
-                'day_of_week' => '金',
+                'day_of_week' => '金曜日',
                 'assignment'=>[['vehicle_id' => '2',
                                 'priority' => '3',
                                 'mcm_task_type_id' => '1',],
@@ -1371,7 +1371,7 @@ class RuleSeeder extends Seeder
                                 'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール7',
-                'day_of_week' => '土',
+                'day_of_week' => '土曜日',
                 'assignment'=>[['vehicle_id' => '2',
                                 'priority' => '2',
                                 'mcm_task_type_id' => '1',],
@@ -1396,39 +1396,6 @@ class RuleSeeder extends Seeder
                                 ['vehicle_id' => '11',
                                 'priority' => '1',
                                 'mcm_task_type_id' => '2',],
-                                ['vehicle_id' => '12',
-                                'priority' => '2',
-                                'mcm_task_type_id' => '2',],
-                                ['vehicle_id' => '13',
-                                'priority' => '1',
-                                'mcm_task_type_id' => '1',]]
-            ],
-            ['name' => 'ルール8',
-                'day_of_week' => '月',
-                'assignment'=>[['vehicle_id' => '2',
-                                'priority' => '2',
-                                'mcm_task_type_id' => '1',],
-                                ['vehicle_id' => '4',
-                                'priority' => '3',
-                                'mcm_task_type_id' => '1',],
-                                ['vehicle_id' => '6',
-                                'priority' => '4',
-                                'mcm_task_type_id' => '1',],
-                                ['vehicle_id' => '7',
-                                'priority' => '5',
-                                'mcm_task_type_id' => '1',],
-                                ['vehicle_id' => '8',
-                                'priority' => '6',
-                                'mcm_task_type_id' => '1',],
-                                ['vehicle_id' => '9',
-                                'priority' => '1',
-                                'mcm_task_type_id' => '2',],
-                                ['vehicle_id' => '10',
-                                'priority' => '7',
-                                'mcm_task_type_id' => '1',],
-                                ['vehicle_id' => '11',
-                                'priority' => '1',
-                                'mcm_task_type_id' => '3',],
                                 ['vehicle_id' => '12',
                                 'priority' => '2',
                                 'mcm_task_type_id' => '2',],
@@ -1437,7 +1404,40 @@ class RuleSeeder extends Seeder
                                 'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール8',
-                'day_of_week' => '火',
+                'day_of_week' => '月曜日',
+                'assignment'=>[['vehicle_id' => '2',
+                                'priority' => '2',
+                                'mcm_task_type_id' => '1',],
+                                ['vehicle_id' => '4',
+                                'priority' => '3',
+                                'mcm_task_type_id' => '1',],
+                                ['vehicle_id' => '6',
+                                'priority' => '4',
+                                'mcm_task_type_id' => '1',],
+                                ['vehicle_id' => '7',
+                                'priority' => '5',
+                                'mcm_task_type_id' => '1',],
+                                ['vehicle_id' => '8',
+                                'priority' => '6',
+                                'mcm_task_type_id' => '1',],
+                                ['vehicle_id' => '9',
+                                'priority' => '1',
+                                'mcm_task_type_id' => '2',],
+                                ['vehicle_id' => '10',
+                                'priority' => '7',
+                                'mcm_task_type_id' => '1',],
+                                ['vehicle_id' => '11',
+                                'priority' => '1',
+                                'mcm_task_type_id' => '3',],
+                                ['vehicle_id' => '12',
+                                'priority' => '2',
+                                'mcm_task_type_id' => '2',],
+                                ['vehicle_id' => '13',
+                                'priority' => '1',
+                                'mcm_task_type_id' => '1',]]
+            ],
+            ['name' => 'ルール8',
+                'day_of_week' => '火曜日',
                 'assignment'=>[['vehicle_id' => '2',
                                 'priority' => '1',
                                 'mcm_task_type_id' => '1',],
@@ -1470,7 +1470,7 @@ class RuleSeeder extends Seeder
                                 'mcm_task_type_id' => '2',]]
             ],
             ['name' => 'ルール8',
-                'day_of_week' => '水',
+                'day_of_week' => '水曜日',
                 'assignment'=>[['vehicle_id' => '2',
                                 'priority' => '2',
                                 'mcm_task_type_id' => '2',],
@@ -1503,7 +1503,7 @@ class RuleSeeder extends Seeder
                                 'mcm_task_type_id' => '2',]]
             ],
             ['name' => 'ルール8',
-                'day_of_week' => '木',
+                'day_of_week' => '木曜日',
                 'assignment'=>[['vehicle_id' => '2',
                                 'priority' => '1',
                                 'mcm_task_type_id' => '2',],
@@ -1536,7 +1536,7 @@ class RuleSeeder extends Seeder
                                 'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール8',
-                'day_of_week' => '金',
+                'day_of_week' => '金曜日',
                 'assignment'=>[['vehicle_id' => '2',
                                 'priority' => '7',
                                 'mcm_task_type_id' => '1',],
@@ -1569,7 +1569,7 @@ class RuleSeeder extends Seeder
                                 'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール8',
-                'day_of_week' => '土',
+                'day_of_week' => '土曜日',
                 'assignment'=>[['vehicle_id' => '2',
                                 'priority' => '6',
                                 'mcm_task_type_id' => '1',],
@@ -1602,7 +1602,7 @@ class RuleSeeder extends Seeder
                                 'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール9',
-                'day_of_week' => '月',
+                'day_of_week' => '月曜日',
                 'assignment'=>[['vehicle_id' => '2',
                                 'priority' => '6',
                                 'mcm_task_type_id' => '1',],
@@ -1635,7 +1635,7 @@ class RuleSeeder extends Seeder
                                 'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール9',
-            'day_of_week' => '火',
+            'day_of_week' => '火曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '5',
                             'mcm_task_type_id' => '1',],
@@ -1668,7 +1668,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール9',
-            'day_of_week' => '水',
+            'day_of_week' => '水曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '4',
                             'mcm_task_type_id' => '1',],
@@ -1701,7 +1701,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール9',
-            'day_of_week' => '木',
+            'day_of_week' => '木曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '3',
                             'mcm_task_type_id' => '1',],
@@ -1734,7 +1734,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール9',
-            'day_of_week' => '金',
+            'day_of_week' => '金曜日',
             'assignment'=>[['vehicle_id' => '2',
                             'priority' => '2',
                             'mcm_task_type_id' => '1',],
@@ -1767,7 +1767,7 @@ class RuleSeeder extends Seeder
                             'mcm_task_type_id' => '1',]]
             ],
             ['name' => 'ルール9',
-                'day_of_week' => '金',
+                'day_of_week' => '土曜日',
                 'assignment'=>[['vehicle_id' => '2',
                                 'priority' => '1',
                                 'mcm_task_type_id' => '1',],
