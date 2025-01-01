@@ -64,6 +64,8 @@ Route::apiResource('dump-orders', DumpOrderController::class);
 Route::post('/dump-orders/import', [DumpOrderController::class, 'import']);
 //富士のオーダー登録
 Route::post('/dump-orders/fuji/store', [DumpOrderController::class, 'fujiScheduleStore']);
+//MCMルールに基づいたオーダー登録
+Route::post('/dump-orders/mcm-rule/store', [DumpOrderController::class, 'mcmRuledScheduleStore']);
 
 //ダンプスケジュール
 Route::apiResource('dump-schedules', DumpScheduleController::class);
