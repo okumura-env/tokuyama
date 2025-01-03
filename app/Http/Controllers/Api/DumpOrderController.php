@@ -11,11 +11,14 @@ use App\Models\DateVehicle;
 use App\Models\DumpOrderCategoryTitle;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DumpOrderImport;
+use App\Models\McmTaskType;
 use App\Models\Vehicle;
+use App\Models\Rule;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Log;
 use Spatie\LaravelIgnition\Recorders\DumpRecorder\Dump;
+use Carbon\Carbon;
 
 class DumpOrderController extends Controller
 {
@@ -161,5 +164,68 @@ class DumpOrderController extends Controller
                 }
             }
         }
+    }
+
+    public function mcmRuledScheduleStore(Request $request)
+    { 
+       $dates = $request->dateData;
+      
+       $selectedRuleData = Rule::where("name", $request->selectedRule)->get();
+
+       // タスクタイプIDを一度に取得
+       $taskTypeIds = McmTaskType::whereIn('name', ['MCM', '転', 'その他'])
+           ->pluck('id', 'name');
+       
+       // ルールデータをタスクタイプによってフィルタリング
+       $mcmCoalRuleData = $selectedRuleData->where('mcm_task_type_id', $taskTypeIds['MCM']);
+       $tenRuleData = $selectedRuleData->where('mcm_task_type_id', $taskTypeIds['転']);
+       $otherRuleData = $selectedRuleData->where('mcm_task_type_id', $taskTypeIds['その他']);
+
+       //MCM石炭のスケジュール登録
+       foreach($mcmCoalRuleData  as $ruleData){
+        //  dd($ruleData->day_of_week);
+         foreach($dates as $date){
+            // dd($date['day_of_week'],$date['id']);
+            if($ruleData->day_of_week == $date['day_of_week']){
+                Log::info("一致");
+                $dateId = $date['id'];
+                Log::info($dateId);
+
+                for ($j = 1; $j <= 2; $j++) {
+                    $dateVehicle = DateVehicle::where('date_id',$dateId)
+                        ->where('vehicle_id',$ruleData->vehicle_id)
+                        ->first();
+                    $sort = DumpSchedule::where('date_id',$dateId)
+                        ->where('vehicle_id',$ruleData->vehicle_id)
+                        ->count() + 1;
+                    $dumpSchedule = DumpSchedule::create([
+                        'date_id' => $dateId,
+                        'vehicle_id' => $ruleData->vehicle_id,
+                        'date_vehicle_id' => $dateVehicle->id,
+                        'dump_order_category_id' => 2,
+                        'dump_order_category_title_id' => 7,
+                        'dump_order_category_title' => DumpOrderCategoryTitle::find(7)->title,
+                        'schedule_type' => "orders", // (受注)固定値
+                        'sort' => $sort, 
+                    ]);
+                    $dumpOrder = $dumpSchedule->dumpOrder()->create([
+                        'date_id' => $dateId,
+                        'vehicle_id' => $ruleData->vehicle_id,
+                        'boiler_number' => null,
+                        'status' => true, 
+                        'is_preloaded' => false, 
+                        'vehicle_number' => null, 
+                        'note' => null, 
+                    ]);
+                }
+            }else{
+            Log::info("不一致");
+            }
+    
+            
+         }
+       }
+
+       
     }
 }
