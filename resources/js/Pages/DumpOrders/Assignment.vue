@@ -25,6 +25,8 @@ const { data: vehicles, fetchData: fetchVehicles } = useDataApi("/api/vehicles")
 const { data: dates, fetchData: fetchDates } = useDataApi("/api/dates");
 const { data: schedules, fetchData: fetchDumpSchedules } = useDataApi("/api/dump-schedules");
 
+const mcmOrderQuantities = ref([320,300,280,300,280,320]);
+
 // フィルタリング処理
 const filteredVehicles = computed(() =>
     vehicles.value.filter((vehicle) => vehicle.id <= 34)
@@ -33,6 +35,16 @@ const filteredVehicles = computed(() =>
 const filteredDates = computed(() =>
     dates.value.filter((date) => date.id >= 7)
 );
+
+//日付を表示できる形に整形(例：12/4(月)(320))
+const dateWithQuantities = computed(() => {
+      return filteredDates.value.map((date, index) => {
+        const shortDayOfWeek = date.day_of_week.replace("曜日", "");
+        const jsDate = new Date(date.date);
+        const formattedDate = `${jsDate.getMonth() + 1}/${jsDate.getDate()}`;
+        return `${formattedDate}(${shortDayOfWeek})(${mcmOrderQuantities.value[index]})`;
+      });
+    });
 
 // モーダルの開閉ロジック
 // 手動新規登録モーダル
@@ -296,8 +308,8 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                         <thead>
                             <tr>
                                 <th>車両名/日付</th>
-                                <th v-for="date in filteredDates" :key="date.id">
-                                    {{ date.date }}
+                                <th v-for="dateWithQuantity in dateWithQuantities">
+                                    {{ dateWithQuantity }}
                                 </th>
                             </tr>
                         </thead>
