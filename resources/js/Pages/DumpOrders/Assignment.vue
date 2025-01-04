@@ -32,19 +32,27 @@ const filteredVehicles = computed(() =>
     vehicles.value.filter((vehicle) => vehicle.id <= 34)
 );
 
-const filteredDates = computed(() =>
-    dates.value.filter((date) => date.id >= 7)
-);
+// 自動配車登録用の日付データ
+const dateData = computed(() => {
+    return dates.value
+    .filter((date) => date.id >= 7) // IDが7以上のデータをフィルタリング
+    .map((date, index) => ({
+        ...date,
+        mcmQuantity: mcmOrderQuantities.value[index],
+      }));
+    });
 
 //日付を表示できる形に整形(例：12/4(月)(320))
 const dateWithQuantities = computed(() => {
-      return filteredDates.value.map((date, index) => {
-        const shortDayOfWeek = date.day_of_week.replace("曜日", "");
-        const jsDate = new Date(date.date);
-        const formattedDate = `${jsDate.getMonth() + 1}/${jsDate.getDate()}`;
-        return `${formattedDate}(${shortDayOfWeek})(${mcmOrderQuantities.value[index]})`;
-      });
+  return dates.value
+    .filter((date) => date.id >= 7) // IDが7以上のデータをフィルタリング
+    .map((date, index) => {
+      const shortDayOfWeek = date.day_of_week.replace("曜日", ""); // "曜日" を省略
+      const jsDate = new Date(date.date);
+      const formattedDate = `${jsDate.getMonth() + 1}/${jsDate.getDate()}`; // 月/日形式に整形
+      return `${formattedDate}(${shortDayOfWeek})(${mcmOrderQuantities.value[index]})`;
     });
+});
 
 // モーダルの開閉ロジック
 // 手動新規登録モーダル
@@ -144,7 +152,7 @@ const importData = async () => {
      */
     const formData = new FormData();
     formData.append("file", selectedFile.value);
-    formData.append("dates", JSON.stringify(filteredDates.value));
+    formData.append("dates", JSON.stringify(dateData.value));
 
     try {
         // ファイルをアップロード
@@ -316,7 +324,7 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                         <tbody>
                             <tr v-for="vehicle in filteredVehicles" :key="vehicle.id">
                                 <td class="nowrap">{{ vehicle.name }}</td>
-                                <td v-for="date in filteredDates"
+                                <td v-for="date in dateData"
                                    :key="date.id"
                                    
                                    >
@@ -366,7 +374,7 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                    />
                 <AutoAssignmentScheduleModal
                     :isAutoAssignmentModalOpen = "isAutoAssignmentModalOpen"
-                    :dateData = "filteredDates"
+                    :dateData = "dateData"
                     @close="closeAutoAssignmentModal" 
                 />
             </v-container>
