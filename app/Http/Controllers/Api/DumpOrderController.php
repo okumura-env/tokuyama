@@ -126,6 +126,7 @@ class DumpOrderController extends Controller
 
     public function fujiScheduleStore(Request $request)
     { 
+        dd($request->dateData);
         $dateIds = collect($request->dateData)->pluck("id");
         $vehicleCount = $request->vehicleCount;
         $fujiVehicleIds = Vehicle::where('name','like', '%富士%')->pluck('id')->toArray();
@@ -168,63 +169,108 @@ class DumpOrderController extends Controller
 
     public function mcmRuledScheduleStore(Request $request)
     { 
-       $dates = $request->dateData;
+    //   dd($request->dateData);
+       $dateData = $request->dateData;
       
        $selectedRuleData = Rule::where("name", $request->selectedRule)->get();
-
-       // タスクタイプIDを一度に取得
-       $taskTypeIds = McmTaskType::whereIn('name', ['MCM', '転', 'その他'])
-           ->pluck('id', 'name');
-       
-       // ルールデータをタスクタイプによってフィルタリング
-       $mcmCoalRuleData = $selectedRuleData->where('mcm_task_type_id', $taskTypeIds['MCM']);
-       $tenRuleData = $selectedRuleData->where('mcm_task_type_id', $taskTypeIds['転']);
-       $otherRuleData = $selectedRuleData->where('mcm_task_type_id', $taskTypeIds['その他']);
-
-       //MCM石炭のスケジュール登録
-       foreach($mcmCoalRuleData  as $ruleData){
-        //  dd($ruleData->day_of_week);
-         foreach($dates as $date){
-            // dd($date['day_of_week'],$date['id']);
-            if($ruleData->day_of_week == $date['day_of_week']){
-                Log::info("一致");
-                $dateId = $date['id'];
-                Log::info($dateId);
-
-                for ($j = 1; $j <= 2; $j++) {
-                    $dateVehicle = DateVehicle::where('date_id',$dateId)
-                        ->where('vehicle_id',$ruleData->vehicle_id)
-                        ->first();
-                    $sort = DumpSchedule::where('date_id',$dateId)
-                        ->where('vehicle_id',$ruleData->vehicle_id)
-                        ->count() + 1;
-                    $dumpSchedule = DumpSchedule::create([
-                        'date_id' => $dateId,
-                        'vehicle_id' => $ruleData->vehicle_id,
-                        'date_vehicle_id' => $dateVehicle->id,
-                        'dump_order_category_id' => 2,
-                        'dump_order_category_title_id' => 7,
-                        'dump_order_category_title' => DumpOrderCategoryTitle::find(7)->title,
-                        'schedule_type' => "orders", // (受注)固定値
-                        'sort' => $sort, 
-                    ]);
-                    $dumpOrder = $dumpSchedule->dumpOrder()->create([
-                        'date_id' => $dateId,
-                        'vehicle_id' => $ruleData->vehicle_id,
-                        'boiler_number' => null,
-                        'status' => true, 
-                        'is_preloaded' => false, 
-                        'vehicle_number' => null, 
-                        'note' => null, 
-                    ]);
-                }
-            }else{
-            Log::info("不一致");
-            }
     
-            
-         }
-       }
+       //1.MCM石炭のスケジュールデータを取得
+       //2.曜日ごとにグループ化
+       //3.priorityを基準に昇順に並び替え
+       //$mcmCoalRuleData =[
+        //     "月曜日" => [
+        //         ["id" => 306, "name" => "ルール6","day_of_week" => "月曜日", "vehicle_id" => 9,"priority" => 1,...],
+        //         ["id" => 310, "name" => "ルール6", "day_of_week" => "月曜日","vehicle_id" => 13,"priority" => 2,...],
+        //       ...
+        //     ],
+        //     "火曜日" => [
+        //         ["id" => 320, "name" => "ルール6", "day_of_week" => "火曜日","vehicle_id" => 13,"priority" => 1,...],
+        //         ["id" => 311, "name" => "ルール6", "day_of_week" => "火曜日","vehicle_id" => 2,"priority" => 2,...],
+        //       ...
+        //     ],
+        //     ...
+        // ];
+        $mcmCoalRuleData = $selectedRuleData
+        ->where('mcm_task_type_id', 1)
+        ->groupBy('day_of_week')
+        ->map(fn($items) => collect($items)->sortBy('priority')->values())
+        ->toArray();
+
+        $daysOfWeek = ["月曜日","火曜日","水曜日","木曜日","金曜日","土曜日"];
+
+        foreach($daysOfWeek as $dayOfWeek){
+            //特定の曜日のみのデータ
+            //$mcmCoalRuleDataByDay = [
+                //         ["id" => 306, "name" => "ルール6","day_of_week" => "月曜日", "vehicle_id" => 9,"priority" => 1,...],
+                //         ["id" => 310, "name" => "ルール6", "day_of_week" => "月曜日","vehicle_id" => 13,"priority" => 2,...],
+                //       ...
+                //     ],
+            $mcmCoalRuleDataByDay = $mcmCoalRuleData[$dayOfWeek];
+
+              //MCM石炭のスケジュール登録
+                $mcmQuantity = null; // MCMオーダー数量の変数初期化
+                foreach($mcmCoalRuleDataByDay  as $ruleDatumByDay){
+                    //$dateData = [
+                    //     ["id" => 1,"date" => "2024-12-02", "day_of_week" => "月曜日", "mcmQuantity" => 320,...],
+                    //     ["id" => 2,"date" => "2024-12-03", "day_of_week" => "火曜日", "mcmQuantity" => 280,...],
+                    //     ...
+                    // ];
+                    foreach($dateData as $date){
+                        if($dayOfWeek == $date['day_of_week']){
+                            Log::info("一致");
+                            // 初回ループ時に $mcmQuantity を初期化
+                            if ($mcmQuantity === null) {
+                                $mcmQuantity = $date['mcmQuantity'];
+                            }
+                            $dateId = $date['id'];
+
+                            //同じ日付の同じ車両が基本2回石炭を運ぶ
+                            for ($j = 1; $j <= 2; $j++) {
+                                $dateVehicle = DateVehicle::where('date_id',$dateId)
+                                    ->where('vehicle_id',$ruleDatumByDay["vehicle_id"])
+                                    ->first();
+                                $sort = DumpSchedule::where('date_id',$dateId)
+                                    ->where('vehicle_id',$ruleDatumByDay["vehicle_id"])
+                                    ->count() + 1;
+                                $dumpSchedule = DumpSchedule::create([
+                                    'date_id' => $dateId,
+                                    'vehicle_id' => $ruleDatumByDay["vehicle_id"],
+                                    'date_vehicle_id' => $dateVehicle->id,
+                                    'dump_order_category_id' => 2,
+                                    'dump_order_category_title_id' => 7,
+                                    'dump_order_category_title' => DumpOrderCategoryTitle::find(7)->title,
+                                    'schedule_type' => "orders", // (受注)固定値
+                                    'sort' => $sort, 
+                                ]);
+                                $dumpOrder = $dumpSchedule->dumpOrder()->create([
+                                    'date_id' => $dateId,
+                                    'vehicle_id' => $ruleDatumByDay["vehicle_id"],
+                                    'boiler_number' => null,
+                                    'status' => true, 
+                                    'is_preloaded' => false, 
+                                    'vehicle_number' => null, 
+                                    'note' => null, 
+                                ]);
+                                
+                                //mcmQuantityから20引く(20t車で一回運んだときの数量)
+                                $mcmQuantity -= 20;
+                                //予定数量が0以下になったら必要分割り当てたということなのでループを抜ける
+                                if($mcmQuantity <= 0){
+                                    //初期化
+                                    $mcmQuantity = null;
+                                    break;
+                                }
+
+                            }
+                        }else{
+                        Log::info("不一致");
+                        }
+                
+                        
+                    }
+                }
+        }
+     
 
        
     }
