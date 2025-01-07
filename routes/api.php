@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\DumpScheduleController;
 use App\Http\Controllers\Api\DumpOtherScheduleController;
 use App\Http\Controllers\Api\McmTaskTypeController;
 use App\Http\Controllers\Api\RuleController;
+use App\Http\Controllers\Api\McmCoalUsageScheduleController;
 
 
 
@@ -78,3 +79,6 @@ Route::apiResource('mcm-task-types', McmTaskTypeController::class);
 
 //ルール
 Route::apiResource('rules', RuleController::class);
+
+//MCM石炭使用スケジュール
+Route::apiResource('mcm-coal-usage-schedules', McmCoalUsageScheduleController::class);
