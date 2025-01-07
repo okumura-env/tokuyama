@@ -12,6 +12,7 @@ use App\Models\DumpOrderCategoryTitle;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DumpOrderImport;
 use App\Models\McmTaskType;
+use App\Models\McmCoalUsageSchedule;
 use App\Models\Vehicle;
 use App\Models\Rule;
 use Illuminate\Http\Request;
@@ -126,24 +127,29 @@ class DumpOrderController extends Controller
 
     public function fujiScheduleStore(Request $request)
     { 
-        dd($request->dateData);
-        $dateIds = collect($request->dateData)->pluck("id");
+        $dateData = $request->dateData;
         $vehicleCount = $request->vehicleCount;
         $fujiVehicleIds = Vehicle::where('name','like', '%富士%')->pluck('id')->toArray();
+        $mcmQuantity = null;
         
         if($vehicleCount !== "未選択"){
-            for ($i = 1; $i <= $vehicleCount; $i++) {
-                foreach($dateIds as $dateId){
+            foreach($dateData as $dateDatum){
+                for ($i = 1; $i <= $vehicleCount; $i++) {
+                    //曜日ごとの初めの登録の際は初期化&予定数量を入れ直す
+                    if($mcmQuantity === null){
+                        $mcmQuantity = $dateDatum['mcmQuantity'];
+                    }
+                    
                     // 一つの車両が同じ日につき2回石炭を運ぶ
                     for ($j = 1; $j <= 2; $j++) {
-                        $dateVehicle = DateVehicle::where('date_id',$dateId)
+                        $dateVehicle = DateVehicle::where('date_id',$dateDatum['id'])
                             ->where('vehicle_id',$fujiVehicleIds[$i-1])
                             ->first();
-                        $sort = DumpSchedule::where('date_id',$dateId)
+                        $sort = DumpSchedule::where('date_id',$dateDatum['id'])
                             ->where('vehicle_id',$fujiVehicleIds[$i-1])
                             ->count() + 1;
                         $dumpSchedule = DumpSchedule::create([
-                            'date_id' => $dateId,
+                            'date_id' => $dateDatum['id'],
                             'vehicle_id' => $fujiVehicleIds[$i-1],
                             'date_vehicle_id' => $dateVehicle->id,
                             'dump_order_category_id' => 2,
@@ -153,7 +159,7 @@ class DumpOrderController extends Controller
                             'sort' => $sort, 
                         ]);
                         $dumpOrder = $dumpSchedule->dumpOrder()->create([
-                            'date_id' => $dateId,
+                            'date_id' => $dateDatum['id'],
                             'vehicle_id' => $fujiVehicleIds[$i-1],
                             'boiler_number' => null,
                             'status' => true, 
@@ -161,15 +167,23 @@ class DumpOrderController extends Controller
                             'vehicle_number' => null, 
                             'note' => null, 
                         ]);
+
+                          //mcmQuantityから20引く(20t車で一回運んだときの数量)
+                          $mcmQuantity -= 20;
                     }
                 }
+                $McmCoalUsageSchedule = McmCoalUsageSchedule::where('date_id',$dateDatum['id'])
+                ->first();
+                $McmCoalUsageSchedule->update([
+                    'temporary_amount' => $mcmQuantity
+                ]); 
+                $mcmQuantity = null;
             }
         }
     }
 
     public function mcmRuledScheduleStore(Request $request)
     { 
-    //   dd($request->dateData);
        $dateData = $request->dateData;
       
        $selectedRuleData = Rule::where("name", $request->selectedRule)->get();
@@ -220,7 +234,8 @@ class DumpOrderController extends Controller
                             Log::info("一致");
                             // 初回ループ時に $mcmQuantity を初期化
                             if ($mcmQuantity === null) {
-                                $mcmQuantity = $date['mcmQuantity'];
+                                $mcmQuantity = McmCoalUsageSchedule::where('date_id',$date['id'])
+                                    ->first()->temporary_amount;
                             }
                             $dateId = $date['id'];
 
@@ -260,13 +275,13 @@ class DumpOrderController extends Controller
                                     $mcmQuantity = null;
                                     break;
                                 }
-
                             }
                         }else{
                         Log::info("不一致");
                         }
-                
-                        
+                    }
+                    if($mcmQuantity === null){
+                        break;
                     }
                 }
         }
