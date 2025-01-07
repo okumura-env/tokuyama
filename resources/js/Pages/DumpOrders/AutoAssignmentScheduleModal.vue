@@ -8,10 +8,15 @@ const props = defineProps({
     dateData : Array,
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close","refetch"]);
 
 const closeAutoAssignmentModal = () => {
     emit("close");
+};
+
+const handleSuccess = () => {
+    emit("refetch");
+    closeAutoAssignmentModal(); 
 };
 
 </script>
@@ -24,6 +29,7 @@ const closeAutoAssignmentModal = () => {
   >
     <AutoAssignmentScheduleForm
       :dateData="dateData"
+      @success="handleSuccess"
      />
   </Modal>
 </template>

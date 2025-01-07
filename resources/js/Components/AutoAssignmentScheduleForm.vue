@@ -5,6 +5,8 @@ const props = defineProps({
     dateData : Array,
 });
 
+const emit = defineEmits(["success"]);
+
 const fujiData = ref({
     dateData: props.dateData,
     vehicleCount: "",
@@ -18,13 +20,13 @@ const ruleData = ref({
  //富士のオーダーの保存処理
 const registerFujiSchedule = async() => {
     const response = await axios.post("/api/dump-orders/fuji/store",fujiData.value);
-    // emit("success");
+    emit("success");
 };
 
  //ルールに基づくオーダーの保存処理
  const registerMcmRuledSchedule = async() => {
     const response = await axios.post("/api/dump-orders/mcm-rule/store",ruleData.value);
-    // emit("success");
+    emit("success");
 };
 
 </script>
