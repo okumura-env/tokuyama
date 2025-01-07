@@ -24,12 +24,15 @@ const selectedFile = ref(null);
 const { data: vehicles, fetchData: fetchVehicles } = useDataApi("/api/vehicles");
 const { data: dates, fetchData: fetchDates } = useDataApi("/api/dates");
 const { data: schedules, fetchData: fetchDumpSchedules } = useDataApi("/api/dump-schedules");
-
-const mcmOrderQuantities = ref([320,300,280,300,280,320]);
+const { data: mcmCoalUsageSchedules, fetchData: fetchMcmCoalUsageSchedules } = useDataApi("/api/mcm-coal-usage-schedules");
 
 // フィルタリング処理
 const filteredVehicles = computed(() =>
     vehicles.value.filter((vehicle) => vehicle.id <= 34)
+);
+
+const filteredMcmCoalUsageSchedules = computed(() =>
+    mcmCoalUsageSchedules.value.filter((mcmCoalUsageSchedules) => mcmCoalUsageSchedules.id >= 7)
 );
 
 // 自動配車登録用の日付データ
@@ -38,7 +41,7 @@ const dateData = computed(() => {
     .filter((date) => date.id >= 7) // IDが7以上のデータをフィルタリング
     .map((date, index) => ({
         ...date,
-        mcmQuantity: mcmOrderQuantities.value[index],
+        mcmQuantity: filteredMcmCoalUsageSchedules.value[index]?.planned_amount,
       }));
     });
 
@@ -50,7 +53,7 @@ const dateWithQuantities = computed(() => {
       const shortDayOfWeek = date.day_of_week.replace("曜日", ""); // "曜日" を省略
       const jsDate = new Date(date.date);
       const formattedDate = `${jsDate.getMonth() + 1}/${jsDate.getDate()}`; // 月/日形式に整形
-      return `${formattedDate}(${shortDayOfWeek})(${mcmOrderQuantities.value[index]})`;
+      return `${formattedDate}(${shortDayOfWeek})(${filteredMcmCoalUsageSchedules.value[index]?.planned_amount})`;
     });
 });
 
@@ -376,6 +379,7 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                     :isAutoAssignmentModalOpen = "isAutoAssignmentModalOpen"
                     :dateData = "dateData"
                     @close="closeAutoAssignmentModal" 
+                    @refetch="fetchDumpSchedules"
                 />
             </v-container>
         </v-main>
