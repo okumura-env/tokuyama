@@ -23,7 +23,6 @@ const registerFujiSchedule = async() => {
 
  //ルールに基づくオーダーの保存処理
  const registerMcmRuledSchedule = async() => {
-    console.log(ruleData.value.selectedRule);
     const response = await axios.post("/api/dump-orders/mcm-rule/store",ruleData.value);
     // emit("success");
 };
