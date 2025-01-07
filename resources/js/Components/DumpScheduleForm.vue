@@ -107,126 +107,97 @@ const updateSchedule = async() => {
 
 </script>
 <template>
-    <main class="modal__content" id="modal-1-content">
+   <main class="modal__content" id="modal-1-content">
         <div class="container px-5 py-8 mx-auto">
             <div class="lg:w-2/3 w-full mx-auto overflow-auto">
-                <form @submit.prevent="isEditMode  ?  updateSchedule() : registerSchedule()" 
-                        class="form-container">
-                    <div class="form-group">
-                        <label for="date" class="form-label">日付</label>
-                        <div id="date" class="form-display">{{ isEditMode ? scheduleData.date?.date : scheduleData.date }}</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="vehicles" class="form-label">車両</label>
-                        <div id="vehicles" class="form-display">{{ getVehicle(formData.vehicle_id) }}</div>
-                  
-                    </div>
-                    <div class="form-group">
-                        <label for="dump-order-categories" class="form-label">カテゴリー</label>
-                        <select
-                                id = "dump-order-categories"
-                                name = "dump-order-categories"
-                                class="form-input"
-                                v-model="formData.dump_order_category_id"
-                            >
-                            <option
-                                v-for="dumpOrderCategory in dumpOrderCategories"
-                                :key="dumpOrderCategory.id"
-                                :value="dumpOrderCategory.id"
-                            >
-                                {{ dumpOrderCategory.name }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="dump-order-category-titles" class="form-label">タイトル</label>
-                        <select
-                                id = "dump-order-category-titles"
-                                name = "dump-order-category-titles"
-                                class="form-input"
-                                v-model="formData.dump_order_category_title_id"
-                            >
-                            <option
-                                v-for="dumpOrderCategoryTitle in filteredTitles"
-                                :key="dumpOrderCategoryTitle.id"
-                                :value="dumpOrderCategoryTitle.id"
-                            >
-                                {{ dumpOrderCategoryTitle.title }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="boiler-number" class="form-label">ボイラー番号</label>
-                        <select 
-                            id = "boiler-number"
-                            name = "boiler-number"
-                            class="form-input"
-                            v-model="formData.boiler_number">
-                            <option value="">未選択</option>
-                            <option value="1">1</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">ステータス</label>
-                        <div class="form-radio-group">
-                            <label for="status_unassigned">
-                                <input 
-                                    type="radio" 
-                                    id="status_unassigned" 
-                                    name="status" 
-                                    v-model="formData.status" 
-                                    :value="false"
-                                />
-                                未配車
-                            </label>
-                            <label for="status_assigned">
-                                <input 
-                                    type="radio" 
-                                    id="status_assigned" 
-                                    name="status" 
-                                    v-model="formData.status" 
-                                    :value="true"
-                                />
-                                配車済み
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="is_preloaded" class="form-label">積み込み</label>
-                        <input
-                            id="is_preloaded"
-                            name="is_preloaded"
-                            v-model="formData.is_preloaded"
-                            type="checkbox"
-                            class="form-checkbox"
-                            :true-value = true
-                            :false-value = false
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label for="note" class="form-label">備考</label>
-                        <textarea
-                            id="note"
-                            name="note"
-                            v-model="formData.note"
-                            class="form-textarea"
-                            rows="4"
-                        ></textarea>
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button
-                            type="submit"
-                            class="submit-button"
+                <form @submit.prevent="isEditMode ? updateSchedule() : registerSchedule()" 
+                      class="form-container">
+                       <!-- 日付 -->
+                        <v-text-field
+                        label="日付"
+                        readonly
+                        outlined
+                        class="form-input">
+                            {{ isEditMode ? scheduleData.date?.date : scheduleData.date }}
+                        </v-text-field>
+                
+                        <!-- 車両 -->
+                        <v-col cols="12">
+                                <v-text-field
+                                    label="車両"
+                                    readonly
+                                    outlined
+                                    class="form-input"
+                                >{{ getVehicle(formData.vehicle_id) }}</v-text-field>
+                        </v-col>
+
+                    <!-- カテゴリー -->
+                        <v-select
+                        label="カテゴリー"
+                        :items="dumpOrderCategories"
+                        item-title="name"
+                        item-value="id"
+                        v-model="formData.dump_order_category_id"
+                        outlined
+                        class="form-input"
+                        >                            
+                        </v-select>
+
+                        <!-- タイトル -->
+                        <v-col cols="12">
+                                    <v-select
+                                        label="タイトル"
+                                        :items="filteredTitles"
+                                        item-title="title"
+                                        item-value="id"
+                                        v-model="formData.dump_order_category_title_id"
+                                        outlined
+                                        class="form-input"
+                                    ></v-select>
+                        </v-col>
+
+                        <!-- ボイラー番号 -->
+                        <v-select
+                        label="ボイラー番号"
+                        :items="['未選択', '1', '5', '6']"
+                        v-model="formData.boiler_number"
+                        outlined
+                        class="form-input"
+                        ></v-select>
+
+                        <!-- ステータス -->
+                        <v-radio-group
+                        v-model="formData.status"
+                        label="ステータス"
+                        class="form-radio-group"
                         >
-                        {{
-                            isEditMode
-                                ? "更新"
-                                : "登録"
-                        }}
-                        </button>
+                            <v-radio label="未配車" :value="false"></v-radio>
+                            <v-radio label="配車済み" :value="true"></v-radio>
+                        </v-radio-group>
+
+                        <!-- 積み込み -->
+                        <v-checkbox
+                        label="積み込み"
+                        v-model="formData.is_preloaded"
+                        true-value="true"
+                        false-value="false"
+                        class="form-checkbox"
+                        ></v-checkbox>
+
+                        <!-- 備考 -->
+                        <v-textarea
+                        label="備考"
+                        v-model="formData.note"
+                        rows="4"
+                        outlined
+                        class="form-textarea"
+                        ></v-textarea>
+
+                   <!-- アクションボタン -->
+                    <div class="form-actions">
+                        <v-btn type="submit" class="submit-button">
+                            {{ isEditMode ? "更新" : "登録" }}
+                        </v-btn>
                     </div>
                 </form>
             </div>
@@ -235,71 +206,39 @@ const updateSchedule = async() => {
 </template>
 
 <style scoped>
-/* モーダルのスタイル */
-.modal__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.close-button {
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
-}
-
+/* カード内部のフォーム全体デザイン */
 .form-container {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
+.form-input {
+  margin-bottom: 1rem;
 }
 
-.form-label {
-  font-weight: bold;
+.form-radio-group {
+  margin-bottom: 1rem;
 }
 
-.form-input,
-.form-textarea,
 .form-checkbox {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .submit-button {
-  background-color: #007bff;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.cancel-button {
-  background-color: #ccc;
-  color: black;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  background-color: #002c5e; /* ブランド基調色 */
+  color: #ffffff;
+  font-weight: bold;
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: #001d43;
+  transition: background-color 0.3s ease;
 }
 
-.cancel-button:hover {
-  background-color: #999;
+@media (max-width: 600px) {
+  .submit-button {
+    font-size: 14px;
+  }
 }
 </style>
