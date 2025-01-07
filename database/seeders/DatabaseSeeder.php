@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             DateVehicleSeeder::class,
             McmTaskTypeSeeder::class,
             RuleSeeder::class,
+            McmCoalUsageScheduleSeeder::class,
         ]);
     }
 }
