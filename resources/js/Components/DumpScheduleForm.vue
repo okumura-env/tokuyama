@@ -100,7 +100,7 @@ const registerSchedule = async() => {
 
 //更新処理
 const updateSchedule = async() => {
-    const response = await axios.put(`/api/dump-orders/${scheduleDataData.value.id}`, formData.value);
+    const response = await axios.put(`/api/dump-orders/${scheduleData.value.id}`, formData.value);
     console.log("更新ボタンが押されました");
     emit("success");
 };
@@ -179,8 +179,8 @@ const updateSchedule = async() => {
                         <v-checkbox
                         label="積み込み"
                         v-model="formData.is_preloaded"
-                        true-value="true"
-                        false-value="false"
+                        :true-value="true"
+                        :false-value="false"
                         class="form-checkbox"
                         ></v-checkbox>
 
