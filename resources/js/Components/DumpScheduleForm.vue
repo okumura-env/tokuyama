@@ -112,22 +112,24 @@ const updateSchedule = async() => {
             <div class="lg:w-2/3 w-full mx-auto overflow-auto">
                 <form @submit.prevent="isEditMode ? updateSchedule() : registerSchedule()" 
                       class="form-container">
-                       <!-- 日付 -->
-                        <v-text-field
-                          label="日付"
+                       <!-- 日付 注：labelをつけると中身のテキストが表示されなくなる-->
+                       <v-text-field
                           readonly
                           outlined
+                          hide-details
+                          :value="isEditMode ? (scheduleData.date?.date || '-') : (scheduleData.date || '-')"
                           class="form-input">
-                            {{ isEditMode ? scheduleData.date?.date : scheduleData.date }}
+                            
                         </v-text-field>
                 
-                        <!-- 車両 -->
+                        <!-- 車両 注：labelをつけると中身のテキストが表示されなくなる-->
                         <v-text-field
-                            label="車両"
                             readonly
                             outlined
+                            hide-details
                             class="form-input"
-                        >{{ getVehicle(formData.vehicle_id) }}</v-text-field>
+                            :value="getVehicle(formData.vehicle_id) || '-'"
+                        ></v-text-field>
                         
 
                     <!-- カテゴリー -->
@@ -212,6 +214,12 @@ const updateSchedule = async() => {
 
 .form-input {
   margin-bottom: 1rem;
+}
+
+.form-input .v-input__control {
+  overflow: visible; /* 内容が切り取られないように設定 */
+  text-overflow: ellipsis; /* 長いテキストが切れる場合に対応 */
+  white-space: nowrap; /* テキストを1行に収める */
 }
 
 .form-radio-group {
