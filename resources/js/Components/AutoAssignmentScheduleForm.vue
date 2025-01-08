@@ -98,24 +98,15 @@ const registerFujiSchedule = async() => {
     margin-bottom: 0; /* ボタンと不要な間隔を排除 */
 }
 
-.submit-button {
-  background-color: #002c5e; /* ブランド基調色 */
-  color: #ffffff;
-  font-weight: bold;
-}
-
-.submit-button:hover {
-  background-color: #001d43;
-  transition: background-color 0.3s ease;
-}
-
+.submit-button,
 .ten-register-button {
   background-color: #002c5e; /* ブランド基調色 */
   color: #ffffff;
   font-weight: bold;
 }
 
-.ten-register-button:hover {
+.submit-button:hover,
+.ten-register-button:hover  {
   background-color: #001d43;
   transition: background-color 0.3s ease;
 }
