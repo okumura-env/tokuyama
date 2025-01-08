@@ -114,62 +114,59 @@ const updateSchedule = async() => {
                       class="form-container">
                        <!-- 日付 -->
                         <v-text-field
-                        label="日付"
-                        readonly
-                        outlined
-                        class="form-input">
+                          label="日付"
+                          readonly
+                          outlined
+                          class="form-input">
                             {{ isEditMode ? scheduleData.date?.date : scheduleData.date }}
                         </v-text-field>
                 
                         <!-- 車両 -->
-                        <v-col cols="12">
-                                <v-text-field
-                                    label="車両"
-                                    readonly
-                                    outlined
-                                    class="form-input"
-                                >{{ getVehicle(formData.vehicle_id) }}</v-text-field>
-                        </v-col>
+                        <v-text-field
+                            label="車両"
+                            readonly
+                            outlined
+                            class="form-input"
+                        >{{ getVehicle(formData.vehicle_id) }}</v-text-field>
+                        
 
                     <!-- カテゴリー -->
                         <v-select
-                        label="カテゴリー"
-                        :items="dumpOrderCategories"
-                        item-title="name"
-                        item-value="id"
-                        v-model="formData.dump_order_category_id"
-                        outlined
-                        class="form-input"
+                          label="カテゴリー"
+                          :items="dumpOrderCategories"
+                          item-title="name"
+                          item-value="id"
+                          v-model="formData.dump_order_category_id"
+                          outlined
+                          class="form-input"
                         >                            
                         </v-select>
 
                         <!-- タイトル -->
-                        <v-col cols="12">
-                                    <v-select
-                                        label="タイトル"
-                                        :items="filteredTitles"
-                                        item-title="title"
-                                        item-value="id"
-                                        v-model="formData.dump_order_category_title_id"
-                                        outlined
-                                        class="form-input"
-                                    ></v-select>
-                        </v-col>
+                          <v-select
+                              label="タイトル"
+                              :items="filteredTitles"
+                              item-title="title"
+                              item-value="id"
+                              v-model="formData.dump_order_category_title_id"
+                              outlined
+                              class="form-input"
+                          ></v-select>
 
                         <!-- ボイラー番号 -->
                         <v-select
-                        label="ボイラー番号"
-                        :items="['未選択', '1', '5', '6']"
-                        v-model="formData.boiler_number"
-                        outlined
-                        class="form-input"
+                          label="ボイラー番号"
+                          :items="['未選択', '1', '5', '6']"
+                          v-model="formData.boiler_number"
+                          outlined
+                          class="form-input"
                         ></v-select>
 
                         <!-- ステータス -->
                         <v-radio-group
-                        v-model="formData.status"
-                        label="ステータス"
-                        class="form-radio-group"
+                          v-model="formData.status"
+                          label="ステータス"
+                          class="form-radio-group"
                         >
                             <v-radio label="未配車" :value="false"></v-radio>
                             <v-radio label="配車済み" :value="true"></v-radio>
@@ -177,28 +174,28 @@ const updateSchedule = async() => {
 
                         <!-- 積み込み -->
                         <v-checkbox
-                        label="積み込み"
-                        v-model="formData.is_preloaded"
-                        :true-value="true"
-                        :false-value="false"
-                        class="form-checkbox"
+                          label="積み込み"
+                          v-model="formData.is_preloaded"
+                          :true-value="true"
+                          :false-value="false"
+                          class="form-checkbox"
                         ></v-checkbox>
 
                         <!-- 備考 -->
                         <v-textarea
-                        label="備考"
-                        v-model="formData.note"
-                        rows="4"
-                        outlined
-                        class="form-textarea"
+                          label="備考"
+                          v-model="formData.note"
+                          rows="4"
+                          outlined
+                          class="form-textarea"
                         ></v-textarea>
 
-                   <!-- アクションボタン -->
-                    <div class="form-actions">
-                        <v-btn type="submit" class="submit-button">
-                            {{ isEditMode ? "更新" : "登録" }}
-                        </v-btn>
-                    </div>
+                      <!-- アクションボタン -->
+                        <div class="form-actions">
+                            <v-btn type="submit" class="submit-button">
+                                {{ isEditMode ? "更新" : "登録" }}
+                            </v-btn>
+                        </div>
                 </form>
             </div>
         </div>
