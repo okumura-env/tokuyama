@@ -61,6 +61,7 @@ const handleSubmit = () => {
  const tenRegister = async() => {
     console.log('転処理実行:', ruleData.value.selectedRule);
     const response = await axios.post("/api/dump-orders/ten/store",ruleData.value);
+    emit("success");
 };
 
 </script>
