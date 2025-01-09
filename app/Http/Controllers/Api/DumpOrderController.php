@@ -142,34 +142,14 @@ class DumpOrderController extends Controller
                     
                     // 一つの車両が同じ日につき2回石炭を運ぶ
                     for ($j = 1; $j <= 2; $j++) {
-                        $dateVehicle = DateVehicle::where('date_id',$dateDatum['id'])
-                            ->where('vehicle_id',$fujiVehicleIds[$i-1])
-                            ->first();
-                        $sort = DumpSchedule::where('date_id',$dateDatum['id'])
-                            ->where('vehicle_id',$fujiVehicleIds[$i-1])
-                            ->count() + 1;
-                        $dumpSchedule = DumpSchedule::create([
-                            'date_id' => $dateDatum['id'],
-                            'vehicle_id' => $fujiVehicleIds[$i-1],
-                            'date_vehicle_id' => $dateVehicle->id,
-                            'dump_order_category_id' => 2,
-                            'dump_order_category_title_id' => 7,
-                            'dump_order_category_title' => DumpOrderCategoryTitle::find(7)->title,
-                            'schedule_type' => "orders", // (受注)固定値
-                            'sort' => $sort, 
-                        ]);
-                        $dumpOrder = $dumpSchedule->dumpOrder()->create([
-                            'date_id' => $dateDatum['id'],
-                            'vehicle_id' => $fujiVehicleIds[$i-1],
-                            'boiler_number' => null,
-                            'status' => true, 
-                            'is_preloaded' => false, 
-                            'vehicle_number' => null, 
-                            'note' => null, 
-                        ]);
-
-                          //mcmQuantityから20引く(20t車で一回運んだときの数量)
-                          $mcmQuantity -= 20;
+                    //$dumpOrderCategoryId 2:MCM
+                    //$dumpOrderCategoryTitleId 7:石炭
+                    $dumpOrderCategoryId = 2; 
+                    $dumpOrderCategoryTitleId = 7;
+                    $this->scheduleStore($dateDatum['id'], $fujiVehicleIds[$i-1], $dumpOrderCategoryId, $dumpOrderCategoryTitleId);
+                    
+                    //mcmQuantityから20引く(20t車で一回運んだときの数量)
+                    $mcmQuantity -= 20;
                     }
                 }
                 $McmCoalUsageSchedule = McmCoalUsageSchedule::where('date_id',$dateDatum['id'])
@@ -241,31 +221,12 @@ class DumpOrderController extends Controller
 
                             //同じ日付の同じ車両が基本2回石炭を運ぶ
                             for ($j = 1; $j <= 2; $j++) {
-                                $dateVehicle = DateVehicle::where('date_id',$dateId)
-                                    ->where('vehicle_id',$ruleDatumByDay["vehicle_id"])
-                                    ->first();
-                                $sort = DumpSchedule::where('date_id',$dateId)
-                                    ->where('vehicle_id',$ruleDatumByDay["vehicle_id"])
-                                    ->count() + 1;
-                                $dumpSchedule = DumpSchedule::create([
-                                    'date_id' => $dateId,
-                                    'vehicle_id' => $ruleDatumByDay["vehicle_id"],
-                                    'date_vehicle_id' => $dateVehicle->id,
-                                    'dump_order_category_id' => 2,
-                                    'dump_order_category_title_id' => 7,
-                                    'dump_order_category_title' => DumpOrderCategoryTitle::find(7)->title,
-                                    'schedule_type' => "orders", // (受注)固定値
-                                    'sort' => $sort, 
-                                ]);
-                                $dumpOrder = $dumpSchedule->dumpOrder()->create([
-                                    'date_id' => $dateId,
-                                    'vehicle_id' => $ruleDatumByDay["vehicle_id"],
-                                    'boiler_number' => null,
-                                    'status' => true, 
-                                    'is_preloaded' => false, 
-                                    'vehicle_number' => null, 
-                                    'note' => null, 
-                                ]);
+
+                                //$dumpOrderCategoryId 2:MCM
+                                //$dumpOrderCategoryTitleId 7:石炭
+                                $dumpOrderCategoryId = 2; 
+                                $dumpOrderCategoryTitleId = 7;
+                                $this->scheduleStore($date["id"], $ruleDatumByDay["vehicle_id"], $dumpOrderCategoryId, $dumpOrderCategoryTitleId);
                                 
                                 //mcmQuantityから20引く(20t車で一回運んだときの数量)
                                 $mcmQuantity -= 20;
@@ -300,33 +261,42 @@ class DumpOrderController extends Controller
             foreach($tenRuleDataByDay as $ruleDatumByDay){
                 if($date['day_of_week']==$ruleDatumByDay["day_of_week"]){
                     // dd($date['day_of_week'],$ruleDatumByDay["day_of_week"]);
-                $dateVehicle = DateVehicle::where('date_id',$date["id"])
-                ->where('vehicle_id',$ruleDatumByDay["vehicle_id"])
-                ->first();
-                $sort = DumpSchedule::where('date_id',$date["id"])
-                    ->where('vehicle_id',$ruleDatumByDay["vehicle_id"])
-                    ->count() + 1;
-                $dumpSchedule = DumpSchedule::create([
-                    'date_id' => $date["id"],
-                    'vehicle_id' => $ruleDatumByDay["vehicle_id"],
-                    'date_vehicle_id' => $dateVehicle->id,
-                    'dump_order_category_id' => 4,
-                    'dump_order_category_title_id' => 13,
-                    'dump_order_category_title' => DumpOrderCategoryTitle::find(13)->title,
-                    'schedule_type' => "orders", // (受注)固定値
-                    'sort' => $sort, 
-                ]);
-                $dumpOrder = $dumpSchedule->dumpOrder()->create([
-                    'date_id' => $date["id"],
-                    'vehicle_id' => $ruleDatumByDay["vehicle_id"],
-                    'boiler_number' => null,
-                    'status' => true, 
-                    'is_preloaded' => false, 
-                    'vehicle_number' => null, 
-                    'note' => null, 
-                ]);
+                    //$dumpOrderCategoryId 4:その他
+                    //$dumpOrderCategoryTitleId 13:転
+                    $dumpOrderCategoryId = 4; 
+                    $dumpOrderCategoryTitleId = 13;
+                $this->scheduleStore($date["id"], $ruleDatumByDay["vehicle_id"], $dumpOrderCategoryId, $dumpOrderCategoryTitleId);
             }
         }
         }
+    }
+
+
+    public function scheduleStore($dateId, $vehicleId, $dumpOrderCategoryId, $dumpOrderCategoryTitleId){    
+        $dateVehicle = DateVehicle::where('date_id',$dateId)
+        ->where('vehicle_id',$vehicleId)
+        ->first();
+        $sort = DumpSchedule::where('date_id',$dateId)
+            ->where('vehicle_id',$vehicleId)
+            ->count() + 1;
+        $dumpSchedule = DumpSchedule::create([
+            'date_id' => $dateId,
+            'vehicle_id' => $vehicleId,
+            'date_vehicle_id' => $dateVehicle->id,
+            'dump_order_category_id' => $dumpOrderCategoryId,
+            'dump_order_category_title_id' => $dumpOrderCategoryTitleId,
+            'dump_order_category_title' => DumpOrderCategoryTitle::find($dumpOrderCategoryTitleId)->title,
+            'schedule_type' => "orders", // (受注)固定値
+            'sort' => $sort, 
+        ]);
+        $dumpOrder = $dumpSchedule->dumpOrder()->create([
+            'date_id' => $dateId,
+            'vehicle_id' => $vehicleId,
+            'boiler_number' => null,
+            'status' => true, 
+            'is_preloaded' => false, 
+            'vehicle_number' => null, 
+            'note' => null, 
+        ]);
     }
 }
