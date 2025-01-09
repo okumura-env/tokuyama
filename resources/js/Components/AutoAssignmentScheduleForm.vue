@@ -7,6 +7,8 @@ const props = defineProps({
 
 const emit = defineEmits(["success"]);
 
+const currentAction = ref("");
+
 const fujiData = ref({
     dateData: props.dateData,
     vehicleCount: "",
@@ -14,7 +16,7 @@ const fujiData = ref({
 
 const ruleData = ref({
     dateData: props.dateData,
-    selectedRule: "",
+    selectedRule: "未選択",
 });
 
  //富士のオーダーの保存処理
@@ -23,10 +25,42 @@ const registerFujiSchedule = async() => {
     emit("success");
 };
 
+//  //ルールに基づくオーダーの保存処理
+//  const registerMcmRuledSchedule = async() => {
+//     const response = await axios.post("/api/dump-orders/mcm-rule/store",ruleData.value);
+//     emit("success");
+// };
+
+const setAction = (action) => {
+    currentAction.value = action;
+};
+
+const handleSubmit = () => {
+    if (ruleData.value.selectedRule === '未選択') {
+        alert('ルールを選択してください。');
+        return;
+      }
+
+      if (currentAction.value === 'mcmCoal') {
+        registerMcmRuledSchedule();
+      } else if (currentAction.value === 'ten') {
+        tenRegister();
+      } else {
+        console.error('無効なアクションです:', currentAction.value);
+      }
+}
+
  //ルールに基づくオーダーの保存処理
  const registerMcmRuledSchedule = async() => {
+    console.log('MCM石炭処理実行:', ruleData.value.selectedRule);
     const response = await axios.post("/api/dump-orders/mcm-rule/store",ruleData.value);
     emit("success");
+};
+
+ //ルールに基づくオーダーの保存処理
+ const tenRegister = async() => {
+    console.log('転処理実行:', ruleData.value.selectedRule);
+    const response = await axios.post("/api/dump-orders/ten/store",ruleData.value);
 };
 
 </script>
@@ -51,7 +85,7 @@ const registerFujiSchedule = async() => {
             </div>
         </form>
 
-        <form  @submit.prevent="registerMcmRuledSchedule()" 
+        <form  @submit.prevent="handleSubmit"
             class="form-container">
             <!-- 選択したMCMルール -->
             <v-select
@@ -62,20 +96,22 @@ const registerFujiSchedule = async() => {
                 class="form-input"
                 ></v-select>
 
-            <!-- アクションボタン -->
             <div class="form-actions">
-                <v-btn type="submit" class="submit-button">
-                    ルールの登録
+                <!-- MCM石炭登録ボタン -->
+                <v-btn type="submit" @click="setAction('mcmCoal')" class="mcm-coal-register-button">
+                    MCM石炭
+                </v-btn>
+
+                 <!-- 転登録ボタン -->
+                <v-btn type="submit" @click="setAction('ten')" class="ten-register-button">
+                    転
                 </v-btn>
             </div>
-        </form>
 
-        <div class="button-container">
-            <!-- データ登録ボタン -->
-            <v-btn @click="tenRegisterData" class="ten-register-button">
-                転
-            </v-btn>
-        </div>
+        
+           
+        
+    </form>
     </div>
 </template>
 
@@ -98,7 +134,14 @@ const registerFujiSchedule = async() => {
     margin-bottom: 0; /* ボタンと不要な間隔を排除 */
 }
 
+/* ボタン間のスペースを調整 */
+.form-actions {
+  display: flex; /* 横並びに配置 */
+  gap: 16px; /* ボタン間のスペースを指定 */
+}
+
 .submit-button,
+.mcm-coal-register-button,
 .ten-register-button {
   background-color: #002c5e; /* ブランド基調色 */
   color: #ffffff;
@@ -106,6 +149,7 @@ const registerFujiSchedule = async() => {
 }
 
 .submit-button:hover,
+.mcm-coal-register-button:hover,
 .ten-register-button:hover  {
   background-color: #001d43;
   transition: background-color 0.3s ease;
