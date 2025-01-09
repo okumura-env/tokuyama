@@ -289,4 +289,44 @@ class DumpOrderController extends Controller
 
        
     }
+
+    public function tenScheduleStore(Request $request){    
+        $dateData = $request->dateData;
+        $tenRuleDataByDay = Rule::where("name", $request->selectedRule)
+                            ->where('mcm_task_type_id', 2)
+                            ->get();
+
+        foreach($dateData as $date){
+            foreach($tenRuleDataByDay as $ruleDatumByDay){
+                if($date['day_of_week']==$ruleDatumByDay["day_of_week"]){
+                    // dd($date['day_of_week'],$ruleDatumByDay["day_of_week"]);
+                $dateVehicle = DateVehicle::where('date_id',$date["id"])
+                ->where('vehicle_id',$ruleDatumByDay["vehicle_id"])
+                ->first();
+                $sort = DumpSchedule::where('date_id',$date["id"])
+                    ->where('vehicle_id',$ruleDatumByDay["vehicle_id"])
+                    ->count() + 1;
+                $dumpSchedule = DumpSchedule::create([
+                    'date_id' => $date["id"],
+                    'vehicle_id' => $ruleDatumByDay["vehicle_id"],
+                    'date_vehicle_id' => $dateVehicle->id,
+                    'dump_order_category_id' => 4,
+                    'dump_order_category_title_id' => 13,
+                    'dump_order_category_title' => DumpOrderCategoryTitle::find(13)->title,
+                    'schedule_type' => "orders", // (受注)固定値
+                    'sort' => $sort, 
+                ]);
+                $dumpOrder = $dumpSchedule->dumpOrder()->create([
+                    'date_id' => $date["id"],
+                    'vehicle_id' => $ruleDatumByDay["vehicle_id"],
+                    'boiler_number' => null,
+                    'status' => true, 
+                    'is_preloaded' => false, 
+                    'vehicle_number' => null, 
+                    'note' => null, 
+                ]);
+            }
+        }
+        }
+    }
 }
