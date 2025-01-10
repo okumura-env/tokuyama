@@ -257,6 +257,66 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
     return result;
 };
 
+// ドラッグされている要素とドロップ先を追跡するための変数
+const draggedItem = ref(null);
+const dropTarget = ref(null);
+
+// ドラッグ開始イベント
+const handleDragStart = (event, item) => {
+  draggedItem.value = item;
+  event.dataTransfer.effectAllowed = "move";
+};
+
+// ドラッグオーバーイベント
+const handleDragOver = (event, item) => {
+  event.preventDefault(); // ドロップを許可
+  dropTarget.value = item;
+  // 入れ替え可能なドロップターゲットをハイライト
+  if (event.target.classList.contains("grid-item")) {
+    event.target.classList.add("highlight");
+  }
+};
+
+// ドラッグリーブイベント
+const handleDragLeave = (event) => {
+  // ハイライトを解除
+  if (event.target.classList.contains("grid-item")) {
+    event.target.classList.remove("highlight");
+  }
+};
+
+// ドロップイベント
+const handleDrop = (event) => {
+  event.preventDefault();
+
+  if (draggedItem.value && dropTarget.value) {
+    // 入れ替え処理
+    const draggedContent = draggedItem.value.innerHTML;
+    const dropContent = dropTarget.value.innerHTML;
+
+    draggedItem.value.innerHTML = dropContent;
+    dropTarget.value.innerHTML = draggedContent;
+  }
+
+  // ハイライトを解除
+  if (dropTarget.value?.classList.contains("highlight")) {
+    dropTarget.value.classList.remove("highlight");
+  }
+
+  // 追跡変数のリセット
+  draggedItem.value = null;
+  dropTarget.value = null;
+};
+
+// ドラッグ終了イベント
+const handleDragEnd = (event) => {
+  // ハイライトをすべて解除
+  document.querySelectorAll(".highlight").forEach((el) => {
+    el.classList.remove("highlight");
+  });
+  draggedItem.value = null;
+  dropTarget.value = null;
+};
 </script>
 
 <template>
@@ -351,7 +411,13 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
                                             )"
                                             :key="index"
                                             @click="clickCell(scheduleTitleAndId[1],date,vehicle.id)"
-                                            class="grid-item"
+                                            class="grid-item movable-item"
+                                            draggable="true"
+                                            @dragstart="handleDragStart($event, $event.target)"
+                                            @dragover="handleDragOver($event, $event.target)"
+                                            @dragleave="handleDragLeave"
+                                            @drop="handleDrop"
+                                            @dragend="handleDragEnd"
                                         >
                                             {{ scheduleTitleAndId[0] }}
                                         </div>
@@ -399,6 +465,12 @@ const createSectionFromSchedules = (schedules,sectionCount) => {
     padding: 5px;
     text-align: center;
     font-size: 12px; /* サイズ調整 */
+}
+
+/* ハイライトのスタイル */
+.highlight {
+  background-color: #ffeb3b;
+  border: 2px dashed #f57c00;
 }
 
 /* ヘッダー */
