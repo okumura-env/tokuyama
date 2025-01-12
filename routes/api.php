@@ -72,6 +72,7 @@ Route::post('/dump-orders/ten/store', [DumpOrderController::class, 'tenScheduleS
 
 //ダンプスケジュール
 Route::apiResource('dump-schedules', DumpScheduleController::class);
+Route::post('/dump-schedules/swap', [DumpScheduleController::class, 'swap']);
 
 //その他のスケジュール
 Route::apiResource('dump-other-schedules', DumpOtherScheduleController::class);
