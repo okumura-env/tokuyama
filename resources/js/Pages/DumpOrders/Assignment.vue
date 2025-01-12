@@ -205,21 +205,40 @@ const getTaskPriority = (dateId, vehicleId, defaultPriority = "-") => {
  * @returns {string[]}
  *
  */
-// メイン関数：2番目以降の区画のオーダーのタイトル(titles)とボイラー番号を処理
 const getScheduleSections = (dateId, vehicleId) => {
-    // 該当日付と車両に対応するダンプスケジュールを取得
     const localFilteredSchedules = filteredSchedules(dateId, vehicleId);
-
-    // データがない場合の処理
-    if (!localFilteredSchedules.length === 0) {
-        return Array(5).fill("-"); // データがない場合でも4区画を埋める
+    if (!localFilteredSchedules.length) {
+        // 空配列であれば 全て "-"
+        return Array.from({ length: 5 }, (_, i) => ({
+            sort: i + 1,
+            id: null,          // dump_schedulesのIDが無い
+            title: "-"         // 表示上は "-" (空欄)
+        }));
     }
+    // ソート
+    const sortedSchedules = localFilteredSchedules.sort((a, b) => {
+        return (a.sort || 0) - (b.sort || 0);
+    });
 
-    // ソート済みスケジュールの取得
-    const sortedSchedules = sortSchedulesByOrder(localFilteredSchedules);
+    // いったん全て空欄で初期化
+    const result = Array.from({ length: 5 }, (_, i) => ({
+        sort: i + 1,
+        id: null,
+        title: "-"
+    }));
 
-    // ソートされたスケジュールから区画データを作成
-    return createSectionFromSchedules(sortedSchedules,5);
+    // sortedSchedulesの要素をsort-1番目に配置
+    sortedSchedules.forEach(schedule => {
+        const index = (schedule.sort || 1) - 1; // sort:1→index0
+        if (index >= 0 && index < 5) {
+            result[index] = {
+                sort: schedule.sort,
+                id: schedule.id,    // dump_schedules.id
+                title: (schedule.dumpOrder?.boiler_number || "") + " " + (schedule.dump_order_category_title || "")
+            }
+        }
+    });
+    return result;
 };
 
 // サブ関数: フィルタリング処理
@@ -230,48 +249,25 @@ const filteredSchedules = (dateId, vehicleId) => {
     );
 };
 
-// サブ関数: スケジュールをソート
-const sortSchedulesByOrder = (schedules) => {
-    return schedules.sort((a, b) => {
-        const sortA = a.sort || "";
-        const sortB = b.sort || "";
-        return sortA - sortB;
-    });
-};
-
-// サブ関数: スケジュールから区画データを作成
-const createSectionFromSchedules = (schedules,sectionCount) => {
-    const result = Array(sectionCount).fill("-");
-    schedules.forEach((schedule) => {
-        const sort = schedule.sort || "";
-        const dumpScheduleId = schedule.id || "";
-        const title = schedule.dump_order_category_title || "";
-        const boilerNumber = schedule.dumpOrder?.boiler_number || "";
-        const fullTitle = `${boilerNumber} ${title}`.trim();
-
-        if (sort >= 1 && sort <= sectionCount) {
-            result[sort - 1] = [fullTitle, dumpScheduleId];
-        }
-    });
-
-    return result;
-};
-
+// ドラッグ&ドロップ
 // ドラッグされている要素とドロップ先を追跡するための変数
 const draggedItem = ref(null);
 const dropTarget = ref(null);
 
 // ドラッグ開始イベント
-const handleDragStart = (event, item) => {
-  draggedItem.value = item;
+const handleDragStart = (event, slotObj) => {
   event.dataTransfer.effectAllowed = "move";
+  draggedItem.value = {
+    slotObj: structuredClone(slotObj)  // or {...slotObj}
+  };
 };
 
 // ドラッグオーバーイベント
-const handleDragOver = (event, item) => {
-  event.preventDefault(); // ドロップを許可
-  dropTarget.value = item;
-  // 入れ替え可能なドロップターゲットをハイライト
+const handleDragOver = (event, slotObj) => {
+  event.preventDefault();
+  dropTarget.value = {
+    slotObj: slotObj
+  };
   if (event.target.classList.contains("grid-item")) {
     event.target.classList.add("highlight");
   }
@@ -286,24 +282,41 @@ const handleDragLeave = (event) => {
 };
 
 // ドロップイベント
-const handleDrop = (event) => {
+const handleDrop = async (event, dropSlotObj) => {
   event.preventDefault();
 
-  if (draggedItem.value && dropTarget.value) {
-    // 入れ替え処理
-    const draggedContent = draggedItem.value.innerHTML;
-    const dropContent = dropTarget.value.innerHTML;
-
-    draggedItem.value.innerHTML = dropContent;
-    dropTarget.value.innerHTML = draggedContent;
+  // ハイライト除去
+  if (event.target.classList.contains("highlight")) {
+    event.target.classList.remove("highlight");
   }
 
-  // ハイライトを解除
-  if (dropTarget.value?.classList.contains("highlight")) {
-    dropTarget.value.classList.remove("highlight");
+  if (!draggedItem.value?.slotObj) return;
+
+  const draggedSlotObj = draggedItem.value.slotObj;
+  const targetSlotObj = dropSlotObj;
+
+  try {
+    await axios.post("/api/dump-schedules/swap", 
+    {
+      // 例: どの日付＆車両か、ドラッグ元＆先のID、sortをどうするか などを送る
+      dragged: {
+        id: draggedSlotObj?.id || null,  // nullなら「新規かも」
+        newSort: targetSlotObj.sort
+      },
+      dropped: {
+        id: targetSlotObj?.id || null,   // nullなら「削除かも」
+        newSort: draggedSlotObj.sort
+      },
+      // dateId, vehicleId, etc...
+    });
+    // 成功したら再取得 or そのまま state を信用するか
+    await fetchDumpSchedules();
+  } catch (err) {
+    console.error(err);
+    alert("入れ替えに失敗しました");
   }
 
-  // 追跡変数のリセット
+  // 最後にクリア
   draggedItem.value = null;
   dropTarget.value = null;
 };
@@ -403,23 +416,18 @@ const handleDragEnd = (event) => {
                                         </div>
                                         <!-- 2番目以降の区画にboiler_numberとtitleを表示 -->
                                         <div
-                                            v-for="(
-                                                scheduleTitleAndId, index
-                                            ) in getScheduleSections(
-                                                date.id,
-                                                vehicle.id
-                                            )"
-                                            :key="index"
-                                            @click="clickCell(scheduleTitleAndId[1],date,vehicle.id)"
+                                            v-for="slotObj in getScheduleSections(date.id, vehicle.id)"
+                                            :key="slotObj.sort"
                                             class="grid-item movable-item"
                                             draggable="true"
-                                            @dragstart="handleDragStart($event, $event.target)"
-                                            @dragover="handleDragOver($event, $event.target)"
+                                            @click="clickCell(slotObj.id, date, vehicle.id)"                            
+                                            @dragstart="handleDragStart($event, slotObj)"
+                                            @dragover="handleDragOver($event, slotObj)"
                                             @dragleave="handleDragLeave"
-                                            @drop="handleDrop"
+                                            @drop="handleDrop($event, slotObj)"
                                             @dragend="handleDragEnd"
                                         >
-                                            {{ scheduleTitleAndId[0] }}
+                                            {{ slotObj.title }}
                                         </div>
                                     </div>
                                 </td>
