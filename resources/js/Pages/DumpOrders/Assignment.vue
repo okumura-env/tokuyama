@@ -12,7 +12,7 @@ const drawer = ref(false);
 const clipped = ref(false);
 const { smAndDown } = useDisplay();
 const isDesktop = computed(() => !smAndDown.value);
-const menuItems = [{ title: "ホーム" }, { title: "設定" }];
+const menuItems = [{ title: "ダンプ配車作成" , icon: ['fas', 'truck']},{ title: "ジェットパック配車作成", icon: ['fas', 'plane'] },{ title: "設定" , icon: ['fas', 'cog'] }];
 const isModalOpen = ref(false);
 const dateVehicleData = ref({});
 
@@ -344,10 +344,10 @@ const handleDragEnd = (event) => {
         >
             <v-list>
                 <v-list-item>
-                    <v-list-item-title>メニュー</v-list-item-title>
+                    <v-list-item-title></v-list-item-title>
                 </v-list-item>
                 <v-list-item v-for="item in menuItems" :key="item.title">
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    <v-list-item-title> <font-awesome-icon :icon="item.icon" />{{ item.title }}</v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-navigation-drawer>
@@ -493,12 +493,13 @@ const handleDragEnd = (event) => {
 
 @media (prefers-color-scheme: dark) {
   .sidebar {
-    background-color: #1A3A86;
+    background-color: #002c5e;
     color: #ffffff;
   }
 
   .v-app-bar.v-toolbar {
-    background-color: #1A3A86;
+    background-color: #002c5e;
+
     color: #ffffff;
   }
 }
