@@ -7,6 +7,7 @@ import VehicleTypeIndex from './Pages/VehicleTypes/Index.vue';
 import WorkerIndex from './Pages/Workers/Index.vue';
 import VehicleIndex from './Pages/Vehicles/Index.vue';
 import DumpAssignment from './Pages/DumpOrders/Assignment.vue';
+import JetpackScheduleIndex from './Pages/JetpackOrders/ScheduleIndex.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
@@ -19,6 +20,11 @@ const routes = [
         path: "/dump-assignment",
         component: DumpAssignment,
         name:'dump-assignment',
+    },
+    {
+        path: "/jetpack-schedule-index",
+        component: JetpackScheduleIndex,
+        name:'jetpack-schedule-index',
     },
     {
         path: '/partners',
