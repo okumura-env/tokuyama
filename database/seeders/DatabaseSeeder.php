@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             McmTaskTypeSeeder::class,
             RuleSeeder::class,
             McmCoalUsageScheduleSeeder::class,
+            JetpackDestinationRouteSeeder::class,
         ]);
     }
 }
