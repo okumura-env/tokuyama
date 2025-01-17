@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('status'); // ステータス
             $table->text('note')->nullable(); // 備考（任意）
             $table->timestamps();
+            $table->softDeletes(); // deleted_at を追加
         });
     }
 

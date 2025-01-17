@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('cell_number')->nullable(); // セル番号（任意）
             $table->integer('order_sequence')->nullable(); // オーダーの順序（任意）
             $table->timestamps();
+            $table->softDeletes(); // deleted_at を追加
         });
     }
 
