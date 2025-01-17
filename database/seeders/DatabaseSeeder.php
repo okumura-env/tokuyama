@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Date;
+use App\Models\JetpackSchedule;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -30,6 +31,8 @@ class DatabaseSeeder extends Seeder
             RuleSeeder::class,
             McmCoalUsageScheduleSeeder::class,
             JetpackDestinationRouteSeeder::class,
+            JetpackScheduleSeeder::class,
+            JetpackOrderSeeder::class,
         ]);
     }
 }
