@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\McmTaskTypeController;
 use App\Http\Controllers\Api\RuleController;
 use App\Http\Controllers\Api\McmCoalUsageScheduleController;
 use App\Http\Controllers\Api\JetpackDestinationRouteController;
+use App\Http\Controllers\Api\JetpackOrderController;
 
 
 
@@ -89,3 +90,6 @@ Route::apiResource('mcm-coal-usage-schedules', McmCoalUsageScheduleController::c
 
 //ジェットパックの行き先ルート
 Route::apiResource('jetpack-destination-routes', JetpackDestinationRouteController::class);
+
+//ジェットパックのオーダー
+Route::apiResource('jetpack-orders', JetpackOrderController::class);
