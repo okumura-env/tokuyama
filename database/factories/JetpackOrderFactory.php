@@ -23,7 +23,7 @@ class JetpackOrderFactory extends Factory
             'date_id' => $date_id,
             'vehicle_id' => null,
             'jetpack_schedule_id' => $schedule ? $schedule->id : null,
-            'jetpack_destination_route_id' => $this->faker->numberBetween(1, 15),
+            'jetpack_destination_id' => $this->faker->numberBetween(1, 15),
             'quantity' => null,
             'status' => 0,
             'note' => null,
