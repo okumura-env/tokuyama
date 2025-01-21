@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
+import { useRouter } from "vue-router";
 import axios from "axios";
 import useDataApi from "@/Composables/useDataApi";
 import useModal from "@/Composables/useModal";
@@ -12,7 +13,30 @@ const drawer = ref(false);
 const clipped = ref(false);
 const { smAndDown } = useDisplay();
 const isDesktop = computed(() => !smAndDown.value);
-const menuItems = [{ title: "ダンプ配車作成" , icon: ['fas', 'truck']},{ title: "ジェットパック配車作成", icon: ['fas', 'plane'] },{ title: "設定" , icon: ['fas', 'cog'] }];
+const menuItems = [
+  { 
+    title: "ダンプ配車作成" , 
+    icon: ['fas', 'truck'],
+    route: "/dump-assignment",
+  },{ 
+    title: "ジェットパック配車作成", 
+    icon: ['fas', 'plane'],
+    route: "/jetpack-schedule/index",
+   },{ 
+    title: "設定" , 
+    icon: ['fas', 'cog'] 
+  }];
+
+// Vue Router
+const router = useRouter();
+
+// 現在のルートを管理
+const currentRoute = ref("/dump-assignment");
+
+const handleMenuClick = (route) => {
+  router.push(route); // 指定されたルートに移動
+};
+
 const isModalOpen = ref(false);
 const dateVehicleData = ref({});
 
@@ -346,7 +370,13 @@ const handleDragEnd = (event) => {
                 <v-list-item>
                     <v-list-item-title></v-list-item-title>
                 </v-list-item>
-                <v-list-item v-for="item in menuItems" :key="item.title">
+                <v-list-item 
+                  v-for="item in menuItems" 
+                  :key="item.route"
+                  :value="item.route"
+                  :active="currentRoute === item.route"
+                  @click="handleMenuClick(item.route)"
+                  class="custom-list-item">
                     <v-list-item-title> <font-awesome-icon :icon="item.icon" />{{ item.title }}</v-list-item-title>
                 </v-list-item>
             </v-list>
