@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             McmTaskTypeSeeder::class,
             RuleSeeder::class,
             McmCoalUsageScheduleSeeder::class,
-            JetpackDestinationRouteSeeder::class,
+            JetpackDestinationSeeder::class,
             JetpackScheduleSeeder::class,
             JetpackOrderSeeder::class,
         ]);
