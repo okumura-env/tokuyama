@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class JetpackDestinationRoute extends Model
+class JetpackDestination extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'jetpack_destination_routes';
+    protected $table = 'jetpack_destinations';
 
     protected $fillable = [
         'name',

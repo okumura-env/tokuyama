@@ -19,7 +19,7 @@ class JetpackOrderResource extends JsonResource
             'date_id' => $this->date_id,
             'vehicle_id' => $this->vehicle_id,
             'jetpsck_schedule_id' => $this->jetpsck_schedule_id,
-            'jetpack_destination_route_id' => $this->jetpack_destination_route_id,
+            'jetpack_destination_id' => $this->jetpack_destination_id,
             'quantity' => $this->quantity,
             'status' => $this->status,
             'note' => $this->note,

@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('jetpack_destination_routes', function (Blueprint $table) {
-            $table->id(); // 主キー
-            $table->string('name'); // ルート名
-            $table->timestamps(); // 作成日時と更新日時
+        Schema::create('jetpack_destinations', function (Blueprint $table) {
+            $table->id();
+            $table->string('name'); // 行先名
+            $table->timestamps(); // 作成日と更新日
             $table->softDeletes(); // 論理削除用のカラム
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jetpack_destination_routes');
+        Schema::dropIfExists('jetpack_destinations');
     }
 };

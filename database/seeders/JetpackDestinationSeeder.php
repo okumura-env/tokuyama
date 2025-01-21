@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\JetpackDestinationRoute;
+use App\Models\JetpackDestination;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class JetpackDestinationRouteSeeder extends Seeder
+class JetpackDestinationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class JetpackDestinationRouteSeeder extends Seeder
      */
     public function run()
     {
-        $destinationRoutes = [
+        $destinations = [
             ['name' => '出光バイオJT'],
             ['name' => '出光バイオ疋田積'],
             ['name' => '出光バイオ苅田'],
@@ -34,8 +34,8 @@ class JetpackDestinationRouteSeeder extends Seeder
             ['name' => 'その他'],
         ];
 
-        foreach ($destinationRoutes as $destinationRoute) {
-            JetpackDestinationRoute::create($destinationRoute);
+        foreach ($destinations as $destination) {
+            JetpackDestination::create($destination);
         }
     }
 }
