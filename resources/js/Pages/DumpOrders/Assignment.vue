@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
-import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import axios from "axios";
 import useDataApi from "@/Composables/useDataApi";
 import useModal from "@/Composables/useModal";
@@ -28,7 +28,7 @@ const menuItems = [
   }];
 
 // Vue Router
-const router = useRouter();
+const router = useRoute();
 
 // 現在のルートを管理
 const currentRoute = ref("/dump-assignment");
