@@ -39,7 +39,10 @@ const handleRegister = (destination, date) => {
 
 // 配車処理
 const handleDispatch = (destination, date) => {
-  router.push({ name:'jetpack-assignment' ,params:{ dateId: date.id }}); // 指定されたルートに移動
+  router.push({ 
+    name:'jetpack-assignment' ,
+    params:{ dateId: date.id },
+  }); // 指定されたルートに移動
   
   // 必要に応じて API 呼び出しを追加
 };
