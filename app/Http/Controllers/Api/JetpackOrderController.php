@@ -36,4 +36,10 @@ class JetpackOrderController extends Controller
         $order->delete();
         return response()->noContent();
     }
+
+    public function fetchJetpackOrdersByDate($date)
+    {
+        $jetpackOrders = JetpackOrder::where('date_id', $date)->get(); 
+        return JetpackOrderResource::collection($jetpackOrders);
+    }
 }

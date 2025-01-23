@@ -94,3 +94,4 @@ Route::apiResource('jetpack-destinations', JetpackDestinationController::class);
 
 //ジェットパックのオーダー
 Route::apiResource('jetpack-orders', JetpackOrderController::class);
+Route::get('/jetpack-orders-by-date/{date}', [JetpackOrderController::class, 'fetchJetpackOrdersByDate']);
