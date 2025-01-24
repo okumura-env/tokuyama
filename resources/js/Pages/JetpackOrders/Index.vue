@@ -53,6 +53,7 @@ const handleDispatch = (destination, date) => {
   <div class="order-management">
     <header>
       <h2>※ジェットパック月間オーダー管理画面</h2>
+      <button>オーダー一括登録</button>
     </header>
     <table>
       <thead>
