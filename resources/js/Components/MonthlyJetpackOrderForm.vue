@@ -11,27 +11,28 @@ import useDataApi from "@/Composables/useDataApi";
 
 // データ取得
 const { data: destinations, fetchData: fetchDestinations } = useDataApi("/api/jetpack-destinations");
-const { data: dates, fetchData: fetchDates } = useDataApi("/api/dates");
+const { data: dates, fetchData: fetchDates, isLoading } = useDataApi("/api/dates");
 
 const initialFormData = {
     jetpack_destination_id: "", // 日付文字列
-    // schedule: [], // 日付と数値のセットを格納
+    schedule: [], // 日付と数値のセットを格納
 };
 // initialFormData.value.schedule = dates.value.map((d) => ({ date: d.date, value: "" }));
 
-// dates の変更を監視して schedule を初期化
-// watch(
-//     dates,
-//     (newDates) => {
-//         if (newDates && newDates.length > 0) {
-//             formData.value.schedule = newDates.map((d) => ({
-//                 date: d.date,
-//                 value: "",
-//             }));
-//         }
-//     },
-//     { immediate: true } // 初期化時にも実行
-// );
+// datesを取得したタイミングで、formDataのscheduleに日付とidをセット
+watch(
+    dates,
+    (newDates) => {
+        if (newDates && newDates.length > 0) {
+            formData.value.schedule = newDates.map((d) => ({
+                date: d.date,
+                dateId: d.id,
+                orderCounts: "",
+            }));
+        }
+    },
+    { immediate: true } // 初期化時にも実行
+);
 
 // const scheduleData = computed(() => {
 //     return props.scheduleData ? props.scheduleData : null;
@@ -39,6 +40,18 @@ const initialFormData = {
 
 const formData = ref({ ...initialFormData });
 
+// 数値フォームに値が入力されるたびにフォームデータを更新。データ構造的にv-modelを使いづらかったため、この方法
+const updateScheduleData = (index, value) => {
+    //フォームに入力された数値を取得
+    const inputFormCount = value.target.value;
+
+    //　数値を入力した該当日付がformDataの初期値の日付と一致しているか(ちゃんと正しい日付-数値のセットになってるか)を確認
+    if(dates.value[index].id === formData.value.schedule[index].dateId){
+    formData.value.schedule[index].orderCounts = inputFormCount;
+    console.log(formData.value.schedule[index]);
+    }
+    
+};
 
 // //保存処理
 const registerSchedule = async() => {
@@ -76,15 +89,21 @@ const updateSchedule = async() => {
                         <!-- 日付とフォーム -->
                         <div class="schedule-form">
                             <h2 class="text-lg font-semibold mb-4">スケジュール</h2>
-                            <div v-for="(date, index) in  dates" :key="index" class="date-row flex items-center mb-2">
+                            <div 
+                                v-for="(date, index) in dates"
+                                :key="index" 
+                                class="date-row flex items-center mb-2"
+                            >
                                 <span class="date-label w-1/3">{{ date.date }}</span>
                                 <v-text-field
                                   type="number"
                                   outlined
                                   class="flex-grow"
                                   placeholder="数値を入力"
+                                  @input="updateScheduleData(index, $event)"
                                 ></v-text-field>
                             </div>
+                        
                         </div>                      
                    
                       <!-- アクションボタン -->
