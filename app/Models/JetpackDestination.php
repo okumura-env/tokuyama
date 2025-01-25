@@ -15,4 +15,13 @@ class JetpackDestination extends Model
     protected $fillable = [
         'name',
     ];
+
+     /**
+     * Jetpack_ordersテーブルとリレーション
+     * 紐づく受注案件の行き先を管理
+     */
+    public function JetpackOrders()
+    {
+        return $this->hasMany(JetpackOrder::class);
+    }
 }

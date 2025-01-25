@@ -24,21 +24,21 @@ class DumpOrder extends Model
     ];
 
     /**
-     * dump_order_categoriesテーブルとリレーション
-     * 受注ごとに行うタスクの大分類を管理
+     * datesテーブルとリレーション
+     * 予定の日付を管理
      */
-    public function dumpOrderCategory()
+    public function date()
     {
-        return $this->belongsTo(DumpOrderCategory::class);
+        return $this->belongsTo(Date::class);
     }
 
     /**
-     * dump_order_category_titlesテーブルとリレーション
-     * 受注ごとに行うタスクを管理
+     * vehiclesテーブルとリレーション
+     * 予定に使用する車両を管理
      */
-    public function dumpOrderCategoryTitle()
+    public function vehicle()
     {
-        return $this->belongsTo(DumpOrderCategoryTitle::class);
+        return $this->belongsTo(Vehicle::class);
     }
 
     /**

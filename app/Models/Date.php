@@ -43,6 +43,24 @@ class Date extends Model
     }
 
     /**
+     * Jetpack_ordersテーブルとリレーション
+     * 紐づく受注案件の日付を管理
+     */
+    public function JetpackOrders()
+    {
+        return $this->hasMany(JetpackOrder::class);
+    }
+
+    /**
+     * jetpack_schedulesテーブルとリレーション
+     * 受注とその他の予定の日付を管理
+     */
+    public function jetpackSchedules()
+    {
+        return $this->hasMany(JetpackSchedule::class);
+    }
+
+    /**
      * vehiclesテーブルとリレーション
      * 日毎の車両情報を管理する際の日付を管理
      */

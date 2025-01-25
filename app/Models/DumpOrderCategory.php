@@ -22,12 +22,12 @@ class DumpOrderCategory extends Model
     }
 
     /**
-     * dump_ordersテーブルとリレーション
+     * dump_schedulesテーブルとリレーション
      * 受注ごとに行うタスクの大分類を管理
      */
-    public function dumpOrders()
+    public function dumpSchedules()
     {
-        return $this->hasMany(DumpOrder::class);
+        return $this->hasMany(DumpSchedule::class);
     }
 
 }

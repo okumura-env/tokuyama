@@ -42,6 +42,24 @@ class DumpSchedule extends Model
     }
 
     /**
+     * dump_order_categoriesテーブルとリレーション
+     * 受注ごとに行うタスクの大分類を管理
+     */
+    public function dumpOrderCategory()
+    {
+        return $this->belongsTo(DumpOrderCategory::class);
+    }
+
+    /**
+     * dump_order_category_titlesテーブルとリレーション
+     * 受注ごとに行うタスクを管理
+     */
+    public function dumpOrderCategoryTitle()
+    {
+        return $this->belongsTo(DumpOrderCategoryTitle::class);
+    }
+
+    /**
      * dump_ordersテーブルとリレーション
      * 受注を含めた予定の大分類を管理
      * 一対一のリレーション
@@ -67,7 +85,7 @@ class DumpSchedule extends Model
 
     /**
      * date_vehicleテーブルとリレーション
-     * 日毎で統一の車両情報を管理
+     * 同一日付・車両の組み合わせでのダンプスケジュールを管理
      */
     public function dateVehicle()
     {

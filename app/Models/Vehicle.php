@@ -75,6 +75,24 @@ class Vehicle extends Model
     }
 
     /**
+     * Jetpack_ordersテーブルとリレーション
+     * 受注ごとに使用する車両を管理
+     */
+    public function JetpackOrders()
+    {
+        return $this->hasMany(JetpackOrder::class);
+    }
+
+    /**
+     * jetpack_schedulesテーブルとリレーション
+     * 予定に使用する車両を管理
+     */
+    public function jetpackSchedules()
+    {
+        return $this->hasMany(JetpackSchedule::class);
+    }
+
+    /**
      * datesテーブルとリレーション
      * 日毎の車両情報を管理する際の車両を管理
      */

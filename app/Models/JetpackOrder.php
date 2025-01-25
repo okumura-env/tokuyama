@@ -21,4 +21,44 @@ class JetpackOrder extends Model
         'status',
         'note',
     ];
+
+    /**
+     * datesテーブルとリレーション
+     * 予定の日付を管理
+     */
+    public function date()
+    {
+        return $this->belongsTo(Date::class);
+    }
+
+    /**
+     * vehiclesテーブルとリレーション
+     * 予定に使用する車両を管理
+     */
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
+
+    /**
+     * jetpack_destinationsテーブルとリレーション
+     * 予定の行き先を管理
+     */
+    public function jetpackDestination()
+    {
+        return $this->belongsTo(JetpackDestination::class);
+    }
+
+
+    /**
+     * jetpack_schedulesテーブルとリレーション
+     * 受注を含めた予定の大分類を管理
+     * 一対一のリレーション
+     * jetpack_schedulesテーブルにはjetpack_order_idはない。
+     * jetpack_ordersテーブルにjetpack_schedule_idがある。
+     */
+    public function jetpackSchedule()
+    {
+        return $this->belongsTo(JetpackSchedule::class);
+    }
 }
