@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('jetpack_orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('date_id'); // 日付ID
-            $table->foreignId('vehicle_id')->nullable(); // 車両ID（任意）
+            $table->foreignId('vehicle_id')->nullable()->constrained()->cascadeOnDelete(); // 車両ID（任意）
             $table->foreignId('jetpack_schedule_id')->constrained()->cascadeOnDelete();
             $table->foreignId('jetpack_destination_id'); // 行き先ID
             $table->integer('quantity')->nullable(); // 数量（任意）
