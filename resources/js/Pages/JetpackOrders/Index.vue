@@ -2,6 +2,8 @@
 import { ref, watch } from "vue";
 import useDataApi from "@/Composables/useDataApi";
 import { useRouter  } from "vue-router";
+import useModal from "@/Composables/useModal";
+import CreateJetpackOrderModal from "@/Pages/JetpackOrders/CreateMonthlyJetpackOrderModal.vue";
 
 // データ取得
 const { data: destinations, fetchData: fetchDestinations } = useDataApi("/api/jetpack-destinations");
@@ -10,6 +12,14 @@ const { data: jetpackOrders, fetchData: fetchJetpackOrders } = useDataApi("/api/
 
 // Vue Router
 const router = useRouter();// ルーターインスタンスを取得
+
+// モーダルの開閉ロジック
+// 手動新規登録モーダル
+const {     
+          isModalOpen: isCreateModalOpen,
+          openModal: openCreateModal,
+          closeModal: closeCreateModal,
+       } = useModal();
 
 // オーダーのカウント処理
 const orderCounts = ref({});
@@ -53,7 +63,7 @@ const handleDispatch = (destination, date) => {
   <div class="order-management">
     <header>
       <h2>※ジェットパック月間オーダー管理画面</h2>
-      <button>オーダー一括登録</button>
+      <button @click="openCreateModal()">オーダー一括登録</button>
     </header>
     <table>
       <thead>
@@ -84,6 +94,13 @@ const handleDispatch = (destination, date) => {
       </tbody>
     </table>
   </div>
+
+  <!-- モーダル -->
+  <CreateJetpackOrderModal 
+    :isCreateModalOpen = "isCreateModalOpen" 
+    :scheduleData = "createModalData"
+    @close="closeCreateModal" 
+  />
 </template>
 
 <style scoped>
