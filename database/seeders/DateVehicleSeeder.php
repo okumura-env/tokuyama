@@ -23,7 +23,11 @@ class DateVehicleSeeder extends Seeder
             foreach ($dates as $date) {
                 $vehicle->dates()->attach($date->id, [
                     'task_priority' => null,
-                    'work_type_id' => 1,//仮にダンプ
+                    'work_type_id' => 1,//ダンプ
+                ]);
+                $vehicle->dates()->attach($date->id, [
+                    'task_priority' => null,
+                    'work_type_id' => 2,//ジェットパック
                 ]);
             }
         }
