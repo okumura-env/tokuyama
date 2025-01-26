@@ -3,7 +3,7 @@ import { ref, watch } from "vue";
 import useDataApi from "@/Composables/useDataApi";
 import { useRouter  } from "vue-router";
 import useModal from "@/Composables/useModal";
-import CreateJetpackOrderModal from "@/Pages/JetpackOrders/CreateMonthlyJetpackOrderModal.vue";
+import CreateMonthlyJetpackOrderModal from "@/Pages/JetpackOrders/CreateMonthlyJetpackOrderModal.vue";
 
 // データ取得
 const { data: destinations, fetchData: fetchDestinations } = useDataApi("/api/jetpack-destinations");
@@ -96,10 +96,12 @@ const handleDispatch = (destination, date) => {
   </div>
 
   <!-- モーダル -->
-  <CreateJetpackOrderModal 
+  <CreateMonthlyJetpackOrderModal 
     :isCreateModalOpen = "isCreateModalOpen" 
     :scheduleData = "createModalData"
     @close="closeCreateModal" 
+    @refetch="fetchJetpackOrders"
+    
   />
 </template>
 
