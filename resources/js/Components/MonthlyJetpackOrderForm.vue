@@ -15,16 +15,15 @@ const { data: dates, fetchData: fetchDates, isLoading } = useDataApi("/api/dates
 
 const initialFormData = {
     jetpack_destination_id: "", // 日付文字列
-    schedule: [], // 日付と数値のセットを格納
+    schedules: [], // 日付と数値のセットを格納
 };
-// initialFormData.value.schedule = dates.value.map((d) => ({ date: d.date, value: "" }));
 
-// datesを取得したタイミングで、formDataのscheduleに日付とidをセット
+// datesを取得したタイミングで、formDataのschedulesに日付とidをセット
 watch(
     dates,
     (newDates) => {
         if (newDates && newDates.length > 0) {
-            formData.value.schedule = newDates.map((d) => ({
+            formData.value.schedules = newDates.map((d) => ({
                 date: d.date,
                 dateId: d.id,
                 orderCounts: "",
@@ -46,17 +45,17 @@ const updateScheduleData = (index, value) => {
     const inputFormCount = value.target.value;
 
     //　数値を入力した該当日付がformDataの初期値の日付と一致しているか(ちゃんと正しい日付-数値のセットになってるか)を確認
-    if(dates.value[index].id === formData.value.schedule[index].dateId){
-    formData.value.schedule[index].orderCounts = inputFormCount;
-    console.log(formData.value.schedule[index]);
+    if(dates.value[index].id === formData.value.schedules[index].dateId){
+    formData.value.schedules[index].orderCounts = inputFormCount;
+    console.log(formData.value.schedules[index]);
     }
-    
 };
 
 // //保存処理
 const registerSchedule = async() => {
-//     const response = await axios.post("/api/dump-orders", formData.value);
-//     console.log("登録ボタンが押されました");
+    console.log(formData.value);
+    const response = await axios.post("/api/jetpack-orders-by-destination", formData.value);
+    console.log("登録ボタンが押されました");
 //     emit("success");
 };
 
