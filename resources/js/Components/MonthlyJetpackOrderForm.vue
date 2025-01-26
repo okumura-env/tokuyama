@@ -7,7 +7,7 @@ import useDataApi from "@/Composables/useDataApi";
 //     scheduleData : Object,
 // });
 
-// const emit = defineEmits(["success"]);
+const emit = defineEmits(["success"]);
 
 // データ取得
 const { data: destinations, fetchData: fetchDestinations } = useDataApi("/api/jetpack-destinations");
@@ -56,7 +56,7 @@ const registerSchedule = async() => {
     console.log(formData.value);
     const response = await axios.post("/api/jetpack-orders-by-destination", formData.value);
     console.log("登録ボタンが押されました");
-//     emit("success");
+    emit("success");
 };
 
 // //更新処理
