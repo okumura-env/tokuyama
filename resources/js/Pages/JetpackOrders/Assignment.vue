@@ -59,6 +59,9 @@ const initializeTableData = () => {
     rounds2: "",
     destination3: "",
     rounds3: "",
+    jetpack_order1_id: null,
+    jetpack_order2_id: null,
+    jetpack_order3_id: null,
     notes: "",
   }));
 };
@@ -79,6 +82,7 @@ const handleDragStartFromTable = (name, rowIndex, colIndex) => {
   // セルが空の場合はドラッグしない
   if (!name) return;
   draggingItem.value = {
+    id,
     name,
     from: "table",
     rowIndex,
@@ -100,20 +104,29 @@ const handleDrop = (rowIndex, colIndex) => {
       const { rowIndex: fromRow, colIndex: fromCol } = draggingItem.value;
       if (fromCol === 0) {
         tableData.value[fromRow].destination1 = "";
+        tableData.value[fromRow].jetpack_order1_id = null; // <-- IDも消す
       } else if (fromCol === 1) {
         tableData.value[fromRow].destination2 = "";
+        tableData.value[fromRow].jetpack_order2_id = null;
       } else if (fromCol === 2) {
         tableData.value[fromRow].destination3 = "";
+        tableData.value[fromRow].jetpack_order3_id = null;
       }
     }
 
     // 3) ドロップ先のセルへ値をセット
+    const droppedName = draggingItem.value.name;
+    const droppedId = draggingItem.value.id || null;
+
     if (colIndex === 0) {
       tableData.value[rowIndex].destination1 = draggingItem.value.name;
+      tableData.value[rowIndex].jetpack_order1_id = droppedId;
     } else if (colIndex === 1) {
       tableData.value[rowIndex].destination2 = draggingItem.value.name;
+      tableData.value[rowIndex].jetpack_order2_id = droppedId;
     } else if (colIndex === 2) {
       tableData.value[rowIndex].destination3 = draggingItem.value.name;
+      tableData.value[rowIndex].jetpack_order3_id = droppedId;
     }
 
     // ドラッグが完了したらリセット
