@@ -49,7 +49,9 @@ const fetchJetpackOrdersByDate = async (dateId) => {
 const initializeTableData = () => {
   tableData.value = vehicles.value.map((vehicle) => ({
     vehicle_number: vehicle.number,
-    driver: "",
+    selectedWorkerId: "",
+    workerDetail: "",
+    startTime: "",
     // destinationを3つ分用意し回数もそれぞれに紐づけられるようにする
     destination1: "",
     rounds1: "",
@@ -61,25 +63,60 @@ const initializeTableData = () => {
   }));
 };
 
-// ドラッグ開始
-const handleDragStart = (item) => {
-  draggingItem.value = item;
+// 未配車リストでドラッグを開始するときのハンドラー
+// "from: 'undispatched'" を付与
+const handleDragStartFromUndispatched = (dispatch) => {
+  draggingItem.value = {
+    id: dispatch.id,
+    name: dispatch.jetpack_destination_name,
+    from: "undispatched", // 未配車から来たことがわかるように
+  };
+};
+
+// テーブル上のセル（すでに何かが入力されているセル）でドラッグを開始するときのハンドラー
+// "from: 'table'" と、セル位置を記録
+const handleDragStartFromTable = (name, rowIndex, colIndex) => {
+  // セルが空の場合はドラッグしない
+  if (!name) return;
+  draggingItem.value = {
+    name,
+    from: "table",
+    rowIndex,
+    colIndex,
+  };
 };
 
 // ドロップ処理
 const handleDrop = (rowIndex, colIndex) => {
   if (draggingItem.value) {
-    switch (colIndex) {
-      case 0:
-        tableData.value[rowIndex].destination1 = draggingItem.value.jetpack_destination_name;
-        break;
-      case 1:
-        tableData.value[rowIndex].destination2 = draggingItem.value.jetpack_destination_name;
-        break;
-      case 2:
-        tableData.value[rowIndex].destination3 = draggingItem.value.jetpack_destination_name;
-        break;
+    // 1) 未配車から来た場合は未配車リストから削除
+    if (draggingItem.value.from === "undispatched") {
+      undispatchedOrders.value = undispatchedOrders.value.filter(
+        (order) => order.id !== draggingItem.value.id
+      );
     }
+    // 2) すでにテーブル上のセルにあった場合は、ドラッグ元を空にする
+    else if (draggingItem.value.from === "table") {
+      const { rowIndex: fromRow, colIndex: fromCol } = draggingItem.value;
+      if (fromCol === 0) {
+        tableData.value[fromRow].destination1 = "";
+      } else if (fromCol === 1) {
+        tableData.value[fromRow].destination2 = "";
+      } else if (fromCol === 2) {
+        tableData.value[fromRow].destination3 = "";
+      }
+    }
+
+    // 3) ドロップ先のセルへ値をセット
+    if (colIndex === 0) {
+      tableData.value[rowIndex].destination1 = draggingItem.value.name;
+    } else if (colIndex === 1) {
+      tableData.value[rowIndex].destination2 = draggingItem.value.name;
+    } else if (colIndex === 2) {
+      tableData.value[rowIndex].destination3 = draggingItem.value.name;
+    }
+
+    // ドラッグが完了したらリセット
     draggingItem.value = null;
   }
 };
@@ -120,7 +157,7 @@ onMounted(async () => {
               v-for="dispatch in undispatchedOrders"
               :key="dispatch.id"
               draggable="true"
-              @dragstart="handleDragStart(dispatch)"
+              @dragstart="handleDragStartFromUndispatched(dispatch)"
             >
               <div class="dispatch-card-header">
                 {{ dispatch.jetpack_destination_name }}
@@ -171,23 +208,26 @@ onMounted(async () => {
                 <td>
                   <input
                     type="text"
-                    v-model="row.driver"
+                    v-model="row.workerDetail"
                     placeholder="運転手備考を入力"
                   />
                 </td>
                 <td class="narrow-column">
-                  <input type="text" v-model="row.driver" placeholder="時間" />
+                  <input type="time" v-model="row.startTime" placeholder="時間" />
                 </td>
 
                 <!-- 1つ目の搬入先 -->
                 <td
                   @dragover.prevent
                   @drop="handleDrop(index, 0)"
+                  :draggable="row.destination1 !== ''"
+                  @dragstart="handleDragStartFromTable(row.destination1, index, 0)"
                 >
                   <input
                     type="text"
                     v-model="row.destination1"
                     placeholder="搬入先を入力"
+                    draggable="false"
                   />
                 </td>
                 <td class="narrow-column">
@@ -207,6 +247,8 @@ onMounted(async () => {
                     type="text"
                     v-model="row.destination2"
                     placeholder="搬入先を入力"
+                    :draggable="row.destination2 !== ''"
+                    @dragstart="handleDragStartFromTable(row.destination2, index, 1)"
                   />
                 </td>
                 <td class="narrow-column">
@@ -221,11 +263,14 @@ onMounted(async () => {
                 <td
                   @dragover.prevent
                   @drop="handleDrop(index, 2)"
+                  :draggable="row.destination3 !== ''"
+                  @dragstart="handleDragStartFromTable(row.destination3, index, 2)"
                 >
                   <input
                     type="text"
                     v-model="row.destination3"
                     placeholder="搬入先を入力"
+                    draggable="false"
                   />
                 </td>
                 <td class="narrow-column">
