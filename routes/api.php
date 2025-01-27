@@ -98,3 +98,5 @@ Route::apiResource('jetpack-orders', JetpackOrderController::class);
 Route::get('/jetpack-orders-by-date/{date}', [JetpackOrderController::class, 'fetchJetpackOrdersByDate']);
 //ジェットパックオーダー表画面で行き先ごとに一括オーダー登録(オーダー一括登録モーダルより)
 Route::post('/jetpack-orders-by-destination', [JetpackOrderController::class, 'registerJetpackOrdersByDestination']);
+//ジェットパックオーダーを配車し、一括で登録
+Route::post('/jetpack-orders/dispatch', [JetpackOrderController::class, 'dispatchJetpackOrders']);

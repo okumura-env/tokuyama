@@ -85,5 +85,11 @@ class JetpackOrderController extends Controller
             }
         }
     }
+
+    public function dispatchJetpackOrders(Request $request)
+    {
+        dd($request->all());
+ 
+    }
     
 }
