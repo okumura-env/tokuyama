@@ -14,6 +14,9 @@ const tableData = ref([]); // テーブルデータの初期状態（空のセ�
 const dispatchedOrders = ref([]); // 配車済みオーダー
 const undispatchedOrders = ref([]); // 未配車オーダー
 
+// ドラッグ中のアイテム
+const draggingItem = ref(null);
+
 // データ取得
 const { data: vehicles, fetchData: fetchVehicles } = useDataApi("/api/vehicles");
 const { data: workers, fetchData: fetchWorkers } = useDataApi("/api/workers");
@@ -33,12 +36,10 @@ const dayOfWeek = computed(() => {
 const fetchJetpackOrdersByDate = async (dateId) => {
   try {
     console.log(dateId);
-    const response = await axios.get(
-      `/api/jetpack-orders-by-date/${dateId}`
-    );
+    const response = await axios.get(`/api/jetpack-orders-by-date/${dateId}`);
     const JetpackOrdersByDate = response.data.data;
-    dispatchedOrders.value = JetpackOrdersByDate.filter(order => order.status);
-    undispatchedOrders.value = JetpackOrdersByDate.filter(order => !order.status);
+    dispatchedOrders.value = JetpackOrdersByDate.filter((order) => order.status);
+    undispatchedOrders.value = JetpackOrdersByDate.filter((order) => !order.status);
   } catch (error) {
     console.error("Error fetching unassigned dispatches:", error);
   }
@@ -49,10 +50,44 @@ const initializeTableData = () => {
   tableData.value = vehicles.value.map((vehicle) => ({
     vehicle_number: vehicle.number,
     driver: "",
-    destination: "",
-    rounds: "",
+    // destinationを3つ分用意し回数もそれぞれに紐づけられるようにする
+    destination1: "",
+    rounds1: "",
+    destination2: "",
+    rounds2: "",
+    destination3: "",
+    rounds3: "",
     notes: "",
   }));
+};
+
+// ドラッグ開始
+const handleDragStart = (item) => {
+  draggingItem.value = item;
+};
+
+// ドロップ処理
+const handleDrop = (rowIndex, colIndex) => {
+  if (draggingItem.value) {
+    switch (colIndex) {
+      case 0:
+        tableData.value[rowIndex].destination1 = draggingItem.value.jetpack_destination_name;
+        break;
+      case 1:
+        tableData.value[rowIndex].destination2 = draggingItem.value.jetpack_destination_name;
+        break;
+      case 2:
+        tableData.value[rowIndex].destination3 = draggingItem.value.jetpack_destination_name;
+        break;
+    }
+    draggingItem.value = null;
+  }
+};
+
+// 配車内容を保存するボタン動作（サンプル）
+const saveAdjustments = () => {
+  // ここは既存機能を想定（例）
+  console.log("配車内容保存:", tableData.value);
 };
 
 // コンポーネントマウント時にデータ取得
@@ -61,6 +96,7 @@ onMounted(async () => {
   initializeTableData();
 });
 </script>
+
 <template>
   <div class="dispatch-adjustment">
     <header>
@@ -83,8 +119,12 @@ onMounted(async () => {
               class="dispatch-card"
               v-for="dispatch in undispatchedOrders"
               :key="dispatch.id"
+              draggable="true"
+              @dragstart="handleDragStart(dispatch)"
             >
-              <div class="dispatch-card-header">{{ dispatch.jetpack_destination_name }}</div>
+              <div class="dispatch-card-header">
+                {{ dispatch.jetpack_destination_name }}
+              </div>
             </div>
           </div>
         </div>
@@ -115,22 +155,18 @@ onMounted(async () => {
                 <td>{{ index + 1 }}</td>
                 <td>{{ row.vehicle_number }}</td>
                 <td>
-                    <select
-                        class="form-control"
-                        v-model="selectedScheduleCategoryId"
+                  <select
+                    class="form-control"
+                    v-model="row.selectedWorkerId"
+                  >
+                    <option
+                      v-for="worker in workers"
+                      :value="worker.id"
+                      :key="worker.id"
                     >
-                        <option
-                            v-for="worker in workers"
-                            v-bind:value="
-                                worker.id
-                            "
-                            v-bind:key="
-                                worker.id
-                            "
-                        >
-                            {{ worker.name }}
-                        </option>
-                    </select>                
+                      {{ worker.name }}
+                    </option>
+                  </select>
                 </td>
                 <td>
                   <input
@@ -142,40 +178,64 @@ onMounted(async () => {
                 <td class="narrow-column">
                   <input type="text" v-model="row.driver" placeholder="時間" />
                 </td>
-                <td>
+
+                <!-- 1つ目の搬入先 -->
+                <td
+                  @dragover.prevent
+                  @drop="handleDrop(index, 0)"
+                >
                   <input
                     type="text"
-                    v-model="row.destination"
-                    placeholder="搬入先を入力"
-                  />
-                </td>
-                <td class="narrow-column">
-                  <input type="number" v-model="row.rounds" placeholder="" />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    v-model="row.destination"
-                    placeholder="搬入先を入力"
-                  />
-                </td>
-                <td class="narrow-column">
-                  <input type="number" v-model="row.rounds" placeholder="" />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    v-model="row.destination"
+                    v-model="row.destination1"
                     placeholder="搬入先を入力"
                   />
                 </td>
                 <td class="narrow-column">
                   <input
                     type="number"
-                    v-model="row.rounds"
+                    v-model="row.rounds1"
                     placeholder=""
                   />
                 </td>
+
+                <!-- 2つ目の搬入先 -->
+                <td
+                  @dragover.prevent
+                  @drop="handleDrop(index, 1)"
+                >
+                  <input
+                    type="text"
+                    v-model="row.destination2"
+                    placeholder="搬入先を入力"
+                  />
+                </td>
+                <td class="narrow-column">
+                  <input
+                    type="number"
+                    v-model="row.rounds2"
+                    placeholder=""
+                  />
+                </td>
+
+                <!-- 3つ目の搬入先 -->
+                <td
+                  @dragover.prevent
+                  @drop="handleDrop(index, 2)"
+                >
+                  <input
+                    type="text"
+                    v-model="row.destination3"
+                    placeholder="搬入先を入力"
+                  />
+                </td>
+                <td class="narrow-column">
+                  <input
+                    type="number"
+                    v-model="row.rounds3"
+                    placeholder=""
+                  />
+                </td>
+
                 <td>
                   <input
                     type="text"
