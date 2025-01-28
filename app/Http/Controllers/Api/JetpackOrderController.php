@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\JetpackOrderRequest;
 use App\Http\Resources\JetpackOrderResource;
+use App\Models\Date;
 use App\Models\JetpackOrder;
 use App\Models\DateVehicle;
 use App\Models\JetpackSchedule;
@@ -82,6 +83,54 @@ class JetpackOrderController extends Controller
 
     public function dispatchJetpackOrders(Request $request)
     {
-        dd($request->all());
+      
+        //車両ごとの予定を格納
+        $ordersByVehicles = $request->all();
+
+        foreach($ordersByVehicles as $ordersByVehicle) {
+
+            // 搬出先、回数の列が3行ずつあるので、3回ループ
+            for($i = 1; $i <= 3; $i++){
+                $jetpackOrderId   = 'jetpack_order' . $i . '_id';
+                $countsKey    = 'counts'        . $i;
+                $cellNumber = $i;
+                if(!empty($ordersByVehicle[$jetpackOrderId])) {
+                //後で使用するため一度変数に格納
+                //findに続けて->update()とすると$jetpackOrderにtrueが格納されてしまうので注意
+                $jetpackOrder = JetpackOrder::find($ordersByVehicle[$jetpackOrderId]);
+                $jetpackOrder->update(
+                        [
+                            'vehicle_id' => $ordersByVehicle['vehicle_id'],
+                            'quantity' => $ordersByVehicle[$countsKey],
+                            'status' => true,
+                            'note' => $ordersByVehicle['note']
+                        ]
+                    );
+
+                    //後で使用するため一度変数に格納
+                    $dateVehicle = DateVehicle::where("date_id",$ordersByVehicle['date_id'])
+                    ->where("vehicle_id",$ordersByVehicle['vehicle_id'])
+                    ->where("work_type_id",2)//work_type_id=2はジェットパックの意
+                    ->first();
+                    $dateVehicle->update(
+                        [
+                            'worker_id' => $ordersByVehicle['worker_id'],
+                            'sub_worker' => $ordersByVehicle['sub_worker'],
+                            'start_time' => $ordersByVehicle['start_time'],
+                        ]
+                    );
+
+        
+                    JetpackSchedule::find($jetpackOrder->jetpack_schedule_id)->update(
+                        [
+                            'vehicle_id' => $ordersByVehicle['vehicle_id'],
+                            'date_vehicle_id' => $dateVehicle->id,
+                            'cell_number' => $cellNumber,
+                        ]
+                    );
+                }
+            }
+
+        }
     }
 }
