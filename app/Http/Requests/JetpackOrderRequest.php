@@ -28,7 +28,7 @@ class JetpackOrderRequest extends FormRequest
             'vehicle_id' => ['nullable', 'integer'],
             'jetpack_schedule_id' => ['nullable', 'integer'],
             'jetpack_destination_id' => ['required', 'integer'],
-            'quantity' => ['nullable', 'integer', 'min:0'],
+            'count' => ['nullable', 'integer', 'min:0'],
             'status' => ['required', 'string', 'max:255'],
             'note' => ['nullable', 'string'],
         ];

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('vehicle_id')->nullable()->constrained()->cascadeOnDelete(); // 車両ID（任意）
             $table->foreignId('jetpack_schedule_id')->constrained()->cascadeOnDelete();
             $table->foreignId('jetpack_destination_id'); // 行き先ID
-            $table->integer('quantity')->nullable(); // 数量（任意）
+            $table->integer('count')->nullable(); // 数量（任意）
             $table->boolean('status')->default(false); // ステータス(未配車 or 配車済)
             $table->text('note')->nullable(); // 備考（任意）
             $table->timestamps();

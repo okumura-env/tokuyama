@@ -38,7 +38,7 @@ class JetpackOrderSeeder extends Seeder
                     'vehicle_id' => $vehicle_id,
                     'jetpack_schedule_id' => $schedule ? $schedule->id : null,
                     'jetpack_destination_id' => rand(1, 15),
-                    'quantity' => null,
+                    'count' => null,
                     'status' => 0,
                     'note' => null,
                 ]);

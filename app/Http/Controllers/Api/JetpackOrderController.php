@@ -101,7 +101,7 @@ class JetpackOrderController extends Controller
                 $jetpackOrder->update(
                         [
                             'vehicle_id' => $ordersByVehicle['vehicle_id'],
-                            'quantity' => $ordersByVehicle[$countsKey],
+                            'count' => $ordersByVehicle[$countsKey],
                             'status' => true,
                             'note' => $ordersByVehicle['note']
                         ]
