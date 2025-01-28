@@ -48,17 +48,19 @@ const fetchJetpackOrdersByDate = async (dateId) => {
 // テーブルの初期化（空の行データを作成）
 const initializeTableData = () => {
   tableData.value = vehicles.value.map((vehicle) => ({
+    date_id: dateId, 
+    vehicle_id: vehicle.id,
     vehicle_number: vehicle.number,
-    selectedWorkerId: "",
-    workerDetail: "",
-    startTime: "",
+    worker_id: "",
+    sub_worker: "",
+    start_time: "",
     // destinationを3つ分用意し回数もそれぞれに紐づけられるようにする
     destination1: "",
-    rounds1: "",
+    counts1: "",
     destination2: "",
-    rounds2: "",
+    counts2: "",
     destination3: "",
-    rounds3: "",
+    counts3: "",
     jetpack_order1_id: null,
     jetpack_order2_id: null,
     jetpack_order3_id: null,
@@ -135,9 +137,10 @@ const handleDrop = (rowIndex, colIndex) => {
 };
 
 // 配車内容を保存するボタン動作（サンプル）
-const saveAdjustments = () => {
-  // ここは既存機能を想定（例）
+const registerdispatches = async() => {
   console.log("配車内容保存:", tableData.value);
+  const response = await axios.post("/api/jetpack-orders/dispatch", tableData.value);
+  console.log("登録ボタンが押されました");
 };
 
 // コンポーネントマウント時にデータ取得
@@ -182,6 +185,8 @@ onMounted(async () => {
 
       <!-- 配車調整テーブル -->
       <main class="adjustment-table">
+        <form @submit.prevent="registerdispatches()" 
+        class="form-container">
         <div class="table-wrapper">
           <table>
             <thead>
@@ -201,111 +206,112 @@ onMounted(async () => {
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(row, index) in tableData" :key="index">
-                <td>{{ index + 1 }}</td>
-                <td>{{ row.vehicle_number }}</td>
-                <td>
-                  <select
-                    class="form-control"
-                    v-model="row.selectedWorkerId"
-                  >
-                    <option
-                      v-for="worker in workers"
-                      :value="worker.id"
-                      :key="worker.id"
+                <tr v-for="(row, index) in tableData" :key="index">
+                  <td>{{ index + 1 }}</td>
+                  <td>{{ row.vehicle_number }}</td>
+                  <td>
+                    <select
+                      class="form-control"
+                      v-model="row.worker_id"
                     >
-                      {{ worker.name }}
-                    </option>
-                  </select>
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    v-model="row.workerDetail"
-                    placeholder="運転手備考を入力"
-                  />
-                </td>
-                <td class="narrow-column">
-                  <input type="time" v-model="row.startTime" placeholder="時間" />
-                </td>
+                      <option
+                        v-for="worker in workers"
+                        :value="worker.id"
+                        :key="worker.id"
+                      >
+                        {{ worker.name }}
+                      </option>
+                    </select>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      v-model="row.sub_worker"
+                      placeholder="運転手備考を入力"
+                    />
+                  </td>
+                  <td class="narrow-column">
+                    <input type="time" v-model="row.start_time" placeholder="時間" />
+                  </td>
 
-                <!-- 1つ目の搬入先 -->
-                <td
-                  @dragover.prevent
-                  @drop="handleDrop(index, 0)"
-                  :draggable="row.destination1 !== ''"
-                  @dragstart="handleDragStartFromTable(row.destination1, index, 0)"
-                >
-                  <input
-                    type="text"
-                    v-model="row.destination1"
-                    placeholder="搬入先を入力"
-                    draggable="false"
-                  />
-                </td>
-                <td class="narrow-column">
-                  <input
-                    type="number"
-                    v-model="row.rounds1"
-                    placeholder=""
-                  />
-                </td>
+                  <!-- 1つ目の搬入先 -->
+                  <td
+                    @dragover.prevent
+                    @drop="handleDrop(index, 0)"
+                    :draggable="row.destination1 !== ''"
+                    @dragstart="handleDragStartFromTable(row.destination1, index, 0)"
+                  >
+                    <input
+                      type="text"
+                      v-model="row.destination1"
+                      placeholder="搬入先を入力"
+                      draggable="false"
+                    />
+                  </td>
+                  <td class="narrow-column">
+                    <input
+                      type="number"
+                      v-model="row.counts1"
+                      placeholder=""
+                    />
+                  </td>
 
-                <!-- 2つ目の搬入先 -->
-                <td
-                  @dragover.prevent
-                  @drop="handleDrop(index, 1)"
-                >
-                  <input
-                    type="text"
-                    v-model="row.destination2"
-                    placeholder="搬入先を入力"
-                    :draggable="row.destination2 !== ''"
-                    @dragstart="handleDragStartFromTable(row.destination2, index, 1)"
-                  />
-                </td>
-                <td class="narrow-column">
-                  <input
-                    type="number"
-                    v-model="row.rounds2"
-                    placeholder=""
-                  />
-                </td>
+                  <!-- 2つ目の搬入先 -->
+                  <td
+                    @dragover.prevent
+                    @drop="handleDrop(index, 1)"
+                  >
+                    <input
+                      type="text"
+                      v-model="row.destination2"
+                      placeholder="搬入先を入力"
+                      :draggable="row.destination2 !== ''"
+                      @dragstart="handleDragStartFromTable(row.destination2, index, 1)"
+                    />
+                  </td>
+                  <td class="narrow-column">
+                    <input
+                      type="number"
+                      v-model="row.counts2"
+                      placeholder=""
+                    />
+                  </td>
 
-                <!-- 3つ目の搬入先 -->
-                <td
-                  @dragover.prevent
-                  @drop="handleDrop(index, 2)"
-                  :draggable="row.destination3 !== ''"
-                  @dragstart="handleDragStartFromTable(row.destination3, index, 2)"
-                >
-                  <input
-                    type="text"
-                    v-model="row.destination3"
-                    placeholder="搬入先を入力"
-                    draggable="false"
-                  />
-                </td>
-                <td class="narrow-column">
-                  <input
-                    type="number"
-                    v-model="row.rounds3"
-                    placeholder=""
-                  />
-                </td>
+                  <!-- 3つ目の搬入先 -->
+                  <td
+                    @dragover.prevent
+                    @drop="handleDrop(index, 2)"
+                    :draggable="row.destination3 !== ''"
+                    @dragstart="handleDragStartFromTable(row.destination3, index, 2)"
+                  >
+                    <input
+                      type="text"
+                      v-model="row.destination3"
+                      placeholder="搬入先を入力"
+                      draggable="false"
+                    />
+                  </td>
+                  <td class="narrow-column">
+                    <input
+                      type="number"
+                      v-model="row.counts3"
+                      placeholder=""
+                    />
+                  </td>
 
-                <td>
-                  <input
-                    type="text"
-                    v-model="row.notes"
-                    placeholder="その他備考"
-                  />
-                </td>
-              </tr>
+                  <td>
+                    <input
+                      type="text"
+                      v-model="row.notes"
+                      placeholder="その他備考"
+                    />
+                  </td>
+                </tr>
             </tbody>
           </table>
         </div>
-        <button @click="saveAdjustments">確定</button>
+        <button type="submit" class="submit-button">確定</button>
+      </form>
       </main>
     </div>
   </div>
