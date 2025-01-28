@@ -64,7 +64,7 @@ const initializeTableData = () => {
     jetpack_order1_id: null,
     jetpack_order2_id: null,
     jetpack_order3_id: null,
-    notes: "",
+    note: "",
   }));
 };
 
@@ -302,7 +302,7 @@ onMounted(async () => {
                   <td>
                     <input
                       type="text"
-                      v-model="row.notes"
+                      v-model="row.note"
                       placeholder="その他備考"
                     />
                   </td>
