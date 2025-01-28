@@ -61,12 +61,9 @@ class JetpackOrderController extends Controller
                 // 日付ごとのフォームに入力した回数分オーダーを登録する
                 for ($i = 0; $i < $orderCounts; $i++) {
                     // 変更点: DateVehicle の取得が正しく行えるようチェック追加
-                    $dateVehicle = DateVehicle::where('date_id', $schedule['dateId'])->first();
-    
-                    if ($dateVehicle) {
+                    
                         $jetpackSchedule = JetpackSchedule::create([
                             'date_id' => $schedule['dateId'],
-                            'date_vehicle_id' => $dateVehicle->id,
                         ]);
     
                         $jetpackSchedule->jetpackOrder()->create([
@@ -74,10 +71,7 @@ class JetpackOrderController extends Controller
                             'jetpack_destination_id' => $jetpackDestinationId,
                             'status' => false,
                         ]);
-                    } else {
-                        // DateVehicle が見つからなかった場合のエラーログ
-                        Log::warning("DateVehicle not found for date_id: " . $schedule['dateId']);
-                    }
+                  
                 }
             } else {
                 // orderCounts が存在しないまたは 0 以下の場合のエラーログ
@@ -89,7 +83,5 @@ class JetpackOrderController extends Controller
     public function dispatchJetpackOrders(Request $request)
     {
         dd($request->all());
- 
     }
-    
 }
