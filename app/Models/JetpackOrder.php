@@ -17,7 +17,7 @@ class JetpackOrder extends Model
         'vehicle_id',
         'jetpack_schedule_id',
         'jetpack_destination_id',
-        'quantity',
+        'count',
         'status',
         'note',
     ];
