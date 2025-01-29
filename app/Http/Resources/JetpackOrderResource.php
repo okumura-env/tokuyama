@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\JetpackDestination;
+use App\Models\JetpackSchedule;
 
 class JetpackOrderResource extends JsonResource
 {
@@ -20,6 +21,7 @@ class JetpackOrderResource extends JsonResource
             'date_id' => $this->date_id,
             'vehicle_id' => $this->vehicle_id,
             'jetpack_schedule_id' => $this->jetpack_schedule_id,
+            'jetpack_schedule' => JetpackSchedule::find($this->jetpack_schedule_id),
             'jetpack_destination_id' => $this->jetpack_destination_id,
             'jetpack_destination_name' => JetpackDestination::find($this->jetpack_destination_id)->name,
             'count' => $this->count,
