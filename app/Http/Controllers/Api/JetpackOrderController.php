@@ -86,6 +86,7 @@ class JetpackOrderController extends Controller
       
         //車両ごとの予定を格納
         $ordersByVehicles = $request->all();
+        // dd($request->all());
 
         foreach($ordersByVehicles as $ordersByVehicle) {
 
@@ -98,12 +99,12 @@ class JetpackOrderController extends Controller
                 //後で使用するため一度変数に格納
                 //findに続けて->update()とすると$jetpackOrderにtrueが格納されてしまうので注意
                 $jetpackOrder = JetpackOrder::find($ordersByVehicle[$jetpackOrderId]);
+                // dd($ordersByVehicle[$countsKey]);
                 $jetpackOrder->update(
                         [
                             'vehicle_id' => $ordersByVehicle['vehicle_id'],
                             'count' => $ordersByVehicle[$countsKey],
                             'status' => true,
-                            'note' => $ordersByVehicle['note']
                         ]
                     );
 
